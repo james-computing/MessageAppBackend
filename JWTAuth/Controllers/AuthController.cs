@@ -23,5 +23,16 @@ namespace JWTAuth.Controllers
             return Created();
         }
 
+        // Login with credentials. It returns a JWT that should be used by the client to identity itself.
+        [HttpPost]
+        public async Task<ActionResult<TokenDto?>> LoginAsync(UserDto userDto)
+        {
+            TokenDto? token = await authService.LoginAsync(userDto);
+            if(token == null)
+            {
+                return BadRequest();
+            }
+            return Ok(token);
+        }
     }
 }
