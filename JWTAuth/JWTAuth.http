@@ -1,0 +1,6 @@
+@JWTAuth_HostAddress = http://localhost:5103
+
+GET {{JWTAuth_HostAddress}}/
+Accept: application/json
+
+###
