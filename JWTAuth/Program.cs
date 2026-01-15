@@ -1,3 +1,4 @@
+using JWTAuth.Data;
 using JWTAuth.Services;
 using Microsoft.Data.SqlClient;
 using Scalar.AspNetCore;
@@ -23,6 +24,9 @@ builder.Services.AddTransient<IDbConnection>
 (
     (IServiceProvider serviceProvider) => new SqlConnection(connectionString)
 );
+
+// Dependency injection for DataAccess class
+builder.Services.AddTransient<IDataAccess, DataAccess>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
