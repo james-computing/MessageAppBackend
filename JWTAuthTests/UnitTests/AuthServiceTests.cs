@@ -60,5 +60,30 @@ namespace JWTAuthTests.UnitTests
             Assert.Equal(userRegisterDto.Username, user.Username);
             Assert.Equal(PasswordVerificationResult.Success, result);
         }
+
+        [Fact]
+        public async Task RegisterAsync_ReturnsNull_ForAlreadyRegisteredUser()
+        {
+            //********************* Arrange *************************
+            UserRegisterDto userRegisterDto = new()
+            {
+                Email = "name@company.com",
+                Password = "password",
+                Username = "name",
+            };
+
+            // Mock the IDataAccess
+            Mock<IDataAccess> dataAccessMock = new();
+            dataAccessMock.Setup(dataAccess => dataAccess.UserExistsAsync(userRegisterDto)).Returns(Task.FromResult(true));
+
+            // Create the AuthService
+            AuthService authService = new AuthService(_configuration, dataAccessMock.Object);
+
+            //********************* Act *************************
+            User? user = await authService.RegisterAsync(userRegisterDto);
+
+            //********************* Assert *************************
+            Assert.Null(user);
+        }
     }
 }
