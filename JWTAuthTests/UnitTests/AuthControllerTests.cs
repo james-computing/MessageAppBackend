@@ -59,7 +59,8 @@ namespace JWTAuthTests.UnitTests
                 Username = "name",
             };
 
-            // A mock for the IAuthService. The user should be already registered,
+            // A mock for the IAuthService.
+            // The user should be already registered,
             // so the IAuthService must return null.
             Mock<IAuthService> authServiceMock = new Mock<IAuthService>();
             authServiceMock.Setup(x => x.RegisterAsync(userRegisterDto)).Returns(Task.FromResult<User?>(null));
