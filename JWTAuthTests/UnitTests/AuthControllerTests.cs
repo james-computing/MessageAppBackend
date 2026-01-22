@@ -214,5 +214,38 @@ namespace JWTAuthTests.UnitTests
             Assert.Equal(200, statusCode); // 200 = ok
         }
 
+        [Fact]
+        public async Task RefreshAccessTokenAsync_ReturnsForbidden_ForInvalidRefreshToken()
+        {
+            //************************* Arrange *********************
+            // The refresh token
+            int userId = 1;
+            string refreshToken = "";
+
+            // A mock for the IAuthService.
+            Mock<IAuthService> authServiceMock = new Mock<IAuthService>();
+            authServiceMock.Setup(authService => authService.RefreshAccessTokenAsync(userId, refreshToken)).Returns(Task.FromResult<TokenDto?>(null));
+
+            // Create the authController
+            AuthController authController = new AuthController(authServiceMock.Object);
+
+            // Authenticate the user
+            authController.ControllerContext.HttpContext = new DefaultHttpContext();
+            List<Claim> claims = new()
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            };
+            ClaimsIdentity identity = new ClaimsIdentity(claims);
+            authController.HttpContext.User = new ClaimsPrincipal(identity);
+
+            //************************* Act *********************
+            ActionResult<TokenDto?> result = await authController.RefreshAccessTokenAsync(refreshToken);
+            ForbidResult? forbidResult = (ForbidResult?) result.Result;
+
+            //************************* Assert *********************
+            Assert.NotNull(result);
+            Assert.NotNull(result.Result);
+            Assert.NotNull(forbidResult);
+        }
     }
 }
