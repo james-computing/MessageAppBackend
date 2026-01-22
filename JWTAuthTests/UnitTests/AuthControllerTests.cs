@@ -3,11 +3,13 @@ using JWTAuth.Dtos;
 using JWTAuth.Models;
 using JWTAuth.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace JWTAuthTests.UnitTests
@@ -160,5 +162,57 @@ namespace JWTAuthTests.UnitTests
             Assert.NotNull(statusCode);
             Assert.Equal(400, statusCode); // 400 = bad request
         }
+
+        [Fact]
+        public async Task RefreshAccessTokenAsync_ReturnsOk_ForValidRefreshToken()
+        {
+            //************************* Arrange *********************
+            // The refresh token
+            int userId = 1;
+            string refreshToken = "";
+            TokenDto token = new TokenDto()
+            {
+                AccessToken = "",
+                RefreshToken = "",
+            };
+
+            // A mock for the IAuthService.
+            Mock<IAuthService> authServiceMock = new Mock<IAuthService>();
+            authServiceMock.Setup(authService => authService.RefreshAccessTokenAsync(userId, refreshToken)).Returns(Task.FromResult<TokenDto?>(token));
+
+            // Create the authController
+            AuthController authController = new AuthController(authServiceMock.Object);
+
+            // Authenticate the user
+            authController.ControllerContext.HttpContext = new DefaultHttpContext();
+            List<Claim> claims = new()
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            };
+            ClaimsIdentity identity = new ClaimsIdentity(claims);
+            authController.HttpContext.User = new ClaimsPrincipal(identity);
+
+            //************************* Act *********************
+            ActionResult<TokenDto?> result = await authController.RefreshAccessTokenAsync(refreshToken);
+
+            IStatusCodeActionResult? statusCodeActionResult = (IStatusCodeActionResult?)result.Result;
+            int? statusCode = statusCodeActionResult?.StatusCode;
+
+            // The value isn't stored in result.Value, rather in result.Result.
+            // To extract it, we need to do some casts.
+            TokenDto? tokenResponse = null;
+            if (result.Result != null)
+            {
+                tokenResponse = (TokenDto?)((ObjectResult)result.Result).Value;
+            }
+
+            //************************* Assert *********************
+            Assert.NotNull(result);
+            Assert.NotNull(result.Result);
+            Assert.NotNull(statusCode);
+            Assert.NotNull(tokenResponse);
+            Assert.Equal(200, statusCode); // 200 = ok
+        }
+
     }
 }
