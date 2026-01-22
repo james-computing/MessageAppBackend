@@ -128,5 +128,40 @@ namespace JWTAuthTests.UnitTests
             Assert.Equal(200, statusCode); // 200 = ok
         }
 
+        [Fact]
+        public async Task LoginAsync_ReturnsBadRequest_ForNonRegisteredUser()
+        {
+            //************************* Arrange *********************
+            // The user to login.
+            UserLoginDto userLoginDto = new UserLoginDto()
+            {
+                Email = "name@company.com",
+                Password = "password",
+            };
+
+            // A mock for the IAuthService.
+            // The user shouldn't be registered,
+            // so the IAuthService must return a null token.
+            Mock<IAuthService> authServiceMock = new Mock<IAuthService>();
+            authServiceMock.Setup(authService => authService.LoginAsync(userLoginDto)).Returns(Task.FromResult<TokenDto?>(null));
+
+            // Create the authController
+            AuthController authController = new AuthController(authServiceMock.Object);
+
+            //************************* Act *********************
+            ActionResult<TokenDto?> result = await authController.LoginAsync(userLoginDto);
+
+            IStatusCodeActionResult? statusCodeActionResult = (IStatusCodeActionResult?)result.Result;
+            int? statusCode = statusCodeActionResult?.StatusCode;
+
+            TokenDto? tokenResponse = result.Value;
+
+            //************************* Assert *********************
+            Assert.NotNull(result);
+            Assert.NotNull(result.Result);
+            Assert.NotNull(statusCode);
+            Assert.Null(tokenResponse);
+            Assert.Equal(400, statusCode); // 400 = bad request
+        }
     }
 }
