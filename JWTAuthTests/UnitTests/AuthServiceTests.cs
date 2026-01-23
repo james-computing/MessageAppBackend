@@ -210,5 +210,43 @@ namespace JWTAuthTests.UnitTests
             //********************* Assert *************************
             Assert.Null(token);
         }
+
+        [Fact]
+        public async Task RefreshAccessTokenAsync_ReturnsNull_IfRefreshTokenExpired()
+        {
+            //********************* Arrange *************************
+            PasswordHasher<User> passwordHasher = new();
+            string passwordHash = passwordHasher.HashPassword(new User(), "password");
+
+            User user = new User()
+            {
+                Id = 1,
+                Email = "name@company.com",
+                PasswordHash = passwordHash,
+            };
+
+            string refreshToken = "";
+            RefreshTokenData refreshTokenData = new()
+            {
+                RefreshToken = refreshToken,
+                RefreshTokenExpirationTime = DateTime.UtcNow.AddSeconds(-1),
+            };
+
+            // Mock the IDataAccess
+            Mock<IDataAccess> dataAccessMock = new();
+            dataAccessMock.Setup(dataAccess => dataAccess.GetUserFromIdAsync(user.Id))
+                .Returns(Task.FromResult<User?>(user));
+            dataAccessMock.Setup(dataAccess => dataAccess.GetRefreshTokenDataAsync(user.Id))
+                .Returns(Task.FromResult<RefreshTokenData?>(refreshTokenData));
+
+            // Create the AuthService
+            AuthService authService = new AuthService(_configuration, dataAccessMock.Object);
+
+            //********************* Act *************************
+            TokenDto? token = await authService.RefreshAccessTokenAsync(user.Id, refreshToken);
+
+            //********************* Assert *************************
+            Assert.Null(token);
+        }
     }
 }
