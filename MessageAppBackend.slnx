@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="JWTAuth/JWTAuth.csproj" />
   <Project Path="JWTAuthTests/JWTAuthTests.csproj" Id="99e7a1ec-34c0-46fd-b2e5-7ed389225865" />
+  <Project Path="Message/Message.csproj" Id="90f5d913-4caa-4e7e-b339-02b230a8e025" />
 </Solution>
