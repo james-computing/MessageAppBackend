@@ -5,16 +5,16 @@ namespace Message.Kafka.Consumer
 {
     public class KafkaConsumerOnBackground : BackgroundService
     {
-        private readonly IKafkaConsumer _kafkaConsumer;
+        private readonly IKafkaConsumer kafkaConsumer;
 
-        public KafkaConsumerOnBackground(IKafkaConsumer kafkaConsumer)
+        public KafkaConsumerOnBackground(IConfiguration configuration, IHubContext<ChatHub, IChatClient> hubContext)
         {
-            _kafkaConsumer = kafkaConsumer;
+            kafkaConsumer = new KafkaConsumer(configuration, hubContext);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _kafkaConsumer.ConsumeMessagesFromKafkaAsync(stoppingToken);
+            await kafkaConsumer.ConsumeMessagesFromKafkaAsync(stoppingToken);
         }
     }
 }
