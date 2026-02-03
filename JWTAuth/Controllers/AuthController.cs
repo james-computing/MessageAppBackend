@@ -22,6 +22,7 @@ namespace JWTAuth.Controllers
         [HttpPost]
         public async Task<ActionResult> RegisterAsync(UserRegisterDto userRegisterDto)
         {
+            Console.WriteLine("action RegisterAsync");
             User? user = await authService.RegisterAsync(userRegisterDto);
             if(user == null)
             {
@@ -35,6 +36,7 @@ namespace JWTAuth.Controllers
         [HttpPost]
         public async Task<ActionResult<TokenDto?>> LoginAsync(UserLoginDto userLoginDto)
         {
+            Console.WriteLine("action LoginAsync");
             TokenDto? token = await authService.LoginAsync(userLoginDto);
             if(token == null)
             {
@@ -58,6 +60,7 @@ namespace JWTAuth.Controllers
             // The authorization schema will get the claims for the user
             // that were obtained from the access token.
             // We search in the claims for the user id.
+            Console.WriteLine("action RefreshAccessTokenAsync");
             string? userIdString = null;
             foreach(ClaimsIdentity identity in HttpContext.User.Identities)
             {
