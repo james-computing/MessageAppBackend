@@ -15,6 +15,15 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+if(builder.Environment.IsProduction())
+{
+    // For K8s deployment.
+    // Some secrets will be created in Kubernetes
+    // which will be copied the json files secrets/jwt-settings.json and secrets/db-settings.json.
+    builder.Configuration.SetBasePath(builder.Environment.ContentRootPath).AddJsonFile("secrets/jwt-settings.json");
+    builder.Configuration.SetBasePath(builder.Environment.ContentRootPath).AddJsonFile("secrets/db-settings.json");
+}
+
 // Dependency injection for database connection, to be used by DataAccess class
 string? connectionString = builder.Configuration.GetConnectionString("Default");
 if(connectionString == null)
