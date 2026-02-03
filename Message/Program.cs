@@ -1,4 +1,5 @@
 using Message.Hubs;
+using Message.Kafka.Producer;
 using Message.UserIdProvider;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
@@ -73,6 +74,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddSignalR();
 // To uniquely identify the user of SignalR
 builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
+
+// Kafka producer
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
