@@ -12,5 +12,30 @@ namespace Message.Hubs
     [Authorize]
     public class ChatHub : Hub<IChatClient>
     {
+        private readonly IKafkaProducer _kafkaProducer;
+
+        public ChatHub(IConfiguration configuration, IKafkaProducer kafkaProducer)
+        {
+            Console.WriteLine("------------------------------------------------------");
+            Console.WriteLine("Constructing ChatHub...");
+
+            _kafkaProducer = kafkaProducer;
+        }
+
+        public async Task SendMessageAsync(string receiverId, string message)
+        {
+            string? senderId = Context.UserIdentifier;
+            if (senderId == null)
+            {
+                Console.WriteLine("Error: Context.UserIdentifier = null in SendMessageAsync");
+
+                await Clients.Caller.ReceiveErrorMessageAsync("Failed to deliver message.");
+
+                return;
+            }
+
+            Console.WriteLine("ChatHub sending message to Kafka...");
+            await _kafkaProducer.ProduceToKafkaAsync(senderId, receiverId, message);
+        }
     }
 }
