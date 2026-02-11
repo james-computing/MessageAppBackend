@@ -1,6 +1,6 @@
-﻿namespace Message.Kafka.Consumer
+﻿namespace KafkaConsumer.Kafka
 {
-    public interface IKafkaConsumer : IAsyncDisposable
+    public interface IConsumer : IAsyncDisposable
     {
         public Task ConsumeMessagesFromKafkaAsync(CancellationToken stoppingToken);
     }

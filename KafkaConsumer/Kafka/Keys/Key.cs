@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Message.Kafka.Keys
+namespace KafkaConsumer.Keys
 {
     public class Key
     {

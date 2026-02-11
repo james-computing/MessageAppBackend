@@ -1,12 +1,11 @@
 ﻿using Confluent.Kafka;
-using Message.Kafka.Keys;
-using Message.SignalR.Hubs;
-using Microsoft.AspNetCore.SignalR;
+using KafkaConsumer.Keys;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
-namespace Message.Kafka.Consumer
+namespace KafkaConsumer.Kafka
 {
-    public class KafkaConsumer : IKafkaConsumer
+    public class Consumer : IConsumer
     {
         // Kafka consumer
         private readonly string bootstrapServers;
@@ -14,13 +13,9 @@ namespace Message.Kafka.Consumer
         private const string groupId = "someGroupId";
         private readonly IConsumer<string, string> consumer;
 
-        private readonly IHubContext<ChatHub, IChatClient> _hubContext;
-
-        public KafkaConsumer(IConfiguration configuration, IHubContext<ChatHub, IChatClient> hubContext)
+        public Consumer(IConfiguration configuration)
         {
             Console.WriteLine("Constructing KafkaConsumer...");
-
-            _hubContext = hubContext;
 
             // Get bootstrapServers, for Kafka
             {
@@ -87,7 +82,6 @@ namespace Message.Kafka.Consumer
             }
             string message = consumeResult.Message.Value;
             string groupName = key.ReceiverId;
-            await _hubContext.Clients.Group(groupName).ReceiveMessageAsync(key.SenderId, message);
 
             Console.WriteLine("KafkaConsumer sent back to client.");
         }

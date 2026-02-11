@@ -1,5 +1,4 @@
 using Message.Data;
-using Message.Kafka.Consumer;
 using Message.Kafka.Producer;
 using Message.SignalR.Hubs;
 using Message.SignalR.UserIdProvider;
@@ -99,13 +98,6 @@ builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
 // Kafka producer
 builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
-
-// Kafka consumer
-// Won't use dependency injection for the consumer.
-// The consumer will be created inside the background service
-//builder.Services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
-// Run the Kafka consumer on the background
-builder.Services.AddHostedService<KafkaConsumerOnBackground>();
 
 var app = builder.Build();
 
