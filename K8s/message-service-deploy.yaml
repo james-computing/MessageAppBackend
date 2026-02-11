@@ -30,8 +30,12 @@ spec:
           periodSeconds: 30
       volumes:
       - name: secrets
-        secret:
-          secretName: jwt-settings
+        projected:
+          sources:
+          - secret:
+              name: jwt-settings
+          - secret:
+              name: db-settings
 ---
 apiVersion: v1
 kind: Service
