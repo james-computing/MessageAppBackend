@@ -1,10 +1,13 @@
+using Message.Data;
 using Message.Hubs;
 using Message.Kafka.Consumer;
 using Message.Kafka.Producer;
 using Message.UserIdProvider;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,10 +23,26 @@ builder.Services.AddOpenApi();
 if (builder.Environment.IsProduction())
 {
     // For K8s deployment.
-    // The JWT settings will be stored in a secret in K8s.
-    // This secret is copied to the app/secrets/jwt-settings.json file
+    // Some secrets will be created in Kubernetes
+    // which will be copied the json files secrets/jwt-settings.json and secrets/db-settings.json.
     builder.Configuration.SetBasePath(builder.Environment.ContentRootPath).AddJsonFile("secrets/jwt-settings.json");
+    builder.Configuration.SetBasePath(builder.Environment.ContentRootPath).AddJsonFile("secrets/db-settings.json");
 }
+
+// Dependency injection for database connection, to be used by DataAccess class
+string? connectionString = builder.Configuration.GetConnectionString("Default");
+if (connectionString == null)
+{
+    throw new Exception("Failed to get connection string.");
+}
+
+builder.Services.AddTransient<IDbConnection>
+(
+    (IServiceProvider serviceProvider) => new SqlConnection(connectionString)
+);
+
+// Dependency injection for DataAccess class
+builder.Services.AddTransient<IDataAccess, DataAccess>();
 
 string? appSettingsTokenNullable = builder.Configuration.GetValue<string>("AppSettings:Token");
 string? appSettingsIssuerNullable = builder.Configuration.GetValue<string>("AppSettings:Issuer");
