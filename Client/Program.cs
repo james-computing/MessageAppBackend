@@ -57,12 +57,6 @@ namespace Client
                 return;
             }
 
-            bool addedToGroups = await client.AddToGroups();
-            if(!addedToGroups)
-            {
-                return;
-            }
-
             string? message = null;
             bool chatting = true;
             const string roomId = "groupName";

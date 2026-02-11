@@ -175,25 +175,6 @@ namespace Client
             return false;
         }
 
-        public async Task<bool> AddToGroups()
-        {
-            if (connection == null)
-            {
-                return false;
-            }
-
-            try
-            {
-                await connection.InvokeAsync("AddToGroups");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return false;
-            }
-        }
-
         public async Task SendMessage(string receiverId, string message)
         {
             if (connection == null)
