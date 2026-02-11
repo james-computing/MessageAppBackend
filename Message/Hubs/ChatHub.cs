@@ -25,44 +25,19 @@ namespace Message.Hubs
             _kafkaProducer = kafkaProducer;
         }
 
-        private async Task<Tuple<string, bool>> GetUserId()
-        {
-            string? userId = Context.UserIdentifier;
-            if (userId == null)
-            {
-                Console.WriteLine("Error: Context.UserIdentifier = null in SendMessageAsync");
-                return new Tuple<string, bool>("",false);
-            }
-            return new Tuple<string, bool>(userId, true);
-        }
-
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
             await AddToGroupsAsync();
         }
-        private async Task AddToGroupsAsync()
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            (string userId, bool succeded) = await GetUserId();
-            if (!succeded)
-            {
-                return;
-            }
 
-            // Get from the database which groups the user is in.
-            Console.WriteLine("ChatHub adding user to its groups...");
-            IEnumerable<string> roomIds = await _dataAccess.GetRoomIds(userId);
-            // Since the Hub is transient, I can't store the rooms in the class,
-            // but I can store it in Context.Items.
-            Context.Items.Add("roomIds", roomIds);
-
-            // Add to corresponding groups in SignalR.
-            List<Task> tasks = new List<Task>();
-            foreach (string roomId in roomIds)
-            {
-                tasks.Add(Groups.AddToGroupAsync(Context.ConnectionId, roomId));
-            }
-            await Task.WhenAll(tasks);
+            Console.WriteLine("User disconnected.");
+            await base.OnDisconnectedAsync(exception);
+            // Check if some device for the same user is still connected.
+            // If not, remove the user from its SignalR groups.
         }
 
         public async Task RemoveFromGroupsAsync()
@@ -115,6 +90,17 @@ namespace Message.Hubs
             await messageTask;
         }
 
+        private async Task<Tuple<string, bool>> GetUserId()
+        {
+            string? userId = Context.UserIdentifier;
+            if (userId == null)
+            {
+                Console.WriteLine("Error: Context.UserIdentifier = null in SendMessageAsync");
+                return new Tuple<string, bool>("", false);
+            }
+            return new Tuple<string, bool>(userId, true);
+        }
+
         private bool UserIsInRoom(string roomId)
         {
             IEnumerable<string> roomIds;
@@ -132,6 +118,30 @@ namespace Message.Hubs
             }
 
             return true;
+        }
+
+        private async Task AddToGroupsAsync()
+        {
+            (string userId, bool succeded) = await GetUserId();
+            if (!succeded)
+            {
+                return;
+            }
+
+            // Get from the database which groups the user is in.
+            Console.WriteLine("ChatHub adding user to its groups...");
+            IEnumerable<string> roomIds = await _dataAccess.GetRoomIds(userId);
+            // Since the Hub is transient, I can't store the rooms in the class,
+            // but I can store it in Context.Items.
+            Context.Items.Add("roomIds", roomIds);
+
+            // Add to corresponding groups in SignalR.
+            List<Task> tasks = new List<Task>();
+            foreach (string roomId in roomIds)
+            {
+                tasks.Add(Groups.AddToGroupAsync(Context.ConnectionId, roomId));
+            }
+            await Task.WhenAll(tasks);
         }
     }
 }
