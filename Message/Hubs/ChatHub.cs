@@ -25,7 +25,6 @@ namespace Message.Hubs
             _kafkaProducer = kafkaProducer;
         }
 
-        public async Task AddToGroups()
         {
             // Get from the database which groups the user is in.
             string? userId = Context.UserIdentifier;
@@ -33,6 +32,11 @@ namespace Message.Hubs
             {
                 Console.WriteLine("Error: Context.UserIdentifier = null in SendMessageAsync");
                 await Clients.Caller.ReceiveErrorMessageAsync("Error in setup.");
+        private async Task AddToGroupsAsync()
+        {
+            (string userId, bool succeded) = await GetUserId();
+            if (!succeded)
+            {
                 return;
             }
 
