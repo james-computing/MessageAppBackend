@@ -112,5 +112,24 @@ namespace Message.Hubs
             await kafkaTask;
             await messageTask;
         }
+
+        private bool UserIsInRoom(string roomId)
+        {
+            IEnumerable<string> roomIds;
+            object? value;
+            bool hasValue = Context.Items.TryGetValue("roomIds", out value);
+            if (!hasValue || value == null)
+            {
+                return false;
+            }
+
+            roomIds = (IEnumerable<string>)value;
+            if (!roomIds.Contains(roomId))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
