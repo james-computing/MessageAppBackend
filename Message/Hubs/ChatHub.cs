@@ -73,8 +73,15 @@ namespace Message.Hubs
                 return;
             }
 
-            // Since the Hub is transient, I can't store the rooms in the class.
-            IEnumerable<string> roomIds = await _dataAccess.GetRoomIds(userId);
+            // Get the room ids
+            object? value;
+            bool hasValue = Context.Items.TryGetValue("roomIds", out value);
+            if (!hasValue || value == null)
+            {
+                return;
+            }
+
+            IEnumerable<string> roomIds = (IEnumerable<string>) value;
 
             // Remove from corresponding groups in SignalR.
             List<Task> tasks = new List<Task>();
