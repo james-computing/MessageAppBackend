@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Message.Kafka.Producer;
+using Message.Data;
 
 /*
     The Hub is transient, it can be disposed fast. For this reason, it can't be used for long tasks.
@@ -12,13 +13,15 @@ namespace Message.Hubs
     [Authorize]
     public class ChatHub : Hub<IChatClient>
     {
+        private readonly IDataAccess _dataAccess;
         private readonly IKafkaProducer _kafkaProducer;
 
-        public ChatHub(IConfiguration configuration, IKafkaProducer kafkaProducer)
+        public ChatHub(IConfiguration configuration, IDataAccess dataAccess, IKafkaProducer kafkaProducer)
         {
             Console.WriteLine("------------------------------------------------------");
             Console.WriteLine("Constructing ChatHub...");
 
+            _dataAccess = dataAccess;
             _kafkaProducer = kafkaProducer;
         }
 
