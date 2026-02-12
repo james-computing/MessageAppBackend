@@ -7,5 +7,10 @@
             IEnumerable<int> roomIds = [0];
             return roomIds;
         }
+
+        public async Task<int> GetUserIdAsync(string userEmail)
+        {
+            return 0;
+        }
     }
 }
