@@ -1,0 +1,5 @@
+CREATE TABLE dbo.rooms
+(
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	name NVARCHAR(20) NOT NULL
+);
