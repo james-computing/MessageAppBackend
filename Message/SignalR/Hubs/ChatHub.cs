@@ -52,9 +52,9 @@ namespace Message.SignalR.Hubs
         public async Task RemoveFromGroupsAsync()
         {
             // Get the room ids
-            object? value;
-            bool hasValue = Context.Items.TryGetValue("roomIds", out value);
-            if (!hasValue || value == null)
+            object? valueRoomId;
+            bool hasValueRoomId = Context.Items.TryGetValue(roomIdsKey, out valueRoomId);
+            if (!hasValueRoomId || valueRoomId == null)
             {
                 return;
             }
