@@ -45,4 +45,11 @@ spec:
     backendRefs:
     - name: message-service-clusterip
       port: 80
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /Rooms
+    backendRefs:
+    - name: rooms-service-clusterip
+      port: 80
 ---
