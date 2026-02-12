@@ -32,6 +32,11 @@ namespace Message.SignalR.Hubs
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
+            bool succesful = await GetUserId();
+            if(!succesful)
+            {
+                throw new Exception("Failed to get user id.");
+            }
             await AddToGroupsAsync();
         }
 
