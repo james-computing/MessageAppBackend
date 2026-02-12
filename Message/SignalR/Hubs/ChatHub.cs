@@ -94,15 +94,20 @@ namespace Message.SignalR.Hubs
             await messageTask;
         }
 
-        private async Task<Tuple<string, bool>> GetUserId()
+        private async Task<bool> GetUserId()
         {
-            string? userId = Context.UserIdentifier;
-            if (userId == null)
+            string? userEmail = Context.UserIdentifier;
+            if (userEmail == null)
             {
                 Console.WriteLine("Error: Context.UserIdentifier = null in SendMessageAsync");
-                return new Tuple<string, bool>("", false);
+                return false;
             }
-            return new Tuple<string, bool>(userId, true);
+
+            int userId = await _dataAccess.GetUserIdAsync(userEmail);
+            Context.Items.Add(userIdKey, userId);
+            return true;
+        }
+
         }
 
         private bool UserIsInRoom(string roomId)
