@@ -119,7 +119,7 @@ namespace Message.SignalR.Hubs
         {
             IEnumerable<int> roomIds;
             object? value;
-            bool hasValue = Context.Items.TryGetValue("roomIds", out value);
+            bool hasValue = Context.Items.TryGetValue(roomIdsKey, out value);
             if (!hasValue || value == null)
             {
                 return false;
