@@ -106,6 +106,9 @@ namespace Message.SignalR.Hubs
             return true;
         }
 
+        private string GroupName(int roomId)
+        {
+            return Convert.ToString(roomId);
         }
 
         private bool UserIsInRoom(string roomId)
