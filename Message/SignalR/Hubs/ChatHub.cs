@@ -87,7 +87,7 @@ namespace Message.SignalR.Hubs
             int senderId = (int)valueUserId;
 
             Console.WriteLine("ChatHub sending message to Kafka...");
-            Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, roomId, message);
+            Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, roomId, message, time);
             Console.WriteLine("ChatHub sending message to group...");
             Task messageTask = Clients.Group(roomId).ReceiveMessageAsync(senderId, message);
 
