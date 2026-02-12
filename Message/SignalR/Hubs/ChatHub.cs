@@ -51,12 +51,6 @@ namespace Message.SignalR.Hubs
 
         public async Task RemoveFromGroupsAsync()
         {
-            (string userId, bool succeded) = await GetUserId();
-            if (!succeded)
-            {
-                return;
-            }
-
             // Get the room ids
             object? value;
             bool hasValue = Context.Items.TryGetValue("roomIds", out value);
