@@ -155,7 +155,8 @@ namespace Message.SignalR.Hubs
             List<Task> tasks = new List<Task>();
             foreach (int roomId in roomIds)
             {
-                tasks.Add(Groups.AddToGroupAsync(Context.ConnectionId, roomId));
+                string groupName = GroupName(roomId);
+                tasks.Add(Groups.AddToGroupAsync(Context.ConnectionId, groupName));
             }
             await Task.WhenAll(tasks);
         }
