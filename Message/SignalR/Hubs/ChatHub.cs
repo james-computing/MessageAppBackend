@@ -149,7 +149,7 @@ namespace Message.SignalR.Hubs
             IEnumerable<int> roomIds = await _dataAccess.GetRoomIdsAsync(userId);
             // Since the Hub is transient, I can't store the rooms in the class,
             // but I can store it in Context.Items.
-            Context.Items.Add("roomIds", roomIds);
+            Context.Items.Add(roomIdsKey, roomIds);
 
             // Add to corresponding groups in SignalR.
             List<Task> tasks = new List<Task>();
