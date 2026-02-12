@@ -146,14 +146,14 @@ namespace Message.SignalR.Hubs
 
             // Get from the database which groups the user is in.
             Console.WriteLine("ChatHub adding user to its groups...");
-            IEnumerable<string> roomIds = await _dataAccess.GetRoomIds(userId);
+            IEnumerable<int> roomIds = await _dataAccess.GetRoomIdsAsync(userId);
             // Since the Hub is transient, I can't store the rooms in the class,
             // but I can store it in Context.Items.
             Context.Items.Add("roomIds", roomIds);
 
             // Add to corresponding groups in SignalR.
             List<Task> tasks = new List<Task>();
-            foreach (string roomId in roomIds)
+            foreach (int roomId in roomIds)
             {
                 tasks.Add(Groups.AddToGroupAsync(Context.ConnectionId, roomId));
             }
