@@ -70,7 +70,7 @@ namespace Message.SignalR.Hubs
             await Task.WhenAll(tasks);
         }
 
-        public async Task SendMessageAsync(string roomId, string message)
+        public async Task SendMessageAsync(int roomId, string message, DateTime time)
         {
             if (!UserIsInRoom(roomId))
             {
