@@ -17,6 +17,9 @@ namespace Message.SignalR.Hubs
         private readonly IDataAccess _dataAccess;
         private readonly IKafkaProducer _kafkaProducer;
 
+        private const string userIdKey = "userId";
+        private const string roomIdsKey = "roomIds";
+
         public ChatHub(IConfiguration configuration, IDataAccess dataAccess, IKafkaProducer kafkaProducer)
         {
             Console.WriteLine("------------------------------------------------------");
