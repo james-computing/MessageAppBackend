@@ -7,6 +7,17 @@ namespace JWTAuth.Data
 {
     public class DataAccess(IDbConnection dbConnection) : IDataAccess
     {
+        private const string ID_VARIABLE = "id";
+        private const string EMAIL_VARIABLE = "email";
+        private const string PASSWORDHASH_VARIABLE = "passwordhash";
+        private const string USERNAME_VARIABLE = "username";
+        private const string USERROLE_VARIABLE = "userrole";
+        private const string REFRESHTOKEN_VARIABLE = "refreshtoken";
+        private const string REFRESHTOKENEXPIRATIONTIME_VARIABLE = "refreshtokenexpirationtime";
+
+        private const string USERID_VARIABLE = "userid";
+
+
         private const string REGISTER_USER_PROCEDURE = "dbo.registerUser";
         private const string USER_EXISTS_PROCEDURE = "dbo.userExists";
         private const string GET_USER_FROM_ID_PROCEDURE = "dbo.getUserFromId";
@@ -18,10 +29,10 @@ namespace JWTAuth.Data
         {
             //Set up DynamicParameters object to pass parameters
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("email", user.Email);
-            parameters.Add("passwordhash", user.PasswordHash);
-            parameters.Add("username", user.Username);
-            parameters.Add("userrole", user.UserRole.ToString());
+            parameters.Add(EMAIL_VARIABLE, user.Email);
+            parameters.Add(PASSWORDHASH_VARIABLE, user.PasswordHash);
+            parameters.Add(USERNAME_VARIABLE, user.Username);
+            parameters.Add(USERROLE_VARIABLE, user.UserRole.ToString());
 
             //Execute stored procedure
             await dbConnection.ExecuteAsync
@@ -36,7 +47,7 @@ namespace JWTAuth.Data
         {
             //Set up DynamicParameters object to pass parameters
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("email", userDto.Email);
+            parameters.Add(EMAIL_VARIABLE, userDto.Email);
 
             //Execute stored procedure
             bool userExists = await dbConnection.QuerySingleAsync<bool>
@@ -52,7 +63,7 @@ namespace JWTAuth.Data
         public async Task<User?> GetUserFromIdAsync(int userId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("id", userId);
+            parameters.Add(ID_VARIABLE, userId);
 
             User? user = await dbConnection.QueryFirstOrDefaultAsync<User>
             (
@@ -67,7 +78,7 @@ namespace JWTAuth.Data
         {
             //Set up DynamicParameters object to pass parameters
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("email", userEmail);
+            parameters.Add(EMAIL_VARIABLE, userEmail);
 
             //Execute stored procedure
             User? user = await dbConnection.QuerySingleOrDefaultAsync<User>
@@ -84,9 +95,9 @@ namespace JWTAuth.Data
         {
 
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("id", userId);
-            parameters.Add("refreshtoken", refreshTokenData.RefreshToken);
-            parameters.Add("refreshtokenexpirationtime", refreshTokenData.RefreshTokenExpirationTime);
+            parameters.Add(ID_VARIABLE, userId);
+            parameters.Add(REFRESHTOKEN_VARIABLE, refreshTokenData.RefreshToken);
+            parameters.Add(REFRESHTOKENEXPIRATIONTIME_VARIABLE, refreshTokenData.RefreshTokenExpirationTime);
 
             await dbConnection.ExecuteAsync
             (
@@ -99,7 +110,7 @@ namespace JWTAuth.Data
         public async Task<RefreshTokenData?> GetRefreshTokenDataAsync(int userId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("userId", userId);
+            parameters.Add(USERID_VARIABLE, userId);
 
             RefreshTokenData? refreshTokenData = await dbConnection.QueryFirstOrDefaultAsync<RefreshTokenData>
             (
