@@ -136,11 +136,13 @@ namespace Message.SignalR.Hubs
 
         private async Task AddToGroupsAsync()
         {
-            (string userId, bool succeded) = await GetUserId();
-            if (!succeded)
+            object? valueUserId;
+            bool hasValueUserId = Context.Items.TryGetValue(userIdKey, out valueUserId);
+            if (!hasValueUserId || valueUserId == null)
             {
                 return;
             }
+            int userId = (int)valueUserId;
 
             // Get from the database which groups the user is in.
             Console.WriteLine("ChatHub adding user to its groups...");
