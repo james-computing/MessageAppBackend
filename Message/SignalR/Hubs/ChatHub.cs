@@ -62,7 +62,7 @@ namespace Message.SignalR.Hubs
 
             // Remove from corresponding groups in SignalR.
             List<Task> tasks = new List<Task>();
-            foreach (string roomId in roomIds)
+            foreach (int roomId in roomIds)
             {
                 tasks.Add(Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId));
             }
