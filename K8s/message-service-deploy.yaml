@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: message-service
-        image: jmstoledo/message-service:v58
+        image: jmstoledo/message-service:v59
         ports:
         - containerPort: 8080
         volumeMounts:
