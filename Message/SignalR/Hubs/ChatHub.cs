@@ -64,7 +64,8 @@ namespace Message.SignalR.Hubs
             List<Task> tasks = new List<Task>();
             foreach (int roomId in roomIds)
             {
-                tasks.Add(Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId));
+                string groupName = GroupName(roomId);
+                tasks.Add(Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName));
             }
             await Task.WhenAll(tasks);
         }
