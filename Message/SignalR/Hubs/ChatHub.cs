@@ -115,9 +115,9 @@ namespace Message.SignalR.Hubs
             return Convert.ToString(roomId);
         }
 
-        private bool UserIsInRoom(string roomId)
+        private bool UserIsInRoom(int roomId)
         {
-            IEnumerable<string> roomIds;
+            IEnumerable<int> roomIds;
             object? value;
             bool hasValue = Context.Items.TryGetValue("roomIds", out value);
             if (!hasValue || value == null)
@@ -125,7 +125,7 @@ namespace Message.SignalR.Hubs
                 return false;
             }
 
-            roomIds = (IEnumerable<string>)value;
+            roomIds = (IEnumerable<int>)value;
             if (!roomIds.Contains(roomId))
             {
                 return false;
