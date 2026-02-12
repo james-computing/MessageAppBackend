@@ -59,7 +59,7 @@ namespace Client
 
             string? message = null;
             bool chatting = true;
-            const string roomId = "groupName";
+            const int roomId = 0;
             Console.WriteLine("Starting chat. Send q to quit.");
             while (chatting)
             {
