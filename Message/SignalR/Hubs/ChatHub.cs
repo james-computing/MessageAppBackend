@@ -78,11 +78,13 @@ namespace Message.SignalR.Hubs
                 return;
             }
 
-            (string senderId, bool succeded) = await GetUserId();
-            if (!succeded)
+            object? valueUserId;
+            bool hasValueUserId = Context.Items.TryGetValue(userIdKey, out valueUserId);
+            if (!hasValueUserId || valueUserId == null)
             {
                 return;
             }
+            int senderId = (int)valueUserId;
 
             Console.WriteLine("ChatHub sending message to Kafka...");
             Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, roomId, message);
