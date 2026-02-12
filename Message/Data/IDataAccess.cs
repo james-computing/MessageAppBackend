@@ -2,6 +2,6 @@
 {
     public interface IDataAccess
     {
-        public Task<IEnumerable<string>> GetRoomIds(string userId);
+        public Task<IEnumerable<int>> GetRoomIdsAsync(int userId);
     }
 }
