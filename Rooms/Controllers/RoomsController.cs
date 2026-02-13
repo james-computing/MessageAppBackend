@@ -93,5 +93,28 @@ namespace Rooms.Controllers
             await dataAccess.UpdateRoomNameAsync(roomId, name);
             return Ok();
         }
+
+        //*******************************************************************
+        [HttpPost]
+        public async Task<ActionResult> AddUserToRoomAsync(int roomId, string userEmail, RoleInRoom roleInRoom)
+        {
+            // First check if the user that is adding the other one to the room
+            // has authority to do it.
+            int? userId = await GetUserIdFromEmail(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool authorized = await IsUserAuthorizedToConfigureRoom(roomId, userId.Value);
+            if (!authorized)
+            {
+                return Forbid();
+            }
+
+            await dataAccess.AddUserToRoomAsync(roomId, userId.Value, roleInRoom);
+            return Ok();
+        }
+
     }
 }
