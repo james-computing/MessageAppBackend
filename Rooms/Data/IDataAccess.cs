@@ -14,5 +14,8 @@ namespace Rooms.Data
         public Task<int> CountUsersInRoomAsync(int roomId);
         public Task RemoveUserFromRoomAsync(int roomId, int userId);
         public Task UpdateUserRoleInRoom(int roomId, int userId, RoleInRoom roleInRoom);
+
+        //*********************** users table **********************************
+        public Task<int> GetUserIdFromEmail(string userEmail);
     }
 }

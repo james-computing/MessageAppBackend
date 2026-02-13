@@ -24,6 +24,11 @@ namespace Rooms.Data
         private const string REMOVE_USER_FROM_ROOM = "dbo.removeUserFromRoom";
         private const string UPDATE_USER_ROLE_IN_ROOM_PROCEDURE = "dbo.updateUserRoleInRoom";
 
+        // users table
+        private const string EMAIL_VARIABLE = "email";
+
+        private const string GET_USER_ID_FROM_EMAIL_PROCEDURE = "dbo.getUserIdFromEmail";
+
         //********************************************** rooms table *****************************************
         public async Task<int> CreateRoomAsync(string name)
         {
@@ -126,6 +131,22 @@ namespace Rooms.Data
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
+        }
+
+        //************************************* users table *********************************************
+        public async Task<int> GetUserIdFromEmail(string userEmail)
+        {
+            DynamicParameters parameters = new();
+            parameters.Add(EMAIL_VARIABLE, userEmail);
+
+            int userId = await connection.QuerySingleAsync<int>
+            (
+                GET_USER_ID_FROM_EMAIL_PROCEDURE,
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return userId;
         }
     }
 }
