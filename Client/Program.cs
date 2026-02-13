@@ -1,5 +1,4 @@
 ﻿using JWTAuth.Dtos;
-using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
 {
