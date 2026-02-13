@@ -10,7 +10,7 @@ namespace Client
             UserRegisterDto userRegisterDto = new UserRegisterDto()
             {
                 Email = "john@hotmail.com",
-                Password = "banana",
+                Password = "john123",
                 Username = "John",
             };
 
