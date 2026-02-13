@@ -49,6 +49,9 @@ namespace Client
                 return;
             }
 
+            const string roomName = "room name";
+            int roomId = await client.CreateRoomAsync(roomName);
+
             await client.ConfigureConnectionAsync();
 
             bool connected = await client.TryToConnectToChatHubAsync();
@@ -59,7 +62,6 @@ namespace Client
 
             string? message = null;
             bool chatting = true;
-            const int roomId = 0;
             Console.WriteLine("Starting chat. Send q to quit.");
             while (chatting)
             {
