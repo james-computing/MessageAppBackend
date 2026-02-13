@@ -5,7 +5,7 @@ GO
 -- =============================================
 -- Author:		James
 -- Create date: 13/01/2026
--- Description: Get password hash of user with given email
+-- Description: Get user with given email
 -- =============================================
 CREATE PROCEDURE dbo.getUserFromEmail
 	-- Add the parameters for the stored procedure here
