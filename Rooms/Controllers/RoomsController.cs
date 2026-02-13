@@ -21,5 +21,25 @@ namespace Rooms.Controllers
             int userId = await dataAccess.GetUserIdFromEmail(userEmail);
             return userId;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateRoomAndAddUserToItAsync(string name)
+        {
+            // Create a new room and get its id
+            int roomId = await dataAccess.CreateRoomAsync(name);
+
+            // Get the user id
+            int? userId = await GetUserIdFromEmail(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            // Add the user to the room
+            await dataAccess.AddUserToRoomAsync(roomId, userId.Value, RoleInRoom.Admin);
+            
+            return Ok(roomId);
+        }
+
     }
 }
