@@ -74,5 +74,24 @@ namespace Rooms.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateRoomNameAsync(int roomId, string name)
+        {
+            // First check if the user has authority to update the room
+            int? userId = await GetUserIdFromEmail(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool authorized = await IsUserAuthorizedToConfigureRoom(roomId, userId.Value);
+            if (!authorized)
+            {
+                return Forbid();
+            }
+
+            await dataAccess.UpdateRoomNameAsync(roomId, name);
+            return Ok();
+        }
     }
 }
