@@ -36,7 +36,7 @@ namespace Message.SignalR.Hubs
             bool succesful = await GetUserId();
             if(!succesful)
             {
-                throw new Exception("Failed to get user id.");
+                throw new Exception("Error: Failed to get user id.");
             }
             await AddToGroupsAsync();
         }
@@ -57,7 +57,7 @@ namespace Message.SignalR.Hubs
             bool hasValueRoomId = Context.Items.TryGetValue(roomsIdsKey, out valueRoomId);
             if (!hasValueRoomId || valueRoomId == null)
             {
-                Console.WriteLine("Null rooms ids in Context.Items");
+                Console.WriteLine("Error: Null rooms ids in Context.Items");
                 return;
             }
             IEnumerable<int> roomsIds = (IEnumerable<int>)valueRoomId;
@@ -76,7 +76,7 @@ namespace Message.SignalR.Hubs
         {
             if (!UserIsInRoom(roomId))
             {
-                Console.WriteLine("User trying to send message to room it is not in.");
+                Console.WriteLine("Error: User trying to send message to room it is not in.");
                 return;
             }
 
@@ -84,7 +84,7 @@ namespace Message.SignalR.Hubs
             bool hasValueUserId = Context.Items.TryGetValue(userIdKey, out valueUserId);
             if (!hasValueUserId || valueUserId == null)
             {
-                Console.WriteLine("Null user id in Context.Items");
+                Console.WriteLine("Error: Null user id in Context.Items");
                 return;
             }
             int senderId = (int)valueUserId;
@@ -126,7 +126,7 @@ namespace Message.SignalR.Hubs
             bool hasValue = Context.Items.TryGetValue(roomsIdsKey, out value);
             if (!hasValue || value == null)
             {
-                Console.WriteLine("Null rooms ids in Context.Items");
+                Console.WriteLine("Error: Null rooms ids in Context.Items");
                 return false;
             }
 
@@ -145,7 +145,7 @@ namespace Message.SignalR.Hubs
             bool hasValueUserId = Context.Items.TryGetValue(userIdKey, out valueUserId);
             if (!hasValueUserId || valueUserId == null)
             {
-                Console.WriteLine("Null user id in Context.Items");
+                Console.WriteLine("Error: Null user id in Context.Items");
                 return;
             }
             int userId = (int)valueUserId;
