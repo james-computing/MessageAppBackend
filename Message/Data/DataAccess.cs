@@ -11,7 +11,7 @@ namespace Message.Data
         private const string GET_USER_ROOMS_PROCEDURE = "dbo.getUserRooms";
         private const string GET_USER_ID_FROM_EMAIL_PROCEDURE = "dbo.getUserIdFromEmail";
 
-        public async Task<IEnumerable<int>> GetRoomIdsAsync(int userId)
+        public async Task<IEnumerable<int>> GetRoomsIdsAsync(int userId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add(USERID_VARIABLE, userId);

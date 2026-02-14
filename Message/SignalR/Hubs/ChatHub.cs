@@ -19,7 +19,7 @@ namespace Message.SignalR.Hubs
 
         // Keys to be used with Context.Items dictionary
         private const string userIdKey = "userId";
-        private const string roomIdsKey = "roomIds";
+        private const string roomsIdsKey = "roomsIds";
 
         public ChatHub(IConfiguration configuration, IDataAccess dataAccess, IKafkaProducer kafkaProducer)
         {
@@ -54,16 +54,16 @@ namespace Message.SignalR.Hubs
         {
             // Get the room ids
             object? valueRoomId;
-            bool hasValueRoomId = Context.Items.TryGetValue(roomIdsKey, out valueRoomId);
+            bool hasValueRoomId = Context.Items.TryGetValue(roomsIdsKey, out valueRoomId);
             if (!hasValueRoomId || valueRoomId == null)
             {
                 return;
             }
-            IEnumerable<int> roomIds = (IEnumerable<int>)valueRoomId;
+            IEnumerable<int> roomsIds = (IEnumerable<int>)valueRoomId;
 
             // Remove from corresponding groups in SignalR.
             List<Task> tasks = new List<Task>();
-            foreach (int roomId in roomIds)
+            foreach (int roomId in roomsIds)
             {
                 string groupName = GroupName(roomId);
                 tasks.Add(Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName));
@@ -118,16 +118,16 @@ namespace Message.SignalR.Hubs
 
         private bool UserIsInRoom(int roomId)
         {
-            IEnumerable<int> roomIds;
+            IEnumerable<int> roomsIds;
             object? value;
-            bool hasValue = Context.Items.TryGetValue(roomIdsKey, out value);
+            bool hasValue = Context.Items.TryGetValue(roomsIdsKey, out value);
             if (!hasValue || value == null)
             {
                 return false;
             }
 
-            roomIds = (IEnumerable<int>)value;
-            if (!roomIds.Contains(roomId))
+            roomsIds = (IEnumerable<int>)value;
+            if (!roomsIds.Contains(roomId))
             {
                 return false;
             }
@@ -147,14 +147,14 @@ namespace Message.SignalR.Hubs
 
             // Get from the database which groups the user is in.
             Console.WriteLine("ChatHub adding user to its groups...");
-            IEnumerable<int> roomIds = await _dataAccess.GetRoomIdsAsync(userId);
+            IEnumerable<int> roomsIds = await _dataAccess.GetRoomsIdsAsync(userId);
             // Since the Hub is transient, I can't store the rooms in the class,
             // but I can store it in Context.Items.
-            Context.Items.Add(roomIdsKey, roomIds);
+            Context.Items.Add(roomsIdsKey, roomsIds);
 
             // Add to corresponding groups in SignalR.
             List<Task> tasks = new List<Task>();
-            foreach (int roomId in roomIds)
+            foreach (int roomId in roomsIds)
             {
                 string groupName = GroupName(roomId);
                 tasks.Add(Groups.AddToGroupAsync(Context.ConnectionId, groupName));
