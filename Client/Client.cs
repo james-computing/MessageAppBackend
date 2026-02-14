@@ -203,7 +203,7 @@ namespace Client
             return false;
         }
 
-        public async Task SendMessageAsync(int receiverId, string message)
+        public async Task SendMessageAsync(int roomId, string message)
         {
             if (connection == null)
             {
@@ -215,7 +215,7 @@ namespace Client
                 // Invoke method SendMessage of ChatHub, with arguments user and message
                 Console.WriteLine("Sending message to server...");
                 DateTime time = DateTime.UtcNow;
-                await connection.InvokeAsync("SendMessageAsync", receiverId, message, time);
+                await connection.InvokeAsync("SendMessageAsync", roomId, message, time);
                 Console.WriteLine("Message sent.");
             }
             catch (Exception ex)
