@@ -34,6 +34,7 @@ namespace Client
             jsonSerializerOptions.PropertyNameCaseInsensitive = true;
 
             urls = new Urls(productionUrls);
+            Console.WriteLine("Finished constructing client.");
         }
 
         public async Task ConfigureConnectionAsync()
@@ -90,6 +91,7 @@ namespace Client
 
         public async Task<bool> TestConnectionToAuthAsync()
         {
+            Console.WriteLine("Trying to connect to Auth service...");
             HttpClient httpClient = new HttpClient();
 
             // Test connection first
@@ -160,6 +162,7 @@ namespace Client
 
         public async Task<int> CreateRoomAsync(string name)
         {
+            Console.WriteLine("Trying to create a new room...");
             HttpClient httpClient = new HttpClient();
 
             if(token == null)
@@ -176,7 +179,7 @@ namespace Client
             if (responseMessage.IsSuccessStatusCode)
             {
                 int roomId = await responseMessage.Content.ReadFromJsonAsync<int>();
-                Console.WriteLine($"roomId = {roomId}");
+                Console.WriteLine($"Created room with roomId = {roomId}");
                 return roomId;
             }
             throw new Exception($"Error: Failed to create room:\n{await responseMessage.Content.ReadAsStringAsync()}");
