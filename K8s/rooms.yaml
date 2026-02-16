@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rooms-service-deployment
+  name: rooms-deployment
   labels:
-    app: rooms-service
+    app: rooms
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rooms-service
+      app: rooms
   template:
     metadata:
       labels:
-        app: rooms-service
+        app: rooms
     spec:
       containers:
-      - name: rooms-service
-        image: jmstoledo/rooms-service:v1
+      - name: rooms
+        image: jmstoledo/rooms:v1
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -40,13 +40,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rooms-service-clusterip
+  name: rooms-clusterip
 spec:
   type: ClusterIP
   selector:
-    app: rooms-service
+    app: rooms
   ports:
-  - name: rooms-service
+  - name: rooms
     protocol: TCP
     port: 80
     targetPort: 8080
