@@ -1,5 +1,10 @@
+using MessageREST.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Data;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +34,35 @@ builder.Services.AddTransient<IDbConnection>
 (
     (IServiceProvider serviceProvider) => new SqlConnection(connectionString)
 );
+
+string? appSettingsTokenNullable = builder.Configuration.GetValue<string>("AppSettings:Token");
+string? appSettingsIssuerNullable = builder.Configuration.GetValue<string>("AppSettings:Issuer");
+string? appSettingsAudienceNullable = builder.Configuration.GetValue<string>("AppSettings:Audience");
+if (appSettingsTokenNullable == null || appSettingsIssuerNullable == null || appSettingsAudienceNullable == null)
+{
+    throw new Exception("Failed to get AppSettings token, issuer or audience.");
+}
+string appSettingsToken = appSettingsTokenNullable;
+string appSettingsIssuer = appSettingsIssuerNullable;
+string appSettingsAudience = appSettingsAudienceNullable;
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(
+        (JwtBearerOptions options) =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidIssuer = appSettingsIssuer,
+                ValidateAudience = true,
+                ValidAudience = appSettingsAudience,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettingsToken)),
+                ValidateLifetime = true
+            };
+        }
+    );
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
