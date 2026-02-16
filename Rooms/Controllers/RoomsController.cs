@@ -37,6 +37,8 @@ namespace Rooms.Controllers
             return true;
         }
 
+        //********************************** Actions ***************************************************************
+
         [HttpPost]
         public async Task<ActionResult<int>> CreateRoomAndAddUserToItAsync(CreateRoomDto createRoomDto)
         {
