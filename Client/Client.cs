@@ -10,21 +10,20 @@ namespace Client
 {
     internal class Client
     {
+        // SignalR
         private readonly HubConnectionBuilder hubConnectionBuilder;
         private HubConnection? connection;
+
+        // Serialization options
+        private readonly JsonSerializerOptions jsonSerializerOptions;
+
+        private readonly Urls urls;
+
+        // Variables
         private readonly UserRegisterDto _userRegisterDto;
         private TokenDto? token;
 
-        private const string chatHubUrl = "http://messageapp/Message/";
-        private const string registerUrl = "http://messageapp/Auth/Register";
-        private const string loginUrl = "http://messageapp/Auth/Login";
-        private const string testAuthConnectionUrl = "http://messageapp/Auth/TestConnection";
-
-        private const string createRoomUrl = "http://messageapp/Rooms/CreateRoomAndAddUserToIt";
-
-        private readonly JsonSerializerOptions jsonSerializerOptions;
-
-        public Client(UserRegisterDto userRegisterDto)
+        public Client(UserRegisterDto userRegisterDto, bool productionUrls)
         {
             Console.WriteLine("Constructing client...");
             _userRegisterDto = userRegisterDto;
@@ -33,6 +32,8 @@ namespace Client
 
             jsonSerializerOptions = new JsonSerializerOptions();
             jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+
+            urls = new Urls(productionUrls);
         }
 
         public async Task ConfigureConnectionAsync()
@@ -43,7 +44,7 @@ namespace Client
             }
 
             connection = hubConnectionBuilder
-                .WithUrl(chatHubUrl, options =>
+                .WithUrl(urls.chatHubUrl, options =>
                 {
                     options.AccessTokenProvider = () => Task.FromResult<string?>(token.AccessToken);
                 })
@@ -92,7 +93,7 @@ namespace Client
             HttpClient httpClient = new HttpClient();
 
             // Test connection first
-            HttpResponseMessage responseMessageConnectionTest = await httpClient.GetAsync(testAuthConnectionUrl);
+            HttpResponseMessage responseMessageConnectionTest = await httpClient.GetAsync(urls.testAuthConnectionUrl);
             if (!responseMessageConnectionTest.IsSuccessStatusCode)
             {
                 Console.WriteLine("Error: Failed to connect to Auth service.");
@@ -116,7 +117,7 @@ namespace Client
             string serializedJson = JsonSerializer.Serialize(userRegisterDto);
             Console.WriteLine($"json to post {serializedJson}");
             using StringContent jsonContent = new StringContent(serializedJson, Encoding.UTF8, "application/json");
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(registerUrl, jsonContent);
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(urls.registerUrl, jsonContent);
             if(responseMessage.IsSuccessStatusCode)
             {
                 string response = await responseMessage.Content.ReadAsStringAsync();
@@ -139,7 +140,7 @@ namespace Client
 
             using StringContent jsonContent = new(serializedString, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(loginUrl, jsonContent);
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(urls.loginUrl, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 Console.WriteLine("Login successful.");
@@ -171,7 +172,7 @@ namespace Client
             Console.WriteLine($"json to post {serializedJson}");
             using StringContent jsonContent = new StringContent(serializedJson, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(createRoomUrl, jsonContent);
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(urls.createRoomUrl, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 int roomId = await responseMessage.Content.ReadFromJsonAsync<int>();
