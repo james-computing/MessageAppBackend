@@ -36,20 +36,20 @@ spec:
         type: PathPrefix
         value: /Auth
     backendRefs:
-    - name: auth-service-clusterip
+    - name: auth-clusterip
       port: 80
   - matches:
     - path:
         type: PathPrefix
-        value: /Message
+        value: /MessageRealTime
     backendRefs:
-    - name: message-service-clusterip
+    - name: message-real-time-clusterip
       port: 80
   - matches:
     - path:
         type: PathPrefix
         value: /Rooms
     backendRefs:
-    - name: rooms-service-clusterip
+    - name: rooms-clusterip
       port: 80
 ---
