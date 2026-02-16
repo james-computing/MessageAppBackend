@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Rooms.Data;
 using Rooms.Dtos;
 using Rooms.Roles;
-using System.Data;
 using System.Security.Claims;
 
 namespace Rooms.Controllers
