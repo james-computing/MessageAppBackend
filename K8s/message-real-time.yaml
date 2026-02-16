@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: message-service-deployment
+  name: message-real-time-deployment
   labels:
-    app: message-service
+    app: message-real-time
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: message-service
+      app: message-real-time
   template:
     metadata:
       labels:
-        app: message-service
+        app: message-real-time
     spec:
       containers:
-      - name: message-service
-        image: jmstoledo/message-service:v59
+      - name: message-real-time
+        image: jmstoledo/message-real-time:v1
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -40,13 +40,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: message-service-clusterip
+  name: message-real-time-clusterip
 spec:
   type: ClusterIP
   selector:
-    app: message-service
+    app: message-real-time
   ports:
-  - name: message-service
+  - name: message-real-time
     protocol: TCP
     port: 80
     targetPort: 8080
