@@ -13,7 +13,7 @@ namespace MessageREST.Data
         private const string NEWMESSAGE_VARIABLE = "newmessage";
         private const string USERID_VARIABLE = "userid";
 
-        private const string LOAD_MESSAGES_PROCEDURE = "dbo.loadMessages";
+        private const string LOAD_MESSAGES_PROCEDURE = "dbo.loadMessagesPrecedingReference";
         private const string EDIT_MESSAGE_PROCEDURE = "dbo.editMessage";
         private const string DELETE_MESSAGE_PROCEDURE = "dbo.deleteMessage";
         private const string GET_MESSAGE_OWNER_PROCEDURE = "dbo.getMessageOwner";
@@ -25,7 +25,7 @@ namespace MessageREST.Data
 
         private const string GET_USER_ID_FROM_EMAIL_PROCEDURE = "dbo.getUserIdFromEmail";
 
-        public async Task<IEnumerable<Message>> LoadMessagesAsync(int roomId, int messageIdReference, uint quantity)
+        public async Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(int roomId, int messageIdReference, uint quantity)
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);

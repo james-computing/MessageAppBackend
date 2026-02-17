@@ -4,7 +4,7 @@ namespace MessageREST.Data
 {
     public interface IDataAccess
     {
-        public Task<IEnumerable<Message>> LoadMessagesAsync(int roomId, int messageIdReference, uint quantity);
+        public Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(int roomId, int messageIdReference, uint quantity);
         public Task EditMessageAsync(int messageId, string newMessage);
         public Task DeleteMessageAsync(int messageId);
         public Task<bool> UserOwnsMessage(int userId, int messageId);
