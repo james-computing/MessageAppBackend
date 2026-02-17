@@ -1,4 +1,5 @@
-﻿using JWTAuth.Dtos;
+﻿using Client.Dtos;
+using JWTAuth.Dtos;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
@@ -207,7 +208,7 @@ namespace Client
             return false;
         }
 
-        public async Task SendMessageAsync(int roomId, string message)
+        public async Task SendMessageAsync(int roomId, string content)
         {
             if (connection == null)
             {
@@ -219,7 +220,13 @@ namespace Client
                 // Invoke method SendMessage of ChatHub, with arguments user and message
                 Console.WriteLine("Sending message to server...");
                 DateTime time = DateTime.UtcNow;
-                await connection.InvokeAsync("SendMessageAsync", roomId, message, time);
+                SendMessageDto sendMessageDto = new()
+                {
+                    RoomId = roomId,
+                    Content = content,
+                    Time = time,
+                };
+                await connection.InvokeAsync("SendMessageAsync", sendMessageDto);
                 Console.WriteLine("Message sent.");
             }
             catch (Exception ex)
