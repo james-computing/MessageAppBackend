@@ -57,5 +57,36 @@ namespace MessageREST.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Message>>> LoadMessagesPrecedingReference(LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto)
+        {
+            // Check if user is in the room
+            int? userId = await GetUserIdFromEmail(User);
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool userIsInRoom = await dataAccess.UserIsInRoom(loadMessagesPrecedingRefDto.RoomId, userId.Value);
+            if (!userIsInRoom)
+            {
+                return Forbid();
+            }
+
+            if (loadMessagesPrecedingRefDto.Quantity > maxMessagesQuantity)
+            {
+                return BadRequest($"Can't request for more than {maxMessagesQuantity} messages.");
+            }
+
+            IEnumerable<Message> messages = await dataAccess.LoadMessagesPrecedingReferenceAsync
+                                            (
+                                                loadMessagesPrecedingRefDto.RoomId,
+                                                loadMessagesPrecedingRefDto.MessageIdReference,
+                                                loadMessagesPrecedingRefDto.Quantity
+                                            );
+
+            return Ok(messages);
+        }
+
     }
 }
