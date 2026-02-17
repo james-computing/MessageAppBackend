@@ -26,5 +26,36 @@ namespace MessageREST.Controllers
             return userId;
         }
 
+        //************************************ Actions **********************************************
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Message>>> LoadLatestMessages(LoadLatestMessagesDto loadLatestMessagesDto)
+        {
+            // Check if user is in the room
+            int? userId = await GetUserIdFromEmail(User);
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool userIsInRoom = await dataAccess.UserIsInRoom(loadLatestMessagesDto.RoomId, userId.Value);
+            if (!userIsInRoom)
+            {
+                return Forbid();
+            }
+
+            if (loadLatestMessagesDto.Quantity > maxMessagesQuantity)
+            {
+                return BadRequest($"Can't request for more than {maxMessagesQuantity} messages.");
+            }
+
+            IEnumerable<Message> messages = await dataAccess.LoadLatestMessagesAsync
+                                            (
+                                                loadLatestMessagesDto.RoomId,
+                                                loadLatestMessagesDto.Quantity
+                                            );
+            return Ok(messages);
+        }
+
+
     }
 }
