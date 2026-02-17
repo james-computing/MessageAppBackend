@@ -35,6 +35,9 @@ builder.Services.AddTransient<IDbConnection>
     (IServiceProvider serviceProvider) => new SqlConnection(connectionString)
 );
 
+// Dependency injection for DataAccess class
+builder.Services.AddTransient<IDataAccess, DataAccess>();
+
 string? appSettingsTokenNullable = builder.Configuration.GetValue<string>("AppSettings:Token");
 string? appSettingsIssuerNullable = builder.Configuration.GetValue<string>("AppSettings:Issuer");
 string? appSettingsAudienceNullable = builder.Configuration.GetValue<string>("AppSettings:Audience");
