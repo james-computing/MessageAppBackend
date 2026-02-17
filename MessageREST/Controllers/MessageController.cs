@@ -58,7 +58,8 @@ namespace MessageREST.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> LoadMessagesPrecedingReference(LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto)
+        public async Task<ActionResult<IEnumerable<Message>>> LoadMessagesPrecedingReference(
+            LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto)
         {
             // Check if user is in the room
             int? userId = await GetUserIdFromEmail(User);
@@ -104,7 +105,7 @@ namespace MessageREST.Controllers
                 return Forbid();
             }
 
-            await dataAccess.EditMessageAsync(editMessageDto.MessageId, editMessageDto.NewMessage);
+            await dataAccess.EditMessageAsync(editMessageDto.MessageId, editMessageDto.NewContent);
 
             return Ok();
         }

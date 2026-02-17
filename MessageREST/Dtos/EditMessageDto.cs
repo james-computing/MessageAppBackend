@@ -3,6 +3,6 @@
     public class EditMessageDto
     {
         public required int MessageId { get; set; }
-        public required string NewMessage { get; set; }
+        public required string NewContent { get; set; }
     }
 }

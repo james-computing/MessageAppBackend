@@ -87,10 +87,10 @@ namespace KafkaConsumer.Kafka
             int senderId = key.SenderId;
             int roomId = key.ReceiverId;
             DateTime time = key.Time;
-            string message = consumeResult.Message.Value;
+            string content = consumeResult.Message.Value;
 
             // Store message in database
-            await _dataAccess.SaveMessage(senderId, roomId, message, time);
+            await _dataAccess.SaveMessage(senderId, roomId, content, time);
 
             Console.WriteLine("KafkaConsumer consumed message successfully.");
         }

@@ -10,7 +10,7 @@ namespace MessageREST.Data
         private const string MESSAGEIDREFERENCE_VARIABLE = "messageidreference";
         private const string QUANTITY_VARIABLE = "quantity";
         private const string MESSAGEID_VARIABLE = "messageid";
-        private const string NEWMESSAGE_VARIABLE = "newmessage";
+        private const string NEWCONTENT_VARIABLE = "newcontent";
         private const string USERID_VARIABLE = "userid";
 
         private const string LOAD_LATEST_MESSAGES_PROCEDURE = "dbo.loadLatestMessages";
@@ -59,11 +59,11 @@ namespace MessageREST.Data
             return messages;
         }
 
-        public async Task EditMessageAsync(int messageId, string newMessage)
+        public async Task EditMessageAsync(int messageId, string newContent)
         {
             DynamicParameters parameters = new();
             parameters.Add(MESSAGEID_VARIABLE, messageId);
-            parameters.Add(NEWMESSAGE_VARIABLE, newMessage);
+            parameters.Add(NEWCONTENT_VARIABLE, newContent);
 
             await connection.ExecuteAsync
             (
