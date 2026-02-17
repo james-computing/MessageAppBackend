@@ -6,7 +6,7 @@
     // we use a method from this interface.
     public interface IChatClient
     {
-        public Task ReceiveMessageAsync(int senderId, string message, DateTime time);
+        public Task ReceiveMessageAsync(int senderId, string content, DateTime time);
         public Task ReceiveErrorMessageAsync(string errorMessage);
     }
 }

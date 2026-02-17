@@ -72,7 +72,7 @@ namespace Message.SignalR.Hubs
             await Task.WhenAll(tasks);
         }
 
-        public async Task SendMessageAsync(int roomId, string message, DateTime time)
+        public async Task SendMessageAsync(int roomId, string content, DateTime time)
         {
             if (!UserIsInRoom(roomId))
             {
@@ -90,10 +90,10 @@ namespace Message.SignalR.Hubs
             int senderId = (int)valueUserId;
 
             Console.WriteLine("ChatHub sending message to Kafka...");
-            Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, roomId, message, time);
+            Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, roomId, content, time);
             Console.WriteLine("ChatHub sending message to group...");
             string groupName = GroupName(roomId);
-            Task messageTask = Clients.Group(groupName).ReceiveMessageAsync(senderId, message, time);
+            Task messageTask = Clients.Group(groupName).ReceiveMessageAsync(senderId, content, time);
 
             await kafkaTask;
             await messageTask;
