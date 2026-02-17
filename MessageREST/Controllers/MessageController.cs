@@ -8,5 +8,7 @@ namespace MessageREST.Controllers
     [Authorize]
     public class MessageController(IDataAccess dataAccess) : ControllerBase
     {
+        private int maxMessagesQuantity = 50;
+
     }
 }
