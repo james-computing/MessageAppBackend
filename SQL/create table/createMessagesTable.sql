@@ -5,11 +5,11 @@ CREATE TABLE dbo.messages
 	senderid INT NOT NULL,
 	content NVARCHAR(100) NOT NULL,
 	time DATETIME NOT NULL,
-	CONSTRAINT FK_chat_rooms FOREIGN KEY (roomid)
+	CONSTRAINT FK_messages_rooms FOREIGN KEY (roomid)
 		REFERENCES rooms(id)
 	ON DELETE CASCADE
 	ON UPDATE CASCADE,
-	CONSTRAINT FK_chat_users FOREIGN KEY (senderid)
+	CONSTRAINT FK_messages_users FOREIGN KEY (senderid)
 		REFERENCES users(id)
 	ON DELETE CASCADE
 	ON UPDATE CASCADE
