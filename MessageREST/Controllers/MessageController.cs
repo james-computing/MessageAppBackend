@@ -88,5 +88,26 @@ namespace MessageREST.Controllers
             return Ok(messages);
         }
 
+        [HttpPut]
+        public async Task<ActionResult> EditMessage(EditMessageDto editMessageDto)
+        {
+            // Check if user owns the message
+            int? userId = await GetUserIdFromEmail(User);
+            if (User == null)
+            {
+                return Unauthorized();
+            }
+
+            bool userOwnsMessage = await dataAccess.UserOwnsMessage(userId.Value, editMessageDto.MessageId);
+            if(!userOwnsMessage)
+            {
+                return Forbid();
+            }
+
+            await dataAccess.EditMessageAsync(editMessageDto.MessageId, editMessageDto.NewMessage);
+
+            return Ok();
+        }
+
     }
 }
