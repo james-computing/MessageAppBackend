@@ -109,5 +109,25 @@ namespace MessageREST.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        public async Task<ActionResult> DeleteMessage(DeleteMessageDto deleteMessageDto)
+        {
+            // Check if user owns the message
+            int? userId = await GetUserIdFromEmail(User);
+            if (User == null)
+            {
+                return Unauthorized();
+            }
+
+            bool userOwnsMessage = await dataAccess.UserOwnsMessage(userId.Value, deleteMessageDto.MessageId);
+            if (!userOwnsMessage)
+            {
+                return Forbid();
+            }
+
+            await dataAccess.DeleteMessageAsync(deleteMessageDto.MessageId);
+
+            return Ok();
+        }
     }
 }
