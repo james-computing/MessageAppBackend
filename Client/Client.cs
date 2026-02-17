@@ -61,9 +61,9 @@ namespace Client
             connection.Closed += OnConnectionClosedAsync;
 
             // When connection receives a message, print it
-            connection.On<int, string, DateTime>("ReceiveMessageAsync", async (int senderId, string content, DateTime time) =>
+            connection.On<ReceiveMessageDto>("ReceiveMessageAsync", async (ReceiveMessageDto receiveMessageDto) =>
             {
-                Console.WriteLine($"{time}, {senderId}: {content}");
+                Console.WriteLine($"{receiveMessageDto.Time}, room: {receiveMessageDto.RoomId}, sender: {receiveMessageDto.SenderId}: {receiveMessageDto.Content}");
             });
 
             connection.On<string>("ReceiveErrorMessageAsync", async (string errorMessage) =>
