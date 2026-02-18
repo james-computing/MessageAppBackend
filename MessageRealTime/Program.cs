@@ -1,6 +1,5 @@
 using MessageRealTime.Kafka;
 using MessageRealTime.Data;
-using MessageRealTime.Kafka.Producer;
 using MessageRealTime.SignalR.Hubs;
 using MessageRealTime.SignalR.UserIdProvider;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -96,9 +95,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddSignalR();
 // To uniquely identify the user of SignalR
 builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
-
-// Kafka producer
-//builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 
 builder.Services.AddHostedService<ConsumerOnBackground>();
 
