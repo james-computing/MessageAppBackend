@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using Rooms.Data;
+using Rooms.Kafka.Producer;
 using Scalar.AspNetCore;
 using System.Data;
 using System.Text;
@@ -64,6 +65,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
         }
     );
+
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 
 var app = builder.Build();
 
