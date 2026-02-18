@@ -1,3 +1,4 @@
+using KafkaConsumer.Kafka;
 using MessageRealTime.Data;
 using MessageRealTime.Kafka.Producer;
 using MessageRealTime.SignalR.Hubs;
@@ -97,7 +98,9 @@ builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
 // Kafka producer
-builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+//builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+
+builder.Services.AddHostedService<ConsumerOnBackground>();
 
 var app = builder.Build();
 
