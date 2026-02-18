@@ -1,6 +1,8 @@
 ﻿using Confluent.Kafka;
 using MessageRealTime.Data;
+using MessageRealTime.Kafka.EventTypes;
 using MessageRealTime.Kafka.Keys;
+using MessageRealTime.Kafka.Values;
 using System.Text.Json;
 
 namespace MessageRealTime.Kafka
@@ -78,6 +80,7 @@ namespace MessageRealTime.Kafka
         {
             Console.WriteLine("KafkaConsumer processing consumed message...");
 
+            // First deserialize the key
             string serializedKey = consumeResult.Message.Key;
             Key? key = JsonSerializer.Deserialize<Key>(serializedKey);
             if (key == null)
@@ -85,9 +88,56 @@ namespace MessageRealTime.Kafka
                 throw new Exception("Error: Null key.");
             }
 
-            Console.WriteLine($"Key =\n{key}\nvalue =\n{consumeResult.Message.Value}");
+            // Use the information in the key to deserialize the value
+            string serializedValue = consumeResult.Message.Value;
+            switch(key.EventType)
+            {
+                case EventType.MESSAGE_UPDATED_EVENT:
+                    await ProcessEventMessageUpdated(serializedValue);
+                    break;
+                case EventType.ROOM_CREATED_EVENT:
+                    await ProcessEventRoomCreated(serializedValue);
+                    break;
+                case EventType.ROOM_DELETED_EVENT:
+                    await ProcessEventRoomDeleted(serializedValue);
+                    break;
+                case EventType.ADD_USER_TO_ROOM_EVENT:
+                    await ProcessEventAddUserToRoom(serializedValue);
+                    break;
+                case EventType.REMOVE_USER_FROM_ROOM_EVENT:
+                    await ProcessEventRemoveUserFromRoom(serializedValue);
+                    break;
+                default:
+                    Console.WriteLine("Warning: Event not processed");
+                    break;
+            }
 
             Console.WriteLine("KafkaConsumer consumed message successfully.");
+        }
+
+        private async Task ProcessEventMessageUpdated(string serializedValue)
+        {
+            MessageUpdated? value = Serializer<MessageUpdated>.Deserialize(serializedValue);
+        }
+
+        private async Task ProcessEventRoomCreated(string serializedValue)
+        {
+            RoomCreated? value = Serializer<RoomCreated>.Deserialize(serializedValue);
+        }
+
+        private async Task ProcessEventRoomDeleted(string serializedValue)
+        {
+            RoomDeleted? value = Serializer<RoomDeleted>.Deserialize(serializedValue);
+        }
+
+        private async Task ProcessEventAddUserToRoom(string serializedValue)
+        {
+            AddUserToRoom? value = Serializer<AddUserToRoom>.Deserialize(serializedValue);
+        }
+
+        private async Task ProcessEventRemoveUserFromRoom(string serializedValue)
+        {
+            RemoveUserFromRoom? value = Serializer<RemoveUserFromRoom>.Deserialize(serializedValue);
         }
 
         ValueTask IAsyncDisposable.DisposeAsync()
