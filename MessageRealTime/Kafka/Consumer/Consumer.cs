@@ -119,6 +119,11 @@ namespace MessageRealTime.Kafka
             Console.WriteLine("KafkaConsumer consumed message successfully.");
         }
 
+        private string GroupName(int roomId)
+        {
+            return Convert.ToString(roomId);
+        }
+
         private async Task ProcessEventMessageUpdated(string serializedValue)
         {
             MessageUpdated? value = Serializer<MessageUpdated>.Deserialize(serializedValue);
