@@ -133,6 +133,7 @@ namespace Rooms.Controllers
             }
 
             await dataAccess.UpdateRoomNameAsync(updateRoomNameDto.RoomId, updateRoomNameDto.Name);
+
             return Ok();
         }
 
