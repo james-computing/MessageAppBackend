@@ -38,7 +38,7 @@ namespace Message.Kafka.Producer
                         .Build();
         }
 
-        public async Task ProduceToKafkaAsync(int senderId, int receiverId, string message, DateTime time)
+        public async Task ProduceToKafkaAsync(int messageId, int senderId, int receiverId, string message, DateTime time)
         {
             // There will be multiple hubs, one for each container that runs the application.
             // As such, a user connected to some container can't send a message to a user in another container
@@ -49,6 +49,7 @@ namespace Message.Kafka.Producer
             {
                 Key = new Key()
                 {
+                    MessageId = messageId,
                     SenderId = senderId,
                     ReceiverId = receiverId,
                     Time = time,

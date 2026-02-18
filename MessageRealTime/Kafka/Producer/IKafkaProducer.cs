@@ -2,6 +2,6 @@
 {
     public interface IKafkaProducer : IAsyncDisposable
     {
-        public Task ProduceToKafkaAsync(int senderId, int receiverId, string message, DateTime time);
+        public Task ProduceToKafkaAsync(int messageId, int senderId, int receiverId, string message, DateTime time);
     }
 }
