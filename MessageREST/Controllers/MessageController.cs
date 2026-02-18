@@ -1,9 +1,12 @@
 ﻿using MessageREST.Data;
 using MessageREST.Dtos;
+using MessageREST.Kafka.Keys;
+using MessageREST.Kafka.Producer;
 using MessageREST.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace MessageREST.Controllers
 {
@@ -13,6 +16,9 @@ namespace MessageREST.Controllers
     public class MessageController(IDataAccess dataAccess, IKafkaProducer kafkaProducer) : ControllerBase
     {
         private int maxMessagesQuantity = 50;
+
+        // For Kafka producer
+        private const string MESSAGE_UPDATED_EVENT = "message-updated";
 
         // From Rooms controller
         private async Task<int?> GetUserIdFromEmail(ClaimsPrincipal user)
@@ -107,6 +113,18 @@ namespace MessageREST.Controllers
 
             await dataAccess.EditMessageAsync(editMessageDto.MessageId, editMessageDto.NewContent);
 
+            Key key = new()
+            {
+                EventType = MESSAGE_UPDATED_EVENT,
+            };
+
+            string value = JsonSerializer.Serialize(new
+            {
+                MessageId = editMessageDto.MessageId,
+            });
+
+            await kafkaProducer.ProduceToKafkaAsync(key, value);
+
             return Ok();
         }
 
@@ -127,6 +145,18 @@ namespace MessageREST.Controllers
             }
 
             await dataAccess.DeleteMessageAsync(deleteMessageDto.MessageId);
+
+            Key key = new()
+            {
+                EventType = MESSAGE_UPDATED_EVENT,
+            };
+
+            string value = JsonSerializer.Serialize(new
+            {
+                MessageId = deleteMessageDto.MessageId,
+            });
+
+            await kafkaProducer.ProduceToKafkaAsync(key, value);
 
             return Ok();
         }
