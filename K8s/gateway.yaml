@@ -7,7 +7,7 @@ metadata:
 spec:
   gatewayClassName: nginx
   listeners:
-  - name: http # the gatway listens on http, but redirects to https
+  - name: http # the gateway listens on http, but redirects to https
     port: 80
     protocol: HTTP
   - name: https
