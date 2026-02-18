@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using MessageRealTime.Data;
+using MessageRealTime.Dtos;
 using MessageRealTime.Kafka.EventTypes;
 using MessageRealTime.Kafka.Keys;
 using MessageRealTime.Kafka.Values;
@@ -126,7 +127,21 @@ namespace MessageRealTime.Kafka
 
         private async Task ProcessEventMessageUpdated(string serializedValue)
         {
+            Console.WriteLine("ProcessEventMessageUpdated");
             MessageUpdated? value = Serializer<MessageUpdated>.Deserialize(serializedValue);
+            if(value == null)
+            {
+                Console.WriteLine("Error: Failed to deserialize Kafka value.");
+                return;
+            }
+
+            // Notify the client that the message was updated
+            string groupName = GroupName(value.RoomId);
+            NotificationDto notificationDto = new()
+            {
+                Content = Serializer<MessageUpdated>.Serialize(value)
+            };
+            await _hubContext.Clients.Group(groupName).ReceiveNotificationAsync(notificationDto);
         }
 
         private async Task ProcessEventRoomCreated(string serializedValue)
