@@ -21,6 +21,7 @@ BEGIN
 
     -- Insert statements for procedure here
 	INSERT INTO dbo.messages (roomid, senderid, content, time)
+		OUTPUT INSERTED.id
 		VALUES(@roomid, @senderid, @content, @time);
 END
 GO
