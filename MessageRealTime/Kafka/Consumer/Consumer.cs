@@ -100,6 +100,7 @@ namespace MessageRealTime.Kafka
                 case EventType.MESSAGE_UPDATED_EVENT:
                     await ProcessEventMessageUpdated(serializedValue);
                     break;
+                /*
                 case EventType.ROOM_CREATED_EVENT:
                     await ProcessEventRoomCreated(serializedValue);
                     break;
@@ -112,6 +113,7 @@ namespace MessageRealTime.Kafka
                 case EventType.REMOVE_USER_FROM_ROOM_EVENT:
                     await ProcessEventRemoveUserFromRoom(serializedValue);
                     break;
+                */
                 default:
                     Console.WriteLine("Warning: Event not processed");
                     break;
@@ -144,25 +146,51 @@ namespace MessageRealTime.Kafka
             await _hubContext.Clients.Group(groupName).ReceiveNotificationAsync(notificationDto);
         }
 
+        /*
         private async Task ProcessEventRoomCreated(string serializedValue)
         {
+            Console.WriteLine("ProcessEventRoomCreated");
             RoomCreated? value = Serializer<RoomCreated>.Deserialize(serializedValue);
+            if (value == null)
+            {
+                Console.WriteLine("Error: Failed to deserialize Kafka value.");
+                return;
+            }
         }
 
         private async Task ProcessEventRoomDeleted(string serializedValue)
         {
+            Console.WriteLine("ProcessEventRoomDeleted");
             RoomDeleted? value = Serializer<RoomDeleted>.Deserialize(serializedValue);
+            if (value == null)
+            {
+                Console.WriteLine("Error: Failed to deserialize Kafka value.");
+                return;
+            }
         }
 
         private async Task ProcessEventAddUserToRoom(string serializedValue)
         {
+            Console.WriteLine("ProcessEventAddUserToRoom");
             AddUserToRoom? value = Serializer<AddUserToRoom>.Deserialize(serializedValue);
+            if (value == null)
+            {
+                Console.WriteLine("Error: Failed to deserialize Kafka value.");
+                return;
+            }
         }
 
         private async Task ProcessEventRemoveUserFromRoom(string serializedValue)
         {
+            Console.WriteLine("ProcessEventRemoveUserFromRoom");
             RemoveUserFromRoom? value = Serializer<RemoveUserFromRoom>.Deserialize(serializedValue);
+            if (value == null)
+            {
+                Console.WriteLine("Error: Failed to deserialize Kafka value.");
+                return;
+            }
         }
+        */
 
         ValueTask IAsyncDisposable.DisposeAsync()
         {
