@@ -1,4 +1,4 @@
-﻿namespace Message.Data
+﻿namespace MessageRealTime.Data
 {
     public interface IDataAccess
     {

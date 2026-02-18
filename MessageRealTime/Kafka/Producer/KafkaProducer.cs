@@ -1,7 +1,7 @@
 ﻿using Confluent.Kafka;
-using Message.Kafka.Keys;
+using MessageRealTime.Kafka.Keys;
 
-namespace Message.Kafka.Producer
+namespace MessageRealTime.Kafka.Producer
 {
     public class KafkaProducer : IKafkaProducer
     {

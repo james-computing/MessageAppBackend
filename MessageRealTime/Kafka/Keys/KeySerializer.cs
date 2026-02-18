@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace Message.Kafka.Keys
+namespace MessageRealTime.Kafka.Keys
 {
     public class KeySerializer : ISerializer<Key>
     {

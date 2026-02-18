@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
-namespace Message.SignalR.UserIdProvider
+namespace MessageRealTime.SignalR.UserIdProvider
 {
     public class UserIdProvider : IUserIdProvider
     {

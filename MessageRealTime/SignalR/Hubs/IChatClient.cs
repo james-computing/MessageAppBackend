@@ -1,6 +1,6 @@
 ﻿using MessageRealTime.Dtos;
 
-namespace Message.SignalR.Hubs
+namespace MessageRealTime.SignalR.Hubs
 {
     // Interface that abstracts the Hub from the client.
     // It is used by SignalR for strongly typing.

@@ -1,4 +1,4 @@
-﻿namespace Message.Kafka.Producer
+﻿namespace MessageRealTime.Kafka.Producer
 {
     public interface IKafkaProducer : IAsyncDisposable
     {

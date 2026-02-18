@@ -1,5 +1,5 @@
-﻿using Message.Data;
-using Message.Kafka.Producer;
+﻿using MessageRealTime.Data;
+using MessageRealTime.Kafka.Producer;
 using MessageRealTime.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.SignalR;
     The Hub.Context is null in the constructor, as far as my tests show, only use it in the methods.
 */
 
-namespace Message.SignalR.Hubs
+namespace MessageRealTime.SignalR.Hubs
 {
     [Authorize]
     public class ChatHub : Hub<IChatClient>

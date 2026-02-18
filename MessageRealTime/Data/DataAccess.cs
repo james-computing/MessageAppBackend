@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 
-namespace Message.Data
+namespace MessageRealTime.Data
 {
     public class DataAccess(IDbConnection connection) : IDataAccess
     {

@@ -1,7 +1,7 @@
-using Message.Data;
-using Message.Kafka.Producer;
-using Message.SignalR.Hubs;
-using Message.SignalR.UserIdProvider;
+using MessageRealTime.Data;
+using MessageRealTime.Kafka.Producer;
+using MessageRealTime.SignalR.Hubs;
+using MessageRealTime.SignalR.UserIdProvider;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient;
