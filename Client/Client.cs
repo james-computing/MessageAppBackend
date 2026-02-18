@@ -66,9 +66,11 @@ namespace Client
                 Console.WriteLine($"id: {receiveMessageDto.Id}, {receiveMessageDto.Time}, room: {receiveMessageDto.RoomId}, sender: {receiveMessageDto.SenderId}: {receiveMessageDto.Content}");
             });
 
-            connection.On<string>("ReceiveErrorMessageAsync", async (string errorMessage) =>
+            connection.On<ErrorMessageDto>("ReceiveErrorMessageAsync", async (ErrorMessageDto errorMessageDto) =>
             {
-                Console.WriteLine($"Error: {errorMessage}");
+                Console.WriteLine($"Error: {errorMessageDto.Content}");
+            });
+
             });
         }
 

@@ -9,6 +9,6 @@ namespace Message.SignalR.Hubs
     public interface IChatClient
     {
         public Task ReceiveMessageAsync(ReceiveMessageDto receiveMessageDto);
-        public Task ReceiveErrorMessageAsync(string errorMessage);
+        public Task ReceiveErrorMessageAsync(ErrorMessageDto errorMessage);
     }
 }
