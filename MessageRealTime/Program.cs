@@ -1,4 +1,3 @@
-using MessageRealTime.Kafka;
 using MessageRealTime.Data;
 using MessageRealTime.SignalR.Hubs;
 using MessageRealTime.SignalR.UserIdProvider;

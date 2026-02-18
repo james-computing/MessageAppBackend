@@ -1,5 +1,4 @@
 ﻿using MessageRealTime.Data;
-using MessageRealTime.Kafka.Producer;
 using MessageRealTime.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
