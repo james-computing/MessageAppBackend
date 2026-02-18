@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Rooms.Data;
 using Rooms.Dtos;
+using Rooms.Kafka.Keys;
+using Rooms.Kafka.Producer;
 using Rooms.Roles;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Rooms.Controllers
 {
@@ -12,6 +15,8 @@ namespace Rooms.Controllers
     [Authorize]
     public class RoomsController(IDataAccess dataAccess, IKafkaProducer kafkaProducer) : ControllerBase
     {
+        private const string ROOM_CREATED_EVENT = "room-created";
+        //*****************************************************************************
         private async Task<int?> GetUserIdFromEmail(ClaimsPrincipal user)
         {
             string? userEmail = user.FindFirstValue(ClaimTypes.Email);
@@ -52,7 +57,23 @@ namespace Rooms.Controllers
             }
 
             // Add the user to the room
-            await dataAccess.AddUserToRoomAsync(roomId, userId.Value, RoleInRoom.Admin);
+            RoleInRoom roleInRoom = RoleInRoom.Admin;
+            await dataAccess.AddUserToRoomAsync(roomId, userId.Value, roleInRoom);
+
+            Key key = new()
+            {
+                EventType = ROOM_CREATED_EVENT,
+            };
+
+            string value = JsonSerializer.Serialize(new
+            {
+                RoomId = roomId,
+                UserId = userId.Value,
+                RoleInRoom = roleInRoom,
+            });
+
+            // Produce an event
+            await kafkaProducer.ProduceToKafkaAsync(key, value);
             
             return Ok(roomId);
         }
