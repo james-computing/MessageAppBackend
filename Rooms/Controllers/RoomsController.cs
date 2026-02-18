@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rooms.Data;
 using Rooms.Dtos;
+using Rooms.Kafka.EventTypes;
 using Rooms.Kafka.Keys;
 using Rooms.Kafka.Producer;
 using Rooms.Kafka.Values;
@@ -15,11 +16,6 @@ namespace Rooms.Controllers
     [Authorize]
     public class RoomsController(IDataAccess dataAccess, IKafkaProducer kafkaProducer) : ControllerBase
     {
-        private const string ROOM_CREATED_EVENT = "room-created";
-        private const string ROOM_DELETED_EVENT = "room-deleted";
-        private const string ADD_USER_TO_ROOM_EVENT = "add-user-to-room";
-        private const string REMOVE_USER_FROM_ROOM_EVENT = "remove-user-from-room";
-
         //*****************************************************************************
         private async Task<int?> GetUserIdFromEmail(ClaimsPrincipal user)
         {
@@ -66,7 +62,7 @@ namespace Rooms.Controllers
 
             Key key = new()
             {
-                EventType = ROOM_CREATED_EVENT,
+                EventType = EventType.ROOM_CREATED_EVENT,
             };
 
             RoomCreated value = new()
@@ -101,7 +97,7 @@ namespace Rooms.Controllers
 
             Key key = new()
             {
-                EventType = ROOM_DELETED_EVENT,
+                EventType = EventType.ROOM_DELETED_EVENT,
             };
 
             RoomDeleted value = new()
@@ -161,7 +157,7 @@ namespace Rooms.Controllers
 
             Key key = new()
             {
-                EventType = ADD_USER_TO_ROOM_EVENT,
+                EventType = EventType.ADD_USER_TO_ROOM_EVENT,
             };
 
             AddUserToRoom value = new()
@@ -199,7 +195,7 @@ namespace Rooms.Controllers
 
             Key key = new()
             {
-                EventType = REMOVE_USER_FROM_ROOM_EVENT,
+                EventType = EventType.REMOVE_USER_FROM_ROOM_EVENT,
             };
 
             RemoveUserFromRoom value = new()
