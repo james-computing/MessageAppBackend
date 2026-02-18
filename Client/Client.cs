@@ -63,7 +63,7 @@ namespace Client
             // When connection receives a message, print it
             connection.On<ReceiveMessageDto>("ReceiveMessageAsync", async (ReceiveMessageDto receiveMessageDto) =>
             {
-                Console.WriteLine($"id: {receiveMessageDto.Id}, {receiveMessageDto.Time}, room: {receiveMessageDto.RoomId}, sender: {receiveMessageDto.SenderId}: {receiveMessageDto.Content}");
+                Console.WriteLine(JsonSerializer.Serialize(receiveMessageDto));
             });
 
             connection.On<ErrorMessageDto>("ReceiveErrorMessageAsync", async (ErrorMessageDto errorMessageDto) =>
