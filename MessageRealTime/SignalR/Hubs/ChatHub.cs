@@ -133,6 +133,7 @@ namespace Message.SignalR.Hubs
             await kafkaTask;
         }
 
+        /*
         public async Task<bool> UpdateUserRooms()
         {
             // Get the user id from Context.Items
@@ -214,6 +215,7 @@ namespace Message.SignalR.Hubs
 
             return true;
         }
+        */
 
         private async Task<bool> GetUserId()
         {
