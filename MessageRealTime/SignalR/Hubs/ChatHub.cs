@@ -90,22 +90,34 @@ namespace Message.SignalR.Hubs
             }
             int senderId = (int)valueUserId;
 
-            Console.WriteLine("ChatHub sending message to Kafka...");
-            Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, sendMessageDto.RoomId, sendMessageDto.Content, sendMessageDto.Time);
+            // First save the message in the database, from which the message gets an id.
+            // This id will be sent to the client as part of the message.
+            Console.WriteLine("ChatHub saving message to database...");
+            int messageId = await _dataAccess.SaveMessageAsync
+                            (
+                                sendMessageDto.RoomId,
+                                senderId,
+                                sendMessageDto.Content,
+                                sendMessageDto.Time
+                            );
             
             Console.WriteLine("ChatHub sending message to group...");
             string groupName = GroupName(sendMessageDto.RoomId);
             ReceiveMessageDto receiveMessageDto = new()
             {
+                Id = messageId,
                 RoomId = sendMessageDto.RoomId,
                 SenderId = senderId,
                 Content = sendMessageDto.Content,
                 Time = sendMessageDto.Time,
             };
             Task messageTask = Clients.Group(groupName).ReceiveMessageAsync(receiveMessageDto);
+            
+            Console.WriteLine("ChatHub sending message to Kafka...");
+            Task kafkaTask = _kafkaProducer.ProduceToKafkaAsync(senderId, sendMessageDto.RoomId, sendMessageDto.Content, sendMessageDto.Time);
 
-            await kafkaTask;
             await messageTask;
+            await kafkaTask;
         }
 
         public async Task<bool> UpdateUserRooms()
