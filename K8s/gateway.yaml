@@ -57,6 +57,6 @@ spec:
         type: PathPrefix
         value: /Rooms
     backendRefs:
-    - name: rooms-clusterip
+    - name: message-rest-clusterip
       port: 80
 ---
