@@ -1,5 +1,4 @@
-﻿using Rooms.Roles;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Rooms.Kafka.Values
 {
@@ -7,7 +6,6 @@ namespace Rooms.Kafka.Values
     {
         public required int RoomId { get; set; }
         public required int UserId { get; set; }
-        public required RoleInRoom RoleInRoom { get; set; }
 
         public override string ToString()
         {

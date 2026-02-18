@@ -1,5 +1,4 @@
-﻿using Rooms.Roles;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Rooms.Kafka.Values
 {

@@ -73,7 +73,6 @@ namespace Rooms.Controllers
             {
                 RoomId = roomId,
                 UserId = userId.Value,
-                RoleInRoom = roleInRoom,
             };
 
             // Produce an event
