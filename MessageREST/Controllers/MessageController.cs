@@ -119,6 +119,7 @@ namespace MessageREST.Controllers
             MessageUpdated value = new()
             {
                 MessageId = editMessageDto.MessageId,
+                RoomId = roomId,
             };
 
             await kafkaProducer.ProduceToKafkaAsync(key, Serializer<MessageUpdated>.Serialize(value));
@@ -152,6 +153,7 @@ namespace MessageREST.Controllers
             MessageUpdated value = new()
             {
                 MessageId = deleteMessageDto.MessageId,
+                RoomId = roomId,
             };
 
             await kafkaProducer.ProduceToKafkaAsync(key, Serializer<MessageUpdated>.Serialize(value));
