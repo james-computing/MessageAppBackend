@@ -1,0 +1,30 @@
+﻿using REST.Models;
+using REST.Roles;
+
+namespace REST.Data
+{
+    public interface IDataAccess
+    {
+        public Task<IEnumerable<Message>> LoadLatestMessagesAsync(int roomId, uint quantity);
+        public Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(int roomId, int messageIdReference, uint quantity);
+        public Task EditMessageAsync(int messageId, string newContent);
+        public Task DeleteMessageAsync(int messageId);
+        public Task<bool> UserOwnsMessage(int userId, int messageId);
+        public Task<bool> UserIsInRoom(int roomId, int userId);
+
+        //*********************** rooms table **********************************
+        public Task<int> CreateRoomAsync(string name);
+        public Task DeleteRoomAsync(int roomId);
+        public Task UpdateRoomNameAsync(int roomId, string name);
+
+        //*********************** usersrooms table *****************************
+        public Task AddUserToRoomAsync(int roomId, int userId, RoleInRoom roleInRoom);
+        public Task<int> CountUsersInRoomAsync(int roomId);
+        public Task RemoveUserFromRoomAsync(int roomId, int userId);
+        public Task UpdateUserRoleInRoom(int roomId, int userId, RoleInRoom roleInRoom);
+        public Task<RoleInRoom?> GetRoleInRoomForUser(int roomId, int userId);
+
+        //*********************** users table **********************************
+        public Task<int> GetUserIdFromEmail(string userEmail);
+    }
+}

@@ -4,6 +4,5 @@
   <Project Path="ConsoleClient/ConsoleClient.csproj" Id="51fbc5b4-d8bc-448a-9ca3-06dc6c50c850" />
   <Project Path="KafkaConsumer/KafkaConsumer.csproj" Id="10c3f8a6-4511-4513-80d6-b8064e19a774" />
   <Project Path="MessageRealTime/MessageRealTime.csproj" Id="90f5d913-4caa-4e7e-b339-02b230a8e025" />
-  <Project Path="MessageREST/MessageREST.csproj" Id="b3eb9fed-7b0c-4b37-a0a9-463acf4336ca" />
-  <Project Path="Rooms/Rooms.csproj" Id="ca46065b-e647-4ca6-aa7f-cc7db80ac975" />
+  <Project Path="REST/REST.csproj" Id="b3eb9fed-7b0c-4b37-a0a9-463acf4336ca" />
 </Solution>
