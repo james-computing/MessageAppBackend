@@ -17,7 +17,9 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT dbo.usersrooms.userid AS 'id', dbo.users.username AS 'username'
+	SELECT dbo.usersrooms.userid AS 'id',
+			dbo.users.username AS 'username',
+			dbo.usersrooms.roleinroom AS 'roleinroom'
 	FROM dbo.usersrooms INNER JOIN dbo.users ON (dbo.usersrooms.userid = dbo.users.id)
 	WHERE dbo.usersrooms.roomid = @roomid;
 END
