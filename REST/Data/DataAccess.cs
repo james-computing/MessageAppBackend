@@ -26,6 +26,7 @@ namespace REST.Data
         private const string EMAIL_VARIABLE = "email";
 
         private const string GET_USER_ID_FROM_EMAIL_PROCEDURE = "dbo.getUserIdFromEmail";
+        private const string ROOM_HAS_USER_WITH_ROLE_PROCEDURE = "dbo.roomHasUserWithRole";
 
         public async Task<IEnumerable<Message>> LoadLatestMessagesAsync(int roomId, uint quantity)
         {
@@ -129,6 +130,20 @@ namespace REST.Data
             }
 
             return true;
+        }
+
+        public async Task<bool> RoomHasUserWithRole(int roomId, RoleInRoom roleInRoom)
+        {
+            DynamicParameters parameters = new();
+            parameters.Add(ROOMID_VARIABLE, roomId);
+
+            bool hasAdmin = await connection.QuerySingleAsync
+                            (
+                                ROOM_HAS_USER_WITH_ROLE_PROCEDURE,
+                                parameters,
+                                commandType: CommandType.StoredProcedure
+                            );
+            return hasAdmin;
         }
 
         // rooms table

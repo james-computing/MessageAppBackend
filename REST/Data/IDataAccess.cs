@@ -25,6 +25,8 @@ namespace REST.Data
         public Task<RoleInRoom?> GetRoleInRoomForUser(int roomId, int userId);
         public Task<bool> UserIsInRoom(int roomId, int userId);
         public Task<bool> UserIsARoomAdmin(int roomId, int userId);
+        public Task<bool> RoomHasUserWithRole(int roomId, RoleInRoom roleInRoom);
+        public Task SetUsersRoleInRoom(int roomId, RoleInRoom roleInRoom);
 
         //*********************** users table **********************************
         public Task<int> GetUserIdFromEmail(string userEmail);
