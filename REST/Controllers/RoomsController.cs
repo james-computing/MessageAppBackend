@@ -61,7 +61,7 @@ namespace REST.Controllers
                 return Unauthorized();
             }
             // First check if the user has authority to delete the room
-            bool authorized = await dataAccess.UserIsARoomAdmin(deleteRoomDto.RoomId, userId.Value);
+            bool authorized = await dataAccess.UserIsARoomAdminAsync(deleteRoomDto.RoomId, userId.Value);
             if (!authorized)
             {
                 return Forbid();
@@ -95,7 +95,7 @@ namespace REST.Controllers
                 return Unauthorized();
             }
 
-            bool authorized = await dataAccess.UserIsARoomAdmin(updateRoomNameDto.RoomId, userId.Value);
+            bool authorized = await dataAccess.UserIsARoomAdminAsync(updateRoomNameDto.RoomId, userId.Value);
             if (!authorized)
             {
                 return Forbid();
@@ -117,7 +117,7 @@ namespace REST.Controllers
                 return Unauthorized();
             }
 
-            bool isAdmin = await dataAccess.UserIsARoomAdmin(generateInvitationTokenDto.RoomId, userId.Value);
+            bool isAdmin = await dataAccess.UserIsARoomAdminAsync(generateInvitationTokenDto.RoomId, userId.Value);
             if (!isAdmin)
             {
                 return Forbid();
@@ -170,7 +170,7 @@ namespace REST.Controllers
                 return Unauthorized();
             }
 
-            bool isAdmin = await dataAccess.UserIsARoomAdmin(removeUserFromRoomDto.RoomId, userId.Value);
+            bool isAdmin = await dataAccess.UserIsARoomAdminAsync(removeUserFromRoomDto.RoomId, userId.Value);
 
             // User can remove itself. If it is an admin of the room, it can remove anyone.
             bool canRemoveUser = isAdmin || userId == removeUserFromRoomDto.UserId;
@@ -191,10 +191,10 @@ namespace REST.Controllers
 
             // Also, if it is not empty, but don't have admins, all users will be turned into admins.
             // Check if there are admins.
-            bool roomHasAdmins = await dataAccess.RoomHasUserWithRole(removeUserFromRoomDto.RoomId, RoleInRoom.Admin);
+            bool roomHasAdmins = await dataAccess.RoomHasUserWithRoleAsync(removeUserFromRoomDto.RoomId, RoleInRoom.Admin);
             if(!roomHasAdmins)
             {
-                await dataAccess.SetUsersRoleInRoom(removeUserFromRoomDto.RoomId, RoleInRoom.Admin);
+                await dataAccess.SetUsersRoleInRoomAsync(removeUserFromRoomDto.RoomId, RoleInRoom.Admin);
                 return Ok();
             }
 
@@ -211,13 +211,13 @@ namespace REST.Controllers
                 return Unauthorized();
             }
 
-            bool authorized = await dataAccess.UserIsARoomAdmin(updateUserRoleInRoomDto.RoomId, userId.Value);
+            bool authorized = await dataAccess.UserIsARoomAdminAsync(updateUserRoleInRoomDto.RoomId, userId.Value);
             if (!authorized)
             {
                 return Forbid();
             }
 
-            await dataAccess.UpdateUserRoleInRoom
+            await dataAccess.UpdateUserRoleInRoomAsync
             (
                 updateUserRoleInRoomDto.RoomId,
                 updateUserRoleInRoomDto.UserId,

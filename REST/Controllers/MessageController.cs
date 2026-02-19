@@ -25,7 +25,7 @@ namespace MessageREST.Controllers
                 return Unauthorized();
             }
 
-            bool userIsInRoom = await dataAccess.UserIsInRoom(loadLatestMessagesDto.RoomId, userId.Value);
+            bool userIsInRoom = await dataAccess.UserIsInRoomAsync(loadLatestMessagesDto.RoomId, userId.Value);
             if (!userIsInRoom)
             {
                 return Forbid();
@@ -56,7 +56,7 @@ namespace MessageREST.Controllers
                 return Unauthorized();
             }
 
-            bool userIsInRoom = await dataAccess.UserIsInRoom(loadMessagesPrecedingRefDto.RoomId, userId.Value);
+            bool userIsInRoom = await dataAccess.UserIsInRoomAsync(loadMessagesPrecedingRefDto.RoomId, userId.Value);
             if (!userIsInRoom)
             {
                 return Forbid();
@@ -87,7 +87,7 @@ namespace MessageREST.Controllers
                 return Unauthorized();
             }
 
-            bool userOwnsMessage = await dataAccess.UserOwnsMessage(userId.Value, editMessageDto.MessageId);
+            bool userOwnsMessage = await dataAccess.UserOwnsMessageAsync(userId.Value, editMessageDto.MessageId);
             if(!userOwnsMessage)
             {
                 return Forbid();
@@ -108,7 +108,7 @@ namespace MessageREST.Controllers
                 return Unauthorized();
             }
 
-            bool userOwnsMessage = await dataAccess.UserOwnsMessage(userId.Value, deleteMessageDto.MessageId);
+            bool userOwnsMessage = await dataAccess.UserOwnsMessageAsync(userId.Value, deleteMessageDto.MessageId);
             if (!userOwnsMessage)
             {
                 return Forbid();
