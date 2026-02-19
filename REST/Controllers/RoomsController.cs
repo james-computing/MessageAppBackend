@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using REST.Data;
 using REST.Dtos.Rooms;
 using REST.Kafka.EventTypes;
