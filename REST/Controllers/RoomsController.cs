@@ -106,32 +106,7 @@ namespace REST.Controllers
         }
 
         //*******************************************************************
-        /*
-        [HttpPost]
-        public async Task<ActionResult> AddUserToRoomAsync(AddUserToRoomDto addUserToRoomDto)
-        {
-            // First check if the user that is adding the other one to the room
-            // has authority to do it.
-            int? userId = Identification.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            bool authorized = await dataAccess.UserIsARoomAdmin(addUserToRoomDto.RoomId, userId.Value);
-            if (!authorized)
-            {
-                return Forbid();
-            }
-
-            // Get id of user to be added
-            int userToAddId = await dataAccess.GetUserIdFromEmail(addUserToRoomDto.UserEmail);
-
-            await dataAccess.AddUserToRoomAsync(addUserToRoomDto.RoomId, userToAddId, addUserToRoomDto.RoleInRoom);
-
-            return Ok();
-        }
-        */
+        
 
         [HttpDelete]
         public async Task<ActionResult> RemoveUserFromRoomAsync(RemoveUserFromRoomDto removeUserFromRoomDto)
