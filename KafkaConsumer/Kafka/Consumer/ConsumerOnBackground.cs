@@ -1,14 +1,12 @@
-﻿using KafkaConsumer.Data;
-
-namespace KafkaConsumer.Kafka
+﻿namespace KafkaConsumer.Kafka
 {
     public class ConsumerOnBackground : BackgroundService
     {
         private readonly IConsumer kafkaConsumer;
 
-        public ConsumerOnBackground(IConfiguration configuration, IDataAccess dataAccess)
+        public ConsumerOnBackground(IConfiguration configuration)
         {
-            kafkaConsumer = new Consumer(configuration, dataAccess);
+            kafkaConsumer = new Consumer(configuration);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
