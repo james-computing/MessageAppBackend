@@ -27,6 +27,7 @@ namespace REST.Data
 
         private const string GET_USER_ID_FROM_EMAIL_PROCEDURE = "dbo.getUserIdFromEmail";
         private const string ROOM_HAS_USER_WITH_ROLE_PROCEDURE = "dbo.roomHasUserWithRole";
+        private const string SET_USERS_ROLE_IN_ROOM_PROCEDURE = "dbo.setUsersRoleInRoom";
 
         public async Task<IEnumerable<Message>> LoadLatestMessagesAsync(int roomId, uint quantity)
         {
@@ -144,6 +145,19 @@ namespace REST.Data
                                 commandType: CommandType.StoredProcedure
                             );
             return hasAdmin;
+        }
+
+        public async Task SetUsersRoleInRoom(int roomId, RoleInRoom roleInRoom)
+        {
+            DynamicParameters parameters = new();
+            parameters.Add(ROOMID_VARIABLE, roomId);
+
+            await connection.ExecuteAsync
+            (
+                SET_USERS_ROLE_IN_ROOM_PROCEDURE,
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
         }
 
         // rooms table
