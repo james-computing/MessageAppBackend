@@ -13,7 +13,7 @@ namespace REST.Kafka.Values
 
         public string Serialize<T>(T value)
         {
-            return JsonSerializer.Serialize(value, options);
+            return JsonSerializer.Serialize(value);
         }
 
         public T? Deserialize<T>(string value)
