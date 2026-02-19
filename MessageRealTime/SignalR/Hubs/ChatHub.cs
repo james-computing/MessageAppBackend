@@ -91,7 +91,7 @@ namespace MessageRealTime.SignalR.Hubs
                 Time = sendMessageDto.Time,
             };
 
-            // Get the users from the room
+            // Get the users from the room without the sender
             IEnumerable<int> usersIdsExceptSender = usersIds.Except([senderId]);
 
             // Send message to all users in room except itself
