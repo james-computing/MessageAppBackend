@@ -17,15 +17,23 @@ namespace Rooms.Controllers
     public class RoomsController(IDataAccess dataAccess, IKafkaProducer kafkaProducer) : ControllerBase
     {
         //*****************************************************************************
-        private async Task<int?> GetUserIdFromEmail(ClaimsPrincipal user)
+        private async Task<int?> GetUserId(ClaimsPrincipal user)
         {
-            string? userEmail = user.FindFirstValue(ClaimTypes.Email);
-            if (userEmail == null)
+            string? idString = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (idString == null)
             {
                 return null;
             }
-            int userId = await dataAccess.GetUserIdFromEmail(userEmail);
-            return userId;
+            int id;
+            bool parsed = Int32.TryParse(idString, out id);
+            if (parsed)
+            {
+                return id;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private async Task<bool> IsUserAuthorizedToConfigureRoom(int roomId, int userId)
@@ -50,7 +58,7 @@ namespace Rooms.Controllers
             int roomId = await dataAccess.CreateRoomAsync(createRoomDto.Name);
 
             // Get the user id
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (userId == null)
             {
                 return Unauthorized();
@@ -81,7 +89,7 @@ namespace Rooms.Controllers
         public async Task<ActionResult> DeleteRoomAsync(DeleteRoomDto deleteRoomDto)
         {
             // Get the user id
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (userId == null)
             {
                 return Unauthorized();
@@ -115,7 +123,7 @@ namespace Rooms.Controllers
         public async Task<ActionResult> UpdateRoomNameAsync(UpdateRoomNameDto updateRoomNameDto)
         {
             // First check if the user has authority to update the room
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (userId == null)
             {
                 return Unauthorized();
@@ -138,7 +146,7 @@ namespace Rooms.Controllers
         {
             // First check if the user that is adding the other one to the room
             // has authority to do it.
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (userId == null)
             {
                 return Unauthorized();
@@ -162,7 +170,7 @@ namespace Rooms.Controllers
         public async Task<ActionResult> RemoveUserFromRoomAsync(RemoveUserFromRoomDto removeUserFromRoomDto)
         {
             // First check if the user has authority to do it.
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (userId == null)
             {
                 return Unauthorized();
@@ -186,7 +194,7 @@ namespace Rooms.Controllers
         public async Task<ActionResult> UpdateUserRoleInRoom(UpdateUserRoleInRoomDto updateUserRoleInRoomDto)
         {
             // First check if the user has authority to do it.
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (userId == null)
             {
                 return Unauthorized();

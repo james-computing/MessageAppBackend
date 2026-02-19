@@ -15,15 +15,23 @@ namespace MessageREST.Controllers
         private int maxMessagesQuantity = 50;
 
         // From Rooms controller
-        private async Task<int?> GetUserIdFromEmail(ClaimsPrincipal user)
+        private async Task<int?> GetUserId(ClaimsPrincipal user)
         {
-            string? userEmail = user.FindFirstValue(ClaimTypes.Email);
-            if (userEmail == null)
+            string? idString = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (idString == null)
             {
                 return null;
             }
-            int userId = await dataAccess.GetUserIdFromEmail(userEmail);
-            return userId;
+            int id;
+            bool parsed = Int32.TryParse(idString, out id);
+            if(parsed)
+            {
+                return id;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         //************************************ Actions **********************************************
@@ -31,7 +39,7 @@ namespace MessageREST.Controllers
         public async Task<ActionResult<IEnumerable<Message>>> LoadLatestMessages(LoadLatestMessagesDto loadLatestMessagesDto)
         {
             // Check if user is in the room
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if(userId == null)
             {
                 return Unauthorized();
@@ -62,7 +70,7 @@ namespace MessageREST.Controllers
             LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto)
         {
             // Check if user is in the room
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if(userId == null)
             {
                 return Unauthorized();
@@ -93,7 +101,7 @@ namespace MessageREST.Controllers
         public async Task<ActionResult> EditMessage(EditMessageDto editMessageDto)
         {
             // Check if user owns the message
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (User == null)
             {
                 return Unauthorized();
@@ -114,7 +122,7 @@ namespace MessageREST.Controllers
         public async Task<ActionResult> DeleteMessage(DeleteMessageDto deleteMessageDto)
         {
             // Check if user owns the message
-            int? userId = await GetUserIdFromEmail(User);
+            int? userId = await GetUserId(User);
             if (User == null)
             {
                 return Unauthorized();
