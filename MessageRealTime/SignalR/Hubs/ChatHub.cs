@@ -18,7 +18,6 @@ namespace MessageRealTime.SignalR.Hubs
 
         // Keys to be used with Context.Items dictionary
         private const string userIdKey = "userId";
-        private const string roomsIdsKey = "roomsIds";
 
         public ChatHub(IConfiguration configuration, IDataAccess dataAccess)
         {
@@ -108,26 +107,6 @@ namespace MessageRealTime.SignalR.Hubs
             int userId = await _dataAccess.GetUserIdAsync(userEmail);
             Console.WriteLine("Adding user id to Context.Items");
             Context.Items.Add(userIdKey, userId);
-            return true;
-        }
-
-        private bool UserIsInRoom(int roomId)
-        {
-            IEnumerable<int> roomsIds;
-            object? value;
-            bool hasValue = Context.Items.TryGetValue(roomsIdsKey, out value);
-            if (!hasValue || value == null)
-            {
-                Console.WriteLine("Error: Null rooms ids in Context.Items");
-                return false;
-            }
-
-            roomsIds = (IEnumerable<int>)value;
-            if (!roomsIds.Contains(roomId))
-            {
-                return false;
-            }
-
             return true;
         }
     }
