@@ -13,7 +13,7 @@ namespace KafkaConsumer.Kafka.Values
 
         public string Serialize<T>(T value)
         {
-            return JsonSerializer.Serialize(value);
+            return JsonSerializer.Serialize(value, options);
         }
 
         public T? Deserialize<T>(string value)
