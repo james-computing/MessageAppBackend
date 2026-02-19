@@ -3,5 +3,5 @@
     "RegisterUrl": "https://localhost:7264/Auth/Register",
     "LoginUrl": "https://localhost:7264/Auth/Login",
     "ChatHubUrl": "https://localhost:7145/MessageRealTime/",
-    "CreateRoomUrl": "https://localhost:7162/Rooms/CreateRoomAndAddUserToIt"
+    "CreateRoomUrl": "https://localhost:7294/Rooms/CreateRoomAndAddUserToIt"
 }
