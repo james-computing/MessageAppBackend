@@ -79,8 +79,7 @@ namespace MessageRealTime.SignalR.Hubs
                                 sendMessageDto.Time
                             );
             
-            Console.WriteLine("ChatHub sending message to group...");
-            string groupName = GroupName(sendMessageDto.RoomId);
+            Console.WriteLine("ChatHub sending message to room...");
             ReceiveMessageDto receiveMessageDto = new()
             {
                 Id = messageId,
@@ -89,7 +88,12 @@ namespace MessageRealTime.SignalR.Hubs
                 Content = sendMessageDto.Content,
                 Time = sendMessageDto.Time,
             };
-            await Clients.Group(groupName).ReceiveMessageAsync(receiveMessageDto);
+
+            // Get the users from the room
+            IEnumerable<string> userIdsExceptItself = [];// not implemented yet
+
+            // Send message to all users in room except itself
+            await Clients.Users(userIdsExceptItself).ReceiveMessageAsync(receiveMessageDto);
         }
 
         private async Task<bool> GetUserId()
