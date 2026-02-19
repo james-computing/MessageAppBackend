@@ -178,6 +178,9 @@ namespace REST.Controllers
 
             await dataAccess.RemoveUserFromRoomAsync(removeUserFromRoomDto.RoomId, removeUserFromRoomDto.UserId);
 
+            // Also delete all messages that the user has sent to the room
+            await dataAccess.DeleteUserMessagesFromRoomAsync(removeUserFromRoomDto.RoomId, removeUserFromRoomDto.UserId);
+
             // If the room became empty, it should be deleted from the database.
             int usersRemaining = await dataAccess.CountUsersInRoomAsync(removeUserFromRoomDto.RoomId);
             if(usersRemaining == 0)
