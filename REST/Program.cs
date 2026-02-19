@@ -1,4 +1,4 @@
-using MessageREST.Data;
+using REST.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
