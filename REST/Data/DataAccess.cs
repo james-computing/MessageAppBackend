@@ -19,6 +19,7 @@ namespace REST.Data
         private const string LOAD_MESSAGES_PROCEDURE = "dbo.loadMessagesPrecedingReference";
         private const string EDIT_MESSAGE_PROCEDURE = "dbo.editMessage";
         private const string DELETE_MESSAGE_PROCEDURE = "dbo.deleteMessage";
+        private const string DELETE_USER_MESSAGES_FROM_ROOM_PROCEDURE = "dbo.deleteUserMessagesFromRoom";
         private const string GET_MESSAGE_OWNER_PROCEDURE = "dbo.getMessageOwner";
         private const string USER_IS_IN_ROOM_PROCEDURE = "dbo.userIsInRoom";
 
@@ -86,6 +87,20 @@ namespace REST.Data
             await connection.ExecuteAsync
             (
                 DELETE_MESSAGE_PROCEDURE,
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+        }
+
+        public async Task DeleteUserMessagesFromRoomAsync(int roomId, int userId)
+        {
+            DynamicParameters parameters = new();
+            parameters.Add(ROOMID_VARIABLE, roomId);
+            parameters.Add(USERID_VARIABLE, userId);
+
+            await connection.ExecuteAsync
+            (
+                DELETE_USER_MESSAGES_FROM_ROOM_PROCEDURE,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );

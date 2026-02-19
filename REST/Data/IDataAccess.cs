@@ -11,6 +11,7 @@ namespace REST.Data
         public Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(int roomId, int messageIdReference, uint quantity);
         public Task EditMessageAsync(int messageId, string newContent);
         public Task DeleteMessageAsync(int messageId);
+        public Task DeleteUserMessagesFromRoomAsync(int roomId, int userId);
         public Task<bool> UserOwnsMessageAsync(int userId, int messageId);
 
         //*********************** rooms table **********************************
