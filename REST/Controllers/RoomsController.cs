@@ -144,11 +144,9 @@ namespace REST.Controllers
             }
 
             bool isAdmin = await dataAccess.UserIsARoomAdmin(removeUserFromRoomDto.RoomId, userId.Value);
-            // Get id of user to be removed
-            int userToRemoveId = await dataAccess.GetUserIdFromEmail(removeUserFromRoomDto.UserEmail);
 
             // User can remove itself. If it is an admin of the room, it can remove anyone.
-            bool canRemoveUser = isAdmin || userId == userToRemoveId;
+            bool canRemoveUser = isAdmin || userId == removeUserFromRoomDto.UserId;
             if (!canRemoveUser)
             {
                 return Forbid();
@@ -175,18 +173,14 @@ namespace REST.Controllers
                 return Forbid();
             }
 
-            // Get id of user to update role
-            int userToUpdateRoleId = await dataAccess.GetUserIdFromEmail(updateUserRoleInRoomDto.UserEmail);
-
             await dataAccess.UpdateUserRoleInRoom
             (
                 updateUserRoleInRoomDto.RoomId,
-                userToUpdateRoleId,
+                updateUserRoleInRoomDto.UserId,
                 updateUserRoleInRoomDto.RoleInRoom
             );
 
             return Ok();
         }
-
     }
 }
