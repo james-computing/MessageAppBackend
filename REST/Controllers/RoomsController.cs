@@ -242,5 +242,24 @@ namespace REST.Controllers
             string roomName = await dataAccess.GetRoomNameAsync(roomId);
             return Ok(roomName);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUsersInfoFromRoom(int roomId)
+        {
+            int? userId = Identification.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool userIsInRoom = await dataAccess.UserIsInRoomAsync(roomId, userId.Value);
+            if (!userIsInRoom)
+            {
+                return Forbid();
+            }
+
+            IEnumerable<UserInfoDto> usersInfo = await dataAccess.GetUsersInfoFromRoomAsync(roomId);
+            return Ok(usersInfo);
+        }
     }
 }
