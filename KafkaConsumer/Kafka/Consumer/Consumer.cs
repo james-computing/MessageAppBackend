@@ -1,4 +1,6 @@
 ﻿using Confluent.Kafka;
+using KafkaConsumer.Kafka.EventTypes;
+using KafkaConsumer.Kafka.Values;
 using KafkaConsumer.Keys;
 using System.Text.Json;
 
@@ -73,7 +75,7 @@ namespace KafkaConsumer.Kafka
         private async Task ProcessConsumedMessage(ConsumeResult<string, string> consumeResult)
         {
             Console.WriteLine("KafkaConsumer processing consumed message...");
-
+            
             string serializedKey = consumeResult.Message.Key;
             Key? key = JsonSerializer.Deserialize<Key>(serializedKey);
             if (key == null)
@@ -81,9 +83,44 @@ namespace KafkaConsumer.Kafka
                 throw new Exception("Error: Null key.");
             }
 
-            Console.WriteLine($"Key =\n{key}\nvalue =\n{consumeResult.Message.Value}");
+            switch (key.EventType)
+            {
+                case EventType.ROOM_CREATED_EVENT:
+                    ProcessRoomCreatedEvent(key, serializedKey);
+                    break;
+                case EventType.ROOM_DELETED_EVENT:
+                    ProcessRoomDeletedEvent(key, serializedKey);
+                    break;
+                default:
+                    Console.WriteLine("Event not processed.");
+                    break;
+            }
 
             Console.WriteLine("KafkaConsumer consumed message successfully.");
+        }
+
+        private void ProcessRoomCreatedEvent(Key key, string serializedValue)
+        {
+            RoomCreated? value = Serializer<RoomCreated>.Deserialize(serializedValue);
+            if(value == null)
+            {
+                return;
+            }
+
+            // Process the event
+            Console.WriteLine($"Processed event room created: RoomId = {value.RoomId}, UserId = {value.UserId}.");
+        }
+
+        private void ProcessRoomDeletedEvent(Key key, string serializedValue)
+        {
+            RoomDeleted? value = Serializer<RoomDeleted>.Deserialize(serializedValue);
+            if (value == null)
+            {
+                return;
+            }
+
+            // Process the event
+            Console.WriteLine($"Processed event room created: RoomId = {value.RoomId}.");
         }
 
         ValueTask IAsyncDisposable.DisposeAsync()
