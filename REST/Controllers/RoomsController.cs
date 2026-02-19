@@ -124,9 +124,8 @@ namespace REST.Controllers
                 return Forbid();
             }
 
-            // Generate an invitation for the specified user to join the specified room.
-            // It is not a generic invitation on purpose. A generic invitation could introduce
-            // a security issue, where a non invited user could join the room.
+            // Generate an invitation to join the specified room.
+            // The invitation is generic, anyone with the invitation can join the room.
 
             // For the moment, the invitation will be a token, which will be just the serialized generateInvitationTokenDto
             string token = JsonSerializer.Serialize(generateInvitationTokenDto);
@@ -151,12 +150,9 @@ namespace REST.Controllers
             }
            
             // Validate token
-            if (userId.Value != decoded.UserId)
-            {
-                return Forbid();
-            }
-
-            await dataAccess.AddUserToRoomAsync(decoded.RoomId, decoded.UserId, RoleInRoom.Regular);
+            
+            // Add user to room
+            await dataAccess.AddUserToRoomAsync(decoded.RoomId, userId.Value, RoleInRoom.Regular);
 
             return Ok();
         }
