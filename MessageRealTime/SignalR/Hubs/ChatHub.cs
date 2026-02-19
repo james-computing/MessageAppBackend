@@ -16,9 +16,6 @@ namespace MessageRealTime.SignalR.Hubs
     {
         private readonly IDataAccess _dataAccess;
 
-        // Keys to be used with Context.Items dictionary
-        private const string userIdKey = "userId";
-
         public ChatHub(IConfiguration configuration, IDataAccess dataAccess)
         {
             Console.WriteLine("------------------------------------------------------");
@@ -30,11 +27,6 @@ namespace MessageRealTime.SignalR.Hubs
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
-            bool succesful = await GetUserId();
-            if(!succesful)
-            {
-                throw new Exception("Error: Failed to get user id.");
-            }
 
             NotificationDto notificationDto = new()
             {
@@ -52,15 +44,20 @@ namespace MessageRealTime.SignalR.Hubs
 
         public async Task SendMessageAsync(SendMessageDto sendMessageDto)
         {
-            // Get the user id from Context.Items
-            object? valueUserId;
-            bool hasValueUserId = Context.Items.TryGetValue(userIdKey, out valueUserId);
-            if (!hasValueUserId || valueUserId == null)
+            string? senderIdString = Context.UserIdentifier;
+            if (senderIdString == null)
             {
-                Console.WriteLine("Error: Null user id in Context.Items");
+                Console.WriteLine("Error: null Context.UserIdentifier.");
                 return;
             }
-            int senderId = (int)valueUserId;
+
+            int senderId;
+            bool parsed = Int32.TryParse(senderIdString, out senderId);
+            if(!parsed)
+            {
+                Console.WriteLine("Error: Failed to convert Context.UserIdentifier to int.");
+                return;
+            }
 
             // Get all users from the room
             IEnumerable<int> usersIds = await _dataAccess.GetUsersIdsFromRoom(sendMessageDto.RoomId);
@@ -99,21 +96,6 @@ namespace MessageRealTime.SignalR.Hubs
 
             // Send message to all users in room except itself
             await Clients.Users(usersIdsToSend).ReceiveMessageAsync(receiveMessageDto);
-        }
-
-        private async Task<bool> GetUserId()
-        {
-            string? userEmail = Context.UserIdentifier;
-            if (userEmail == null)
-            {
-                Console.WriteLine("Error: Context.UserIdentifier = null in SendMessageAsync");
-                return false;
-            }
-
-            int userId = await _dataAccess.GetUserIdAsync(userEmail);
-            Console.WriteLine("Adding user id to Context.Items");
-            Context.Items.Add(userIdKey, userId);
-            return true;
         }
     }
 }
