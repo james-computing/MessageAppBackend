@@ -39,7 +39,7 @@ namespace MessageRealTime.SignalR.Hubs
 
             NotificationDto notificationDto = new()
             {
-                Content = "Connected." 
+                Content = "Connected.",
             };
             await Clients.Caller.ReceiveNotificationAsync(notificationDto);
         }
