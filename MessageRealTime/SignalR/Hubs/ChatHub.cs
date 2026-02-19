@@ -38,7 +38,6 @@ namespace MessageRealTime.SignalR.Hubs
             {
                 throw new Exception("Error: Failed to get user id.");
             }
-            await AddToGroupsAsync();
 
             NotificationDto notificationDto = new()
             {
@@ -52,30 +51,6 @@ namespace MessageRealTime.SignalR.Hubs
 
             Console.WriteLine("User disconnected.");
             await base.OnDisconnectedAsync(exception);
-            // Check if some device for the same user is still connected.
-            // If not, remove the user from its SignalR groups.
-        }
-
-        public async Task RemoveFromGroupsAsync()
-        {
-            // Get the room ids
-            object? valueRoomId;
-            bool hasValueRoomId = Context.Items.TryGetValue(roomsIdsKey, out valueRoomId);
-            if (!hasValueRoomId || valueRoomId == null)
-            {
-                Console.WriteLine("Error: Null rooms ids in Context.Items");
-                return;
-            }
-            IEnumerable<int> roomsIds = (IEnumerable<int>)valueRoomId;
-
-            // Remove from corresponding groups in SignalR.
-            List<Task> tasks = new List<Task>();
-            foreach (int roomId in roomsIds)
-            {
-                string groupName = GroupName(roomId);
-                tasks.Add(Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName));
-            }
-            await Task.WhenAll(tasks);
         }
 
         public async Task SendMessageAsync(SendMessageDto sendMessageDto)
