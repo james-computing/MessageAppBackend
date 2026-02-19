@@ -8,6 +8,7 @@ using REST.Kafka.Producer;
 using REST.Kafka.Values;
 using REST.Roles;
 using REST.Utils;
+using System.Text.Json;
 
 namespace REST.Controllers
 {
@@ -106,6 +107,31 @@ namespace REST.Controllers
         }
 
         //*******************************************************************
+        [HttpPost]
+        public async Task<ActionResult<string>> GenerateInvitationTokenAsync(GenerateInvitationTokenDto generateInvitationTokenDto)
+        {
+            // First check if the user has authority to do it.
+            int? userId = Identification.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool isAdmin = await dataAccess.UserIsARoomAdmin(generateInvitationTokenDto.RoomId, userId.Value);
+            if (!isAdmin)
+            {
+                return Forbid();
+            }
+
+            // Generate an invitation for the specified user to join the specified room.
+            // It is not a generic invitation on purpose. A generic invitation could introduce
+            // a security issue, where a non invited user could join the room.
+
+            // For the moment, the invitation will be a token, which will be just the serialized generateInvitationTokenDto
+            string token = JsonSerializer.Serialize(generateInvitationTokenDto);
+            return Ok(token);
+        }
+
 
         [HttpDelete]
         public async Task<ActionResult> RemoveUserFromRoomAsync(RemoveUserFromRoomDto removeUserFromRoomDto)
