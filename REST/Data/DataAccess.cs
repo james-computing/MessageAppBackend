@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using REST.Dtos.Rooms;
 using REST.Models;
 using REST.Roles;
 using System.Data;
@@ -180,6 +181,7 @@ namespace REST.Data
         private const string UPDATE_USER_ROLE_IN_ROOM_PROCEDURE = "dbo.updateUserRoleInRoom";
         private const string GET_ROLE_IN_ROOM_FOR_USER_PROCEDURE = "dbo.getRoleInRoomForUser";
         private const string GET_ROOM_NAME_PROCEDURE = "dbo.getRoomName";
+        private const string GET_USERS_INFO_FROM_ROOM_PROCEDURE = "dbo.getUsersInfoFromRoom";
 
         // users table
         //private const string EMAIL_VARIABLE = "email";
@@ -336,5 +338,20 @@ namespace REST.Data
 
             return userId;
         }*/
+
+        //********************************* mixed *************************************
+        public async Task<IEnumerable<UserInfoDto>> GetUsersInfoFromRoomAsync(int roomId)
+        {
+            DynamicParameters parameters = new();
+            parameters.Add(ROOMID_VARIABLE, roomId);
+
+            IEnumerable<UserInfoDto> usersInfo = await connection.QueryAsync<UserInfoDto>
+                                                    (
+                                                        GET_USERS_INFO_FROM_ROOM_PROCEDURE,
+                                                        parameters,
+                                                        commandType: CommandType.StoredProcedure
+                                                    );
+            return usersInfo;
+        }
     }
 }

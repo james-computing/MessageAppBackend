@@ -1,4 +1,5 @@
-﻿using REST.Models;
+﻿using REST.Dtos.Rooms;
+using REST.Models;
 using REST.Roles;
 
 namespace REST.Data
@@ -31,5 +32,7 @@ namespace REST.Data
 
         //*********************** users table **********************************
         //public Task<int> GetUserIdFromEmailAsync(string userEmail);
+        //********************************* mixed *************************************
+        public Task<IEnumerable<UserInfoDto>> GetUsersInfoFromRoomAsync(int roomId);
     }
 }
