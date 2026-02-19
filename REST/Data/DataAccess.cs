@@ -90,7 +90,7 @@ namespace REST.Data
             );
         }
 
-        public async Task<bool> UserOwnsMessage(int userId, int messageId)
+        public async Task<bool> UserOwnsMessageAsync(int userId, int messageId)
         {
             DynamicParameters parameters = new();
             parameters.Add(MESSAGEID_VARIABLE, messageId);
@@ -105,7 +105,7 @@ namespace REST.Data
             return userId == ownerId;
         }
 
-        public async Task<bool> UserIsInRoom(int roomId, int userId)
+        public async Task<bool> UserIsInRoomAsync(int roomId, int userId)
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
@@ -121,10 +121,10 @@ namespace REST.Data
             return userIsInRoom;
         }
 
-        public async Task<bool> UserIsARoomAdmin(int roomId, int userId)
+        public async Task<bool> UserIsARoomAdminAsync(int roomId, int userId)
         {
             // Get the role the user has for the room with given id
-            RoleInRoom? roleInRoom = await GetRoleInRoomForUser(roomId, userId);
+            RoleInRoom? roleInRoom = await GetRoleInRoomForUserAsync(roomId, userId);
             if (roleInRoom == null || roleInRoom != RoleInRoom.Admin)
             {
                 // user is not in room
@@ -134,7 +134,7 @@ namespace REST.Data
             return true;
         }
 
-        public async Task<bool> RoomHasUserWithRole(int roomId, RoleInRoom roleInRoom)
+        public async Task<bool> RoomHasUserWithRoleAsync(int roomId, RoleInRoom roleInRoom)
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
@@ -148,7 +148,7 @@ namespace REST.Data
             return hasAdmin;
         }
 
-        public async Task SetUsersRoleInRoom(int roomId, RoleInRoom roleInRoom)
+        public async Task SetUsersRoleInRoomAsync(int roomId, RoleInRoom roleInRoom)
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
@@ -289,7 +289,7 @@ namespace REST.Data
             );
         }
 
-        public async Task UpdateUserRoleInRoom(int roomId, int userId, RoleInRoom roleInRoom)
+        public async Task UpdateUserRoleInRoomAsync(int roomId, int userId, RoleInRoom roleInRoom)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add(ROOMID_VARIABLE, roomId);
@@ -304,7 +304,7 @@ namespace REST.Data
             );
         }
 
-        public async Task<RoleInRoom?> GetRoleInRoomForUser(int roomId, int userId)
+        public async Task<RoleInRoom?> GetRoleInRoomForUserAsync(int roomId, int userId)
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);

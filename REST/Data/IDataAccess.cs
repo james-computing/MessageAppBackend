@@ -10,7 +10,7 @@ namespace REST.Data
         public Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(int roomId, int messageIdReference, uint quantity);
         public Task EditMessageAsync(int messageId, string newContent);
         public Task DeleteMessageAsync(int messageId);
-        public Task<bool> UserOwnsMessage(int userId, int messageId);
+        public Task<bool> UserOwnsMessageAsync(int userId, int messageId);
 
         //*********************** rooms table **********************************
         public Task<int> CreateRoomAsync(string name);
@@ -22,12 +22,12 @@ namespace REST.Data
         public Task AddUserToRoomAsync(int roomId, int userId, RoleInRoom roleInRoom);
         public Task<int> CountUsersInRoomAsync(int roomId);
         public Task RemoveUserFromRoomAsync(int roomId, int userId);
-        public Task UpdateUserRoleInRoom(int roomId, int userId, RoleInRoom roleInRoom);
-        public Task<RoleInRoom?> GetRoleInRoomForUser(int roomId, int userId);
-        public Task<bool> UserIsInRoom(int roomId, int userId);
-        public Task<bool> UserIsARoomAdmin(int roomId, int userId);
-        public Task<bool> RoomHasUserWithRole(int roomId, RoleInRoom roleInRoom);
-        public Task SetUsersRoleInRoom(int roomId, RoleInRoom roleInRoom);
+        public Task UpdateUserRoleInRoomAsync(int roomId, int userId, RoleInRoom roleInRoom);
+        public Task<RoleInRoom?> GetRoleInRoomForUserAsync(int roomId, int userId);
+        public Task<bool> UserIsInRoomAsync(int roomId, int userId);
+        public Task<bool> UserIsARoomAdminAsync(int roomId, int userId);
+        public Task<bool> RoomHasUserWithRoleAsync(int roomId, RoleInRoom roleInRoom);
+        public Task SetUsersRoleInRoomAsync(int roomId, RoleInRoom roleInRoom);
 
         //*********************** users table **********************************
         //public Task<int> GetUserIdFromEmail(string userEmail);
