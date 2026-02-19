@@ -2,7 +2,7 @@
 
 namespace KafkaConsumer.Kafka.Values
 {
-    public class Serializer
+    public class Serializer : ISerializer
     {
         private static JsonSerializerOptions options = new();
 
