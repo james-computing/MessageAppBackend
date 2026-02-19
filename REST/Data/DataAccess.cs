@@ -322,7 +322,7 @@ namespace REST.Data
 
         //************************************* users table *********************************************
         /*
-        public async Task<int> GetUserIdFromEmail(string userEmail)
+        public async Task<int> GetUserIdFromEmailAsync(string userEmail)
         {
             DynamicParameters parameters = new();
             parameters.Add(EMAIL_VARIABLE, userEmail);

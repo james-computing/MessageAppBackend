@@ -30,6 +30,6 @@ namespace REST.Data
         public Task SetUsersRoleInRoomAsync(int roomId, RoleInRoom roleInRoom);
 
         //*********************** users table **********************************
-        //public Task<int> GetUserIdFromEmail(string userEmail);
+        //public Task<int> GetUserIdFromEmailAsync(string userEmail);
     }
 }
