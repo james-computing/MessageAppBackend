@@ -106,7 +106,6 @@ namespace REST.Controllers
         }
 
         //*******************************************************************
-        
 
         [HttpDelete]
         public async Task<ActionResult> RemoveUserFromRoomAsync(RemoveUserFromRoomDto removeUserFromRoomDto)
@@ -127,7 +126,16 @@ namespace REST.Controllers
                 return Forbid();
             }
 
-            await dataAccess.RemoveUserFromRoomAsync(removeUserFromRoomDto.RoomId, userToRemoveId);
+            await dataAccess.RemoveUserFromRoomAsync(removeUserFromRoomDto.RoomId, removeUserFromRoomDto.UserId);
+
+            // If the room became empty, it should be deleted from the database.
+            int usersRemaining = await dataAccess.CountUsersInRoomAsync(removeUserFromRoomDto.RoomId);
+            if(usersRemaining == 0)
+            {
+                await dataAccess.DeleteRoomAsync(removeUserFromRoomDto.RoomId);
+                return Ok();
+            }
+
 
             return Ok();
         }
