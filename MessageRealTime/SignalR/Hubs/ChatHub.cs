@@ -61,13 +61,38 @@ namespace MessageRealTime.SignalR.Hubs
 
             // Get all users from the room
             IEnumerable<int> usersIds = await _dataAccess.GetUsersIdsFromRoom(sendMessageDto.RoomId);
-            if(!usersIds.Contains(senderId))
+
+            bool senderIsInRoom = false;
+            // Alloc space for a list of the same size of usersIds.
+            // If the sender is in the room, we will not be using one entry of the list,
+            // but that is not much.
+            // If the sender isn't in the room, then we need all space allocated.
+            List<string> usersIdsToSend = new(usersIds.Count());
+            // Copy the ids of the users in the room, except the sender id.
+            // At the same time, check if the sender is in the room.
+            // We'll use the list to broadcast the message to the users in the room,
+            // except the sender.
+            // SignalR needs the ids as strings, so also convert the ints to strings.
+            foreach (int id in usersIds)
+            {
+                if(id == senderId)
+                {
+                    senderIsInRoom = true;
+                }
+                else
+                {
+                    usersIdsToSend.Add(id.ToString());
+                }
+            }
+
+            // If the sender isn't in the room, it can't send a message to it, so return.
+            if (!senderIsInRoom)
             {
                 Console.WriteLine("User can't send a message to a room it is not in.");
                 return;
             }
 
-            // First save the message in the database, from which the message gets an id.
+            // Save the message in the database, from which the message gets an id.
             // This id will be sent to the client as part of the message.
             Console.WriteLine("ChatHub saving message to database...");
             int messageId = await _dataAccess.SaveMessageAsync
@@ -87,12 +112,6 @@ namespace MessageRealTime.SignalR.Hubs
                 Content = sendMessageDto.Content,
                 Time = sendMessageDto.Time,
             };
-
-            // Get the users from the room without the sender
-            IEnumerable<int> usersIdsExceptSender = usersIds.Except([senderId]);
-
-            // Convert int to string
-            IEnumerable<string> usersIdsToSend = usersIdsExceptSender.Select(id => id.ToString());
 
             // Send message to all users in room except itself
             await Clients.Users(usersIdsToSend).ReceiveMessageAsync(receiveMessageDto);
