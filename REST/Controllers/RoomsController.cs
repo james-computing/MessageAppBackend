@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using REST.Data;
 using REST.Dtos.Rooms;
 using REST.Kafka.EventTypes;
@@ -225,6 +226,25 @@ namespace REST.Controllers
             );
 
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<string>> GetRoomNameAsync(int roomId)
+        {
+            int? userId = Identification.GetUserId(User);
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+
+            bool userIsInRoom = await dataAccess.UserIsInRoomAsync(roomId, userId.Value);
+            if(!userIsInRoom)
+            {
+                return Forbid();
+            }
+
+            string roomName = await dataAccess.GetRoomNameAsync(roomId);
+            return Ok(roomName);
         }
     }
 }
