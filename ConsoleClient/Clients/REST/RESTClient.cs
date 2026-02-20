@@ -186,5 +186,27 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
+        public async Task UpdateUserRoleInRoomAsync(TokenDto token, UpdateUserRoleInRoomDto updateUserRoleInRoomDto)
+        {
+            Console.WriteLine("Trying to update user role in room...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Put,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.UpdateUserRoleInRoom.ToString(),
+                updateUserRoleInRoomDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to update user role in room. Status code: {responseMessage.StatusCode}.");
+            }
+        }
+
     }
 }
