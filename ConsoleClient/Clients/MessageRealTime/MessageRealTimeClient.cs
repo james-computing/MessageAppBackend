@@ -120,6 +120,7 @@ namespace ConsoleClient.Clients.MessageRealTime
 
         public async ValueTask DisposeAsync()
         {
+            Console.WriteLine("Stopping SignalR client.");
             await connection.StopAsync();
         }
     }
