@@ -208,5 +208,26 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
+        public async Task GetRoomInfoAsync(TokenDto token, GetRoomInfoDto getRoomInfoDto)
+        {
+            Console.WriteLine("Trying to get room info...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Get,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.GetRoomInfo.ToString(),
+                getRoomInfoDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to get room info. Status code: {responseMessage.StatusCode}.");
+            }
+        }
     }
 }
