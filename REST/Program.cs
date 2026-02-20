@@ -60,7 +60,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         }
     );
 
-builder.Services.AddTransient<IKafkaProducer, KafkaProducer>();
+builder.Services.AddScoped<IKafkaProducer, KafkaProducer>();
 
 builder.Services.AddSingleton<ISerializer, Serializer>();
 
