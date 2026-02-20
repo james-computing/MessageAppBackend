@@ -246,6 +246,8 @@ namespace ConsoleClient
 
             // Delete users
             await DeleteUsers(authClient);
+
+            Console.WriteLine("Test succeeded.");
         }
 
         private async Task<bool> TryToRegisterARandomUserAsync(AuthClient authClient, int index)
