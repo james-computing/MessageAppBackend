@@ -95,8 +95,24 @@ namespace ConsoleClient
                 }
             }
 
+            // Test if the user 1 can change the name of the room.
+            // It shouldn't be possible.
+            UpdateRoomNameDto updateRoomNameDto = new()
             {
+                Name = newRoomName,
+                RoomId = roomId,
+            };
+            // We need finer control, so use RequestWithJsonAsync directly
+            HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
+                tokens[1],
+                HttpMethod.Put,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.UpdateRoomName.ToString(),
+                updateRoomNameDto);
+            if(responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
             {
+                throw new Exception("Error: A regular user should receive a Forbidden response when trying to update the name of a room.");
             }
 
             // Turn the regular user into an admin
