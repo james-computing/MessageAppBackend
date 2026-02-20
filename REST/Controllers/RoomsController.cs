@@ -68,7 +68,7 @@ namespace REST.Controllers
             }
 
             await dataAccess.DeleteRoomAsync(deleteRoomDto.RoomId);
-
+            
             Key key = new()
             {
                 EventType = EventType.ROOM_DELETED_EVENT,
