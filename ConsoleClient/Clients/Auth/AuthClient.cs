@@ -12,14 +12,14 @@ namespace ConsoleClient.Clients.Auth
         // Urls to communicate with server
         private readonly AuthUrls urls;
 
-        public AuthClient()
+        public AuthClient(bool productionUrls)
         {
             Console.WriteLine("Constructing Auth client...");
 
             jsonSerializerOptions = new JsonSerializerOptions();
             jsonSerializerOptions.PropertyNameCaseInsensitive = true;
 
-            urls = new AuthUrls();
+            urls = new AuthUrls(productionUrls);
 
             Console.WriteLine("Finished constructing Auth client.");
         }
