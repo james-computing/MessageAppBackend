@@ -91,5 +91,36 @@ namespace JWTAuth.Controllers
             }
             return Ok(token);
         }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUserAsync()
+        {
+            string? userIdString = null;
+            foreach (ClaimsIdentity identity in HttpContext.User.Identities)
+            {
+                Claim? claim = identity.FindFirst(ClaimTypes.NameIdentifier);
+                if (claim != null)
+                {
+                    userIdString = claim.Value;
+                }
+            }
+
+            if (userIdString == null)
+            {
+                return Unauthorized();
+            }
+
+            int userId;
+            bool parsed = int.TryParse(userIdString, out userId);
+            if (parsed == false)
+            {
+                return Unauthorized();
+            }
+
+            await authService.DeleteAsync(userId);
+
+            return Ok();
+        }
     }
 }
