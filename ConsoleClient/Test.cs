@@ -232,6 +232,19 @@ namespace ConsoleClient
             Console.WriteLine("Finished login users.");
         }
 
+        private int GetIdFromJWT(string token)
+        {
+            JwtSecurityTokenHandler handler = new();
+
+            JwtSecurityToken jwtToken = handler.ReadJwtToken(token);
+
+            Claim claim = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier);
+            string idString = claim.Value;
+            int id = Int32.Parse(idString);
+
+            return id;
+        }
+
         private async Task DeleteUsers(AuthClient authClient)
         {
             Console.WriteLine("\nDeleting users...");
