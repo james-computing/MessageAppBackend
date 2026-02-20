@@ -3,6 +3,7 @@ using ConsoleClient.Clients.REST;
 using ConsoleClient.Clients.Urls;
 using JWTAuth.Dtos;
 using REST.Dtos.Rooms;
+using REST.Roles;
 
 namespace ConsoleClient
 {
