@@ -237,7 +237,7 @@ namespace ConsoleClient.Clients.REST
             TokenDto token,
             GetUsersInfoFromRoomDto getUsersInfoFromRoomDto)
         {
-            Console.WriteLine("Trying to users info from room...");
+            Console.WriteLine("Trying to get users info from room...");
 
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
