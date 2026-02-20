@@ -1,4 +1,5 @@
 ﻿using ConsoleClient.Clients.Auth;
+using ConsoleClient.Clients.REST;
 using JWTAuth.Dtos;
 
 namespace ConsoleClient
@@ -12,6 +13,7 @@ namespace ConsoleClient
         private Random random = new Random();
         private const string ALPHNUM = "ABCEDFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         private const string SYMB = @"&%-/\*#$";
+        private const string roomName = "original name";
 
         private const int DELAY_MILLISECS = 500;
 
@@ -27,6 +29,8 @@ namespace ConsoleClient
         {
             // Only need a single Auth client to get tokens
             AuthClient authClient = new AuthClient(_productionUrls);
+            // And only need a single REST client
+            RESTClient restClient = new RESTClient(_productionUrls);
 
             // Try to register new users until we have the amount of users we need
             await RegisterRandomUsers(authClient);
@@ -35,6 +39,8 @@ namespace ConsoleClient
             // Login each user
             await LoginUsers(authClient);
 
+            // Create a room for the first user
+            int roomId = await restClient.CreateRoomAsync(tokens[0], roomName);
 
 
             // Delete users
