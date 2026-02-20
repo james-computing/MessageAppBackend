@@ -35,6 +35,8 @@ namespace ConsoleClient
 
 
 
+            // Delete users
+            await DeleteUsers(authClient);
         }
 
         private async Task<bool> TryToRegisterARandomUserAsync(AuthClient authClient, int index)
@@ -116,6 +118,16 @@ namespace ConsoleClient
             }
         }
 
+        private async Task DeleteUsers(AuthClient authClient)
+        {
+            bool succeded = false;
+            for (int i = 0; i < _usersQuantity; i++)
+            {
+                while (!succeded)
+                {
+                    succeded = await authClient.DeleteUserAsync(tokens[i]);
+                }
+            }
         }
     }
 }
