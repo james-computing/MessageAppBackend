@@ -13,6 +13,9 @@ namespace ConsoleClient
             _usersQuantity = usersQuantity;
         public async Task ExecuteAsync()
         {
+            // Only need a single Auth client to get tokens
+            AuthClient authClient = new AuthClient(_productionUrls);
+
         }
         }
     }
