@@ -23,10 +23,6 @@ namespace ConsoleClient.Clients.REST
             Console.WriteLine("Trying to create a new room...");
             HttpClient httpClient = new HttpClient();
 
-            if (token == null)
-            {
-                throw new Exception("Error: Null token");
-            }
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
             string serializedJson = JsonSerializer.Serialize(new { Name = name });
