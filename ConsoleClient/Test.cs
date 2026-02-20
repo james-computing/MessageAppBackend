@@ -115,11 +115,11 @@ namespace ConsoleClient
                 throw new Exception("Error: A regular user should receive a Forbidden response when trying to update the name of a room.");
             }
 
-            // Turn the regular user into an admin
+            // Turn the user 1 into an admin
             UpdateUserRoleInRoomDto updateUserRoleInRoomDto = new()
             { 
                 RoleInRoom = RoleInRoom.Admin,
-                UserId = regularUserId,
+                UserId = usersIds[1],
                 RoomId = roomId,
             };
             await restClient.UpdateUserRoleInRoomAsync(tokens[0], updateUserRoleInRoomDto);
