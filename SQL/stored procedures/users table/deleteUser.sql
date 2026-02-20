@@ -18,7 +18,7 @@ BEGIN
 
     -- Insert statements for procedure here
 	DELETE
-	FROM db.users
+	FROM dbo.users
 	WHERE id = @id;
 END
 GO
