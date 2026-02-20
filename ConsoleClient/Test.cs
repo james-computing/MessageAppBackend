@@ -1,13 +1,14 @@
 ﻿using ConsoleClient.Clients.Auth;
 using ConsoleClient.Clients.REST;
+using ConsoleClient.Clients.Urls;
 using JWTAuth.Dtos;
 
 namespace ConsoleClient
 {
     internal class Test
     {
-        private readonly bool _productionUrls;
         private readonly int _usersQuantity = 3;
+        private readonly Url url;
         private UserRegisterDto[] userRegisterDtos;
         private TokenDto[] tokens;
         private Random random = new Random();
@@ -19,7 +20,8 @@ namespace ConsoleClient
 
         public Test(bool productionUrls, int usersQuantity)
         {
-            _productionUrls = productionUrls;
+            url = new Url(productionUrls);
+
             _usersQuantity = usersQuantity;
             userRegisterDtos = new UserRegisterDto[usersQuantity];
             tokens = new TokenDto[usersQuantity];
@@ -28,9 +30,9 @@ namespace ConsoleClient
         public async Task ExecuteAsync()
         {
             // Only need a single Auth client to get tokens
-            AuthClient authClient = new AuthClient(_productionUrls);
+            AuthClient authClient = new AuthClient(url);
             // And only need a single REST client
-            RESTClient restClient = new RESTClient(_productionUrls);
+            RESTClient restClient = new RESTClient(url);
 
             // Try to register new users until we have the amount of users we need
             await RegisterRandomUsers(authClient);
@@ -42,6 +44,7 @@ namespace ConsoleClient
             // Create a room for the first user
             int roomId = await restClient.CreateRoomAsync(tokens[0], roomName);
 
+            // Invite the other users to the room
 
             // Delete users
             await DeleteUsers(authClient);

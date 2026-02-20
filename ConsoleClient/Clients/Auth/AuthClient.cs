@@ -1,4 +1,6 @@
-﻿using JWTAuth.Dtos;
+﻿using ConsoleClient.Clients.Urls;
+using ConsoleClient.Enums;
+using JWTAuth.Dtos;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -11,16 +13,16 @@ namespace ConsoleClient.Clients.Auth
         private readonly JsonSerializerOptions jsonSerializerOptions;
 
         // Urls to communicate with server
-        private readonly AuthUrls urls;
+        private readonly Url _url;
 
-        public AuthClient(bool productionUrls)
+        public AuthClient(Url url)
         {
             Console.WriteLine("Constructing Auth client...");
 
             jsonSerializerOptions = new JsonSerializerOptions();
             jsonSerializerOptions.PropertyNameCaseInsensitive = true;
 
-            urls = new AuthUrls(productionUrls);
+            _url = url;
 
             Console.WriteLine("Finished constructing Auth client.");
         }
@@ -31,7 +33,11 @@ namespace ConsoleClient.Clients.Auth
             HttpClient httpClient = new HttpClient();
 
             // Test connection first
-            HttpResponseMessage responseMessageConnectionTest = await httpClient.GetAsync(urls.testAuthConnectionUrl);
+            string url = _url.FromControllerAction(
+                Service.Auth,
+                Controller.Auth,
+                AuthAction.TestConnection.ToString());
+            HttpResponseMessage responseMessageConnectionTest = await httpClient.GetAsync(url);
             if (!responseMessageConnectionTest.IsSuccessStatusCode)
             {
                 Console.WriteLine("Error: Failed to connect to Auth service.");
@@ -55,7 +61,12 @@ namespace ConsoleClient.Clients.Auth
             string serializedJson = JsonSerializer.Serialize(userRegisterDto);
             Console.WriteLine($"json to post {serializedJson}");
             using StringContent jsonContent = new StringContent(serializedJson, Encoding.UTF8, "application/json");
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(urls.registerUrl, jsonContent);
+
+            string url = _url.FromControllerAction(
+                Service.Auth,
+                Controller.Auth,
+                AuthAction.Register.ToString());
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string response = await responseMessage.Content.ReadAsStringAsync();
@@ -78,7 +89,11 @@ namespace ConsoleClient.Clients.Auth
 
             using StringContent jsonContent = new(serializedString, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(urls.loginUrl, jsonContent);
+            string url = _url.FromControllerAction(
+                Service.Auth,
+                Controller.Auth,
+                AuthAction.Login.ToString());
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 Console.WriteLine("Login successful.");
@@ -97,7 +112,11 @@ namespace ConsoleClient.Clients.Auth
             HttpClient httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
-            HttpResponseMessage response = await httpClient.DeleteAsync(urls.deleteUrl);
+            string url = _url.FromControllerAction(
+                Service.Auth,
+                Controller.Auth,
+                AuthAction.Delete.ToString());
+            HttpResponseMessage response = await httpClient.DeleteAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Delete a user.");

@@ -1,4 +1,6 @@
-﻿using JWTAuth.Dtos;
+﻿using ConsoleClient.Clients.Urls;
+using ConsoleClient.Enums;
+using JWTAuth.Dtos;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -9,12 +11,12 @@ namespace ConsoleClient.Clients.REST
     internal class RESTClient
     {
         // Urls to communicate with server
-        private readonly RESTUrls urls;
+        private readonly Url _url;
 
-        public RESTClient(bool productionUrls)
+        public RESTClient(Url url)
         {
             Console.WriteLine("Constructing REST client...");
-            urls = new RESTUrls(productionUrls);
+            _url = url;
             Console.WriteLine("Finished constructing REST client.");
         }
 
@@ -29,14 +31,21 @@ namespace ConsoleClient.Clients.REST
             Console.WriteLine($"json to post {serializedJson}");
             using StringContent jsonContent = new StringContent(serializedJson, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(urls.createRoomUrl, jsonContent);
+            string url = _url.FromControllerAction(
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.CreateRoomAndAddUserToIt.ToString());
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 int roomId = await responseMessage.Content.ReadFromJsonAsync<int>();
                 Console.WriteLine($"Created room with roomId = {roomId}");
                 return roomId;
             }
-            throw new Exception($"Error: Failed to create room:\n{await responseMessage.Content.ReadAsStringAsync()}");
+            string content = await responseMessage.Content.ReadAsStringAsync();
+            throw new Exception($"Error: Failed to create room:\n{content}");
+        }
+
         }
     }
 }

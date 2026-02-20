@@ -1,4 +1,5 @@
 ﻿using Client.Dtos;
+using ConsoleClient.Clients.Urls;
 using JWTAuth.Dtos;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
@@ -13,18 +14,19 @@ namespace ConsoleClient.Clients.MessageRealTime
         private HubConnection connection;
 
         // Urls to communicate with server
-        private readonly MessageRealTimeUrls urls;
+        private readonly Url _url;
 
-        public MessageRealTimeClient(bool productionUrls, TokenDto token)
+        public MessageRealTimeClient(Url url, TokenDto token)
         {
             Console.WriteLine("Constructing MessageRealTime client...");
 
-            urls = new MessageRealTimeUrls(productionUrls);
+            _url = url;
 
             hubConnectionBuilder = new HubConnectionBuilder();
             connection = hubConnectionBuilder
-                .WithUrl(urls.chatHubUrl, options =>
+                .WithUrl(url.ChatHub(), options =>
                 {
+
                     options.AccessTokenProvider = () => Task.FromResult<string?>(token.AccessToken);
                 })
                 .ConfigureLogging(logging =>
