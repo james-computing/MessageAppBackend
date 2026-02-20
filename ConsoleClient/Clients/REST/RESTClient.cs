@@ -20,7 +20,7 @@ namespace ConsoleClient.Clients.REST
             Console.WriteLine("Finished constructing REST client.");
         }
 
-        public async Task<int> CreateRoomAsync(TokenDto token, string name)
+        public async Task<int> CreateRoomAndAddUserToItAsync(TokenDto token, string name)
         {
             Console.WriteLine("Trying to create a new room...");
             HttpClient httpClient = new HttpClient();
@@ -46,7 +46,7 @@ namespace ConsoleClient.Clients.REST
             throw new Exception($"Error: Failed to create room:\n{content}");
         }
 
-        public async Task RenameRoom(TokenDto token, string name)
+        public async Task UpdateRoomNameAsync(TokenDto token, string name)
         {
             Console.WriteLine("Trying to rename room...");
             HttpClient httpClient = new();

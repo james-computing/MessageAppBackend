@@ -106,7 +106,7 @@ namespace ConsoleClient.Clients.Auth
             return null;
         }
 
-        public async Task<bool> DeleteUserAsync(TokenDto token)
+        public async Task<bool> DeleteAsync(TokenDto token)
         {
             Console.WriteLine("Trying to delete user...");
             HttpClient httpClient = new HttpClient();

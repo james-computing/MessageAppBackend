@@ -42,7 +42,7 @@ namespace ConsoleClient
             await LoginUsers(authClient);
 
             // Create a room for the first user
-            int roomId = await restClient.CreateRoomAsync(tokens[0], roomName);
+            int roomId = await restClient.CreateRoomAndAddUserToItAsync(tokens[0], roomName);
 
             // Invite the other users to the room
 
@@ -144,7 +144,7 @@ namespace ConsoleClient
                 bool succeded = false;
                 while (!succeded)
                 {
-                    succeded = await authClient.DeleteUserAsync(tokens[i]);
+                    succeded = await authClient.DeleteAsync(tokens[i]);
                     await Task.Delay(DELAY_MILLISECS);
                 }
             }
