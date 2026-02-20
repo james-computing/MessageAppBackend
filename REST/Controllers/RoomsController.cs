@@ -166,10 +166,13 @@ namespace REST.Controllers
                 return Unauthorized();
             }
 
-            bool isAdmin = await dataAccess.UserIsARoomAdminAsync(removeUserFromRoomDto.RoomId, userId.Value);
+            bool requesterIsAdmin = await dataAccess.UserIsARoomAdminAsync(removeUserFromRoomDto.RoomId, userId.Value);
+            bool toBeRemovedIsAdmin = await dataAccess.UserIsARoomAdminAsync(
+                removeUserFromRoomDto.RoomId,
+                removeUserFromRoomDto.UserId);
 
-            // User can remove itself. If it is an admin of the room, it can remove anyone.
-            bool canRemoveUser = isAdmin || userId == removeUserFromRoomDto.UserId;
+            // User can remove itself. If it is an admin of the room, it can remove non admins.
+            bool canRemoveUser = userId == removeUserFromRoomDto.UserId || (requesterIsAdmin && !toBeRemovedIsAdmin);
             if (!canRemoveUser)
             {
                 return Forbid();
