@@ -70,7 +70,7 @@ namespace ConsoleClient.Clients.REST
                 return roomId;
             }
             string content = await responseMessage.Content.ReadAsStringAsync();
-            throw new Exception($"Error: Failed to create room:\n{content}");
+            throw new Exception($"Error: Failed to create room. Status code: {responseMessage.StatusCode}.");
         }
 
         public async Task DeleteRoomAsync(TokenDto token, DeleteRoomDto deleteRoomDto)
@@ -92,8 +92,7 @@ namespace ConsoleClient.Clients.REST
             }
             else
             {
-                string content = await responseMessage.Content.ReadAsStringAsync();
-                throw new Exception($"Error: Failed to delete room:\n{content}");
+                throw new Exception($"Error: Failed to delete room. Status code: {responseMessage.StatusCode}.");
             }
         }
 
@@ -115,6 +114,11 @@ namespace ConsoleClient.Clients.REST
                 return;
             }
             else
+            {
+                throw new Exception($"Error: Failed to rename room. Status code: {responseMessage.StatusCode}.");
+            }
+        }
+
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
                 throw new Exception($"Error: Failed to rename room:\n{content}"); 
