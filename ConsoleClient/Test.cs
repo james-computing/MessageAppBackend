@@ -95,12 +95,7 @@ namespace ConsoleClient
                 }
             }
 
-            // Check that there is only one admin
-            if (numberOfAdmins != 1)
             {
-                throw new Exception("Error: Room should have exactly 1 admin");
-            }
-
             // If we got a Regular user, its id must be >= 1
             if(regularUserId <= 0)
             {
