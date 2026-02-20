@@ -201,6 +201,12 @@ namespace ConsoleClient
                 }
             }
 
+            if (!containsTheAdmin)
+            {
+                throw new Exception("Error: Admin was removed from room.");
+            }
+
+            // Also check that a regular user can't remove an admin
 
 
             // Delete the room
