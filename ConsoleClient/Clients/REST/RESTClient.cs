@@ -1,6 +1,7 @@
 ﻿using ConsoleClient.Clients.Urls;
 using ConsoleClient.Enums;
 using JWTAuth.Dtos;
+using REST.Dtos.Rooms;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -50,10 +51,18 @@ namespace ConsoleClient.Clients.REST
             return responseMessage;
         }
 
+        public async Task<int> CreateRoomAndAddUserToItAsync(TokenDto token, CreateRoomDto createRoomDto)
+        {
+            Console.WriteLine("Trying to create a new room...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Post,
                 Service.REST,
                 Controller.Rooms,
-                RoomsAction.CreateRoomAndAddUserToIt.ToString());
-            HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
+                RoomsAction.CreateRoomAndAddUserToIt.ToString(),
+                createRoomDto);
+
             if (responseMessage.IsSuccessStatusCode)
             {
                 int roomId = await responseMessage.Content.ReadFromJsonAsync<int>();
@@ -64,17 +73,13 @@ namespace ConsoleClient.Clients.REST
             throw new Exception($"Error: Failed to create room:\n{content}");
         }
 
-        public async Task UpdateRoomNameAsync(TokenDto token, string name)
+        public async Task UpdateRoomNameAsync(TokenDto token, UpdateRoomNameDto updateRoomNameDto)
         {
             Console.WriteLine("Trying to rename room...");
-            HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-
-            string serializedJson = JsonSerializer.Serialize(new { Name = name });
-            Console.WriteLine($"json to post {serializedJson}");
-            using StringContent jsonContent = new StringContent(serializedJson, Encoding.UTF8, "application/json");
-
-            string url = _url.FromControllerAction(
+            
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Put,
                 Service.REST,
                 Controller.Rooms,
                 RoomsAction.UpdateRoomName.ToString(),
