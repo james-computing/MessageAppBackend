@@ -51,6 +51,13 @@ namespace ConsoleClient
 
             // Invite the other users to the room
 
+            // Delete the room
+            DeleteRoomDto deleteRoomDto = new()
+            {
+                RoomId = roomId
+            };
+            await restClient.DeleteRoomAsync(tokens[0], deleteRoomDto);
+
             // Delete users
             await DeleteUsers(authClient);
         }
