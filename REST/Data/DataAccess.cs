@@ -141,6 +141,7 @@ namespace REST.Data
         {
             // Get the role the user has for the room with given id
             RoleInRoom? roleInRoom = await GetRoleInRoomForUserAsync(roomId, userId);
+
             if (roleInRoom == null || roleInRoom != RoleInRoom.Admin)
             {
                 // user is not in room
@@ -327,12 +328,21 @@ namespace REST.Data
             parameters.Add(ROOMID_VARIABLE, roomId);
             parameters.Add(USERID_VARIABLE, userId);
 
-            RoleInRoom? roleInRoom = await connection.QuerySingleOrDefaultAsync<RoleInRoom>
+            // Enums store integers, but, for safety,
+            // the enums are being in the database as strings.
+            // First get the string, then parse it to the enum.
+            string? roleString = await connection.QuerySingleOrDefaultAsync<string>
             (
                 GET_ROLE_IN_ROOM_FOR_USER_PROCEDURE,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
+            if (roleString == null)
+            {
+                return null;
+            }
+
+            RoleInRoom roleInRoom = Enum.Parse<RoleInRoom>(roleString);
 
             return roleInRoom;
         }
