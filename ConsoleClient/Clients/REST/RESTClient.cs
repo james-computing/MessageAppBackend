@@ -14,10 +14,14 @@ namespace ConsoleClient.Clients.REST
         // Urls to communicate with server
         private readonly Url _url;
 
+        private readonly JsonSerializerOptions jsonSerializerOptions;
+
         public RESTClient(Url url)
         {
             Console.WriteLine("Constructing REST client...");
             _url = url;
+            jsonSerializerOptions = new JsonSerializerOptions();
+            jsonSerializerOptions.PropertyNameCaseInsensitive = true;
             Console.WriteLine("Finished constructing REST client.");
         }
 
@@ -223,7 +227,7 @@ namespace ConsoleClient.Clients.REST
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
-                RoomInfoDto roomInfo = JsonSerializer.Deserialize<RoomInfoDto>(content)
+                RoomInfoDto roomInfo = JsonSerializer.Deserialize<RoomInfoDto>(content, jsonSerializerOptions)
                                         ?? throw new Exception("Error: Failed to deserialize content to RoomInfoDto.");
                 return roomInfo;
             }
@@ -250,7 +254,8 @@ namespace ConsoleClient.Clients.REST
             if (responseMessage.IsSuccessStatusCode)
             {
                 string content = await responseMessage.Content.ReadAsStringAsync();
-                IEnumerable<UserInfoDto> usersInfo = JsonSerializer.Deserialize<IEnumerable<UserInfoDto>>(content)
+                Console.WriteLine(content);
+                IEnumerable<UserInfoDto> usersInfo = JsonSerializer.Deserialize<IEnumerable<UserInfoDto>>(content,jsonSerializerOptions)
                     ?? throw new Exception("Error: Failed to deserialize content to IEnumerable<UserInfoDto>.");
                 return usersInfo;
             }
