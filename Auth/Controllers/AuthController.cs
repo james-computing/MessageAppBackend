@@ -94,7 +94,7 @@ namespace JWTAuth.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<ActionResult> DeleteUserAsync()
+        public async Task<ActionResult> DeleteAsync()
         {
             string? userIdString = null;
             foreach (ClaimsIdentity identity in HttpContext.User.Identities)
