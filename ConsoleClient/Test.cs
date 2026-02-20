@@ -74,7 +74,7 @@ namespace ConsoleClient
             {
                 RoomId = roomId
             };
-            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
+            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[1], getUsersInfoFromRoomDto);
 
             // Count the number of admins
             int numberOfAdmins = 0;
