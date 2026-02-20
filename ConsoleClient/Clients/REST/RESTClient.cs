@@ -229,5 +229,29 @@ namespace ConsoleClient.Clients.REST
                 throw new Exception($"Error: Failed to get room info. Status code: {responseMessage.StatusCode}.");
             }
         }
+
+        public async Task GetUsersInfoFromRoomAsync(
+            TokenDto token,
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto)
+        {
+            Console.WriteLine("Trying to users info from room...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Get,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.GetUsersInfoFromRoom.ToString(),
+                getUsersInfoFromRoomDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to get users info from room. Status code: {responseMessage.StatusCode}.");
+            }
+        }
     }
 }
