@@ -1,4 +1,5 @@
 ﻿using JWTAuth.Dtos;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -88,6 +89,23 @@ namespace ConsoleClient.Clients.Auth
 
             Console.WriteLine($"Error: Failed to log in. Status code: {responseMessage.StatusCode}");
             return null;
+        }
+
+        public async Task<bool> DeleteUserAsync(TokenDto token)
+        {
+            Console.WriteLine("Trying to delete user...");
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            HttpResponseMessage response = await httpClient.DeleteAsync(urls.deleteUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }   
 }
