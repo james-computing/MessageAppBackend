@@ -20,6 +20,7 @@ namespace ConsoleClient
         private const string ALPHNUM = "ABCEDFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         private const string SYMB = @"&%-/\*#$";
         private const string originalRoomName = "original name";
+        private const string newRoomName = "new name";
 
         private const int DELAY_MILLISECS = 500;
 
