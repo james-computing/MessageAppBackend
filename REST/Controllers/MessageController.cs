@@ -16,7 +16,7 @@ namespace MessageREST.Controllers
 
         //************************************ Actions **********************************************
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> LoadLatestMessages(LoadLatestMessagesDto loadLatestMessagesDto)
+        public async Task<ActionResult<IEnumerable<Message>>> LoadLatestMessagesAsync(LoadLatestMessagesDto loadLatestMessagesDto)
         {
             // Check if user is in the room
             int? userId = Identification.GetUserId(User);
@@ -46,7 +46,7 @@ namespace MessageREST.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> LoadMessagesPrecedingReference(
+        public async Task<ActionResult<IEnumerable<Message>>> LoadMessagesPrecedingReferenceAsync(
             LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto)
         {
             // Check if user is in the room
@@ -78,7 +78,7 @@ namespace MessageREST.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> EditMessage(EditMessageDto editMessageDto)
+        public async Task<ActionResult> EditMessageAsync(EditMessageDto editMessageDto)
         {
             // Check if user owns the message
             int? userId = Identification.GetUserId(User);
@@ -99,7 +99,7 @@ namespace MessageREST.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteMessage(DeleteMessageDto deleteMessageDto)
+        public async Task<ActionResult> DeleteMessageAsync(DeleteMessageDto deleteMessageDto)
         {
             // Check if user owns the message
             int? userId = Identification.GetUserId(User);
