@@ -2,6 +2,7 @@
     "TestAuthConnectionUrl": "http://messageapp/Auth/TestConnection",
     "RegisterUrl": "http://messageapp/Auth/Register",
     "LoginUrl": "http://messageapp/Auth/Login",
+    "DeleteUrl": "http://messageapp/Auth/Delete",
     "ChatHubUrl": "http://messageapp/MessageRealTime/",
     "CreateRoomUrl": "http://messageapp/Rooms/CreateRoomAndAddUserToIt"
 }
