@@ -117,11 +117,6 @@ namespace ConsoleClient.Clients.MessageRealTime
                 Console.WriteLine(ex.ToString());
             }
         }
-        /*
-        public async Task StopAsync()
-        {
-            await connection.StopAsync();
-        }*/
 
         public async ValueTask DisposeAsync()
         {
