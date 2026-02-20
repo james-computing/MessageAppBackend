@@ -125,7 +125,7 @@ namespace KafkaConsumer.Kafka
             }
 
             // Process the event
-            Console.WriteLine($"Processed event room created: RoomId = {value.RoomId}.");
+            Console.WriteLine($"Processed event room deleted: RoomId = {value.RoomId}.");
         }
 
         ValueTask IAsyncDisposable.DisposeAsync()
