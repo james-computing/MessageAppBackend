@@ -153,6 +153,25 @@ namespace ConsoleClient
                 throw new Exception("Error: Room name not updated.");
             }
 
+            // Remove the user 2, which should be a regular user
+            RemoveUserFromRoomDto removeUserFromRoomDto = new()
+            {
+                RoomId = roomId,
+                UserId = usersIds[2],
+            };
+            await restClient.RemoveUserFromRoomAsync(tokens[0], removeUserFromRoomDto);
+
+            // Get the users info again to verify that the user was removed
+            usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
+
+            foreach (UserInfoDto info in usersInfo)
+            {
+                if (info.Id == usersIds[2])
+                {
+                    throw new Exception("Error: Regular user not removed from room.");
+                }
+            }
+
 
 
 
