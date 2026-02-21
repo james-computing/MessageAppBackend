@@ -395,7 +395,7 @@ namespace ConsoleClient
             };
 
             // Get the users info again to verify that the admin wasn't removed
-            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
+            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(adminToken, getUsersInfoFromRoomDto);
 
             // Check if the admin is still in the room
             bool containsTheAdmin = false;
