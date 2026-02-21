@@ -58,7 +58,6 @@ namespace ConsoleClient
 
             // Login each user
             await LoginUsersAsync(authClient);
-
             GetUsersIdsFromTokens();
 
             // Create a room for the first user
@@ -68,172 +67,40 @@ namespace ConsoleClient
             };
             int roomId = await restClient.CreateRoomAndAddUserToItAsync(tokens[0], createRoomDto);
 
-            await AddUsersToRoomAsync(roomId);
-
-            // Get users info from room, to verify their roles
-            // Use the user 1, because it should not need to be an admin
-            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            for (int i = 1; i < _usersQuantity; i++)
             {
-                RoomId = roomId
-            };
-            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[1], getUsersInfoFromRoomDto);
-
-            // Check that the user 0 is admin, but the other users aren't
-            foreach (UserInfoDto info in usersInfo)
-            {
-                if (info.Id == usersIds[0] && info.RoleInRoom != RoleInRoom.Admin.ToString())
-                {
-                    throw new Exception("Error: Room admin lost privilege.");
-                }
-                else if (info.Id != usersIds[0] && info.RoleInRoom == RoleInRoom.Admin.ToString())
-                {
-                    throw new Exception("Error: Room admin that should be regular.");
-                }
+                await AddUserToRoomAsync(roomId, tokens[i]);
             }
+
+            await CheckThatTheRoomCreatorIsTheOnlyAdminAsync(roomId, usersIds[0]);
 
             // Test if the user 1 can change the name of the room.
             // It shouldn't be possible.
-            UpdateRoomNameDto updateRoomNameDto = new()
-            {
-                Name = newRoomName,
-                RoomId = roomId,
-            };
-            // We need finer control, so use RequestWithJsonAsync directly
-            HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
-                tokens[1],
-                HttpMethod.Put,
-                Service.REST,
-                Controller.Rooms,
-                RoomsAction.UpdateRoomName.ToString(),
-                updateRoomNameDto);
-            if(responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
-            {
-                throw new Exception("Error: A regular user should receive a Forbidden response when trying to update the name of a room.");
-            }
-
+            await TestRegularUserTryingToRenameARoomAsync(roomId, tokens[1]);
             // Turn the user 1 into an admin
-            UpdateUserRoleInRoomDto updateUserRoleInRoomDto = new()
-            { 
-                RoleInRoom = RoleInRoom.Admin,
-                UserId = usersIds[1],
-                RoomId = roomId,
-            };
-            await restClient.UpdateUserRoleInRoomAsync(tokens[0], updateUserRoleInRoomDto);
-
-            // Get users info from room, to verify their roles
-            usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
-
-            // Check that user 1 is admin
-            foreach (UserInfoDto info in usersInfo)
-            {
-                if (info.Id == usersIds[1] && info.RoleInRoom != RoleInRoom.Admin.ToString())
-                {
-                    throw new Exception("Error: Regular user not turned into admin.");
-                }
-            }
-
+            await TestPromotingRegularUserToAdminAsync(roomId, usersIds[1]);
             // Try again to rename the room, now with admin privilege
-            await restClient.UpdateRoomNameAsync(tokens[1], updateRoomNameDto);
-
-            // Get the room name
-            GetRoomInfoDto getRoomInfoDto = new()
-            {
-                RoomId = roomId,
-            };
-            RoomInfoDto roomInfo = await restClient.GetRoomInfoAsync(tokens[0], getRoomInfoDto);
-
-            // Check that the room name was updated
-            if(roomInfo.Name != newRoomName)
-            {
-                throw new Exception("Error: Room name not updated.");
-            }
-
-            // Remove the user 2, which should be a regular user
-            RemoveUserFromRoomDto removeUserFromRoomDto = new()
-            {
-                RoomId = roomId,
-                UserId = usersIds[2],
-            };
-            await restClient.RemoveUserFromRoomAsync(tokens[0], removeUserFromRoomDto);
-
-            // Get the users info again to verify that the user was removed
-            usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
-
-            foreach (UserInfoDto info in usersInfo)
-            {
-                if (info.Id == usersIds[2])
-                {
-                    throw new Exception("Error: Regular user not removed from room.");
-                }
-            }
-
+            await TestAdminRenamingARoomAsync(roomId, tokens[1]);
+            // Remove the user 3, which should be a regular user
+            await TestAdminRemovingARegularUserAsync(roomId, tokens[0], usersIds[_usersQuantity-1]);
             // Also make an admin try to remove an admin, it shouldn't be possible.
-            removeUserFromRoomDto.UserId = usersIds[1];
-            // We need finer control, so use the RequestWithJsonAsync method
-            responseMessage = await restClient.RequestWithJsonAsync(
-                tokens[0],
-                HttpMethod.Delete,
-                Service.REST,
-                Controller.Rooms,
-                RoomsAction.RemoveUserFromRoom.ToString(),
-                removeUserFromRoomDto);
-            if(responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
-            {
-                throw new Exception("Error: When trying to remove an admin, a Forbidden response should be received.");
-            }
-
-            // Get the users info again to verify that the admin wasn't removed
-            usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
-
-            // Check if the admin is still in the room
-            bool containsTheAdmin = false;
-            foreach (UserInfoDto info in usersInfo)
-            {
-                if (info.Id == usersIds[1])
-                {
-                    containsTheAdmin = true;
-                }
-            }
-
-            if (!containsTheAdmin)
-            {
-                throw new Exception("Error: Admin was removed from room.");
-            }
-
-            // Also check that a regular user can't remove an admin.
-            // It shouldn't be possible.
-            removeUserFromRoomDto.UserId = usersIds[1]; // an admin
-            // We need finer control, so use the RequestWithJsonAsync method
-            responseMessage = await restClient.RequestWithJsonAsync(
-                tokens[3], // token of a regular user
-                HttpMethod.Delete,
-                Service.REST,
-                Controller.Rooms,
-                RoomsAction.RemoveUserFromRoom.ToString(),
-                removeUserFromRoomDto);
-            if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
-            {
-                throw new Exception("Error: When trying to remove an admin, a Forbidden response should be received.");
-            }
-
-            // Check if the admin is still in the room
-            containsTheAdmin = false;
-            foreach (UserInfoDto info in usersInfo)
-            {
-                if (info.Id == usersIds[1])
-                {
-                    containsTheAdmin = true;
-                }
-            }
-
-            if (!containsTheAdmin)
-            {
-                throw new Exception("Error: Admin was removed from room.");
-            }
+            await TestAdminRemovingAdminAsync(roomId, tokens[0], usersIds[1]);
+            // Also check that a regular user can't remove an admin, it shouldn't be possible.
+            await TestRegularUserRemovingAdminAsync(roomId, tokens[_usersQuantity-2], usersIds[1]);
 
             // Do some chatting
-            int numberOfUsersInRoom = usersInfo.Count();
-            await ChatAsync(roomId, numberOfUsersInRoom);
+            int numberOfUsersInRoom = _usersQuantity-1;
+            TokenDto[] tokensOfUsersInRoom = new TokenDto[numberOfUsersInRoom];
+            for (int i = 0; i < numberOfUsersInRoom; i++)
+            {
+                tokensOfUsersInRoom[i] = tokens[i];
+            }
+            // Constructing the clients already starts the connections to SignalR
+            MessageRealTimeClient[] mrtClients = await ConstructMessageRealTimeClients(tokensOfUsersInRoom);
+            await ChatAsync(roomId, mrtClients);
+            await StopConnectionsToSignalRAsync(mrtClients);
+
+            Console.WriteLine("Finished chatting.");
 
             // Test editing, deleting and loading messages
 
@@ -365,7 +232,7 @@ namespace ConsoleClient
             Console.WriteLine("Finished deleting users.");
         }
 
-        public async Task AddUsersToRoomAsync(int roomId)
+        public async Task AddUserToRoomAsync(int roomId, TokenDto userToJoinToken)
         {
             // Get a room invitation
             GenerateInvitationTokenDto generateInvitationTokenDto = new()
@@ -375,29 +242,239 @@ namespace ConsoleClient
             string invitationToken = await restClient.GenerateInvitationTokenAsync(tokens[0], generateInvitationTokenDto);
             Console.WriteLine($"Invitation token = {invitationToken}");
 
-            // Make other users join the room
-            for (int i = 1; i < _usersQuantity; i++)
+            // Join the room
+            JoinRoomDto joinRoomDto = new()
             {
-                JoinRoomDto joinRoomDto = new()
+                InvitationToken = invitationToken,
+            };
+            await restClient.JoinRoomAsync(userToJoinToken, joinRoomDto);
+        }
+
+        public async Task CheckThatTheRoomCreatorIsTheOnlyAdminAsync(int roomId, int roomCreatorId)
+        {
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            { 
+                RoomId = roomId
+            };
+            IEnumerable <UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[1], getUsersInfoFromRoomDto);
+
+            foreach (UserInfoDto info in usersInfo)
+            {
+                if (info.Id == roomCreatorId && info.RoleInRoom != RoleInRoom.Admin.ToString())
                 {
-                    InvitationToken = invitationToken,
-                };
-                await restClient.JoinRoomAsync(tokens[i], joinRoomDto);
+                    throw new Exception("Error: Room creator not admin.");
+                }
+                else if (info.Id != roomCreatorId && info.RoleInRoom == RoleInRoom.Admin.ToString())
+                {
+                    throw new Exception("Error: Room admin that should be regular.");
+                }
             }
         }
 
-        private async Task ChatAsync(int roomId, int numberOfUsersInRoom)
+        public async Task TestRegularUserTryingToRenameARoomAsync(int roomId, TokenDto regularUserToken)
         {
-            MessageRealTimeClient[] mrtClients = new MessageRealTimeClient[numberOfUsersInRoom];
-
-            // Connect each user in the room to SignalR, so they can chat
-            Task[] signalrTasks = new Task[numberOfUsersInRoom];
-            for(int i = 0; i < numberOfUsersInRoom; i++)
+            UpdateRoomNameDto updateRoomNameDto = new()
             {
-                mrtClients[i] = new MessageRealTimeClient(url, tokens[i]);
-                signalrTasks[i] = mrtClients[i].TryToConnectToChatHubAsync();
+                Name = newRoomName,
+                RoomId = roomId,
+            };
+
+            // We need finer control, so use RequestWithJsonAsync directly
+            HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
+                regularUserToken,
+                HttpMethod.Put,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.UpdateRoomName.ToString(),
+                updateRoomNameDto);
+            if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
+            {
+                throw new Exception("Error: A regular user should receive a Forbidden response when trying to update the name of a room.");
             }
-            Task.WaitAll(signalrTasks);
+        }
+
+        public async Task TestPromotingRegularUserToAdminAsync(int roomId, int regularUserId)
+        {
+            UpdateUserRoleInRoomDto updateUserRoleInRoomDto = new()
+            {
+                RoleInRoom = RoleInRoom.Admin,
+                UserId = regularUserId,
+                RoomId = roomId,
+            };
+            await restClient.UpdateUserRoleInRoomAsync(tokens[0], updateUserRoleInRoomDto);
+
+            // Get users info from room, to verify their roles
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            {
+                RoomId = roomId,
+            };
+            IEnumerable <UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
+
+            // Check that user 1 is admin
+            foreach (UserInfoDto info in usersInfo)
+            {
+                if (info.Id == usersIds[1] && info.RoleInRoom != RoleInRoom.Admin.ToString())
+                {
+                    throw new Exception("Error: Regular user not turned into admin.");
+                }
+            }
+        }
+
+        public async Task TestAdminRenamingARoomAsync(int roomId, TokenDto adminToken)
+        {
+            UpdateRoomNameDto updateRoomNameDto = new()
+            {
+                Name = newRoomName,
+                RoomId = roomId
+            };
+            await restClient.UpdateRoomNameAsync(adminToken, updateRoomNameDto);
+            
+            // Get the room name
+            GetRoomInfoDto getRoomInfoDto = new()
+            {
+                RoomId = updateRoomNameDto.RoomId,
+            };
+            RoomInfoDto roomInfo = await restClient.GetRoomInfoAsync(adminToken, getRoomInfoDto);
+
+            // Check that the room name was updated
+            if (roomInfo.Name != newRoomName)
+            {
+                throw new Exception("Error: Room name not updated.");
+            }
+        }
+
+        public async Task TestAdminRemovingARegularUserAsync(int roomId, TokenDto adminToken, int regularUserId)
+        {
+            RemoveUserFromRoomDto removeUserFromRoomDto = new()
+            {
+                RoomId = roomId,
+                UserId = regularUserId,
+            };
+            await restClient.RemoveUserFromRoomAsync(adminToken, removeUserFromRoomDto);
+
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            { 
+                RoomId = removeUserFromRoomDto.RoomId
+            };
+
+            // Get the users info again to verify that the user was removed
+            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(adminToken, getUsersInfoFromRoomDto);
+
+            foreach (UserInfoDto info in usersInfo)
+            {
+                if (info.Id == regularUserId)
+                {
+                    throw new Exception("Error: Regular user not removed from room.");
+                }
+            }
+        }
+
+        public async Task TestAdminRemovingAdminAsync(int roomId, TokenDto adminToken, int adminToRemoveId)
+        {
+            RemoveUserFromRoomDto removeUserFromRoomDto = new()
+            {
+                RoomId = roomId,
+                UserId = adminToRemoveId,
+            };
+            // We need finer control, so use the RequestWithJsonAsync method
+            HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
+                adminToken,
+                HttpMethod.Delete,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.RemoveUserFromRoom.ToString(),
+                removeUserFromRoomDto);
+            if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
+            {
+                throw new Exception("Error: When trying to remove an admin, a Forbidden response should be received.");
+            }
+
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            {
+                RoomId = removeUserFromRoomDto.RoomId
+            };
+
+            // Get the users info again to verify that the admin wasn't removed
+            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(tokens[0], getUsersInfoFromRoomDto);
+
+            // Check if the admin is still in the room
+            bool containsTheAdmin = false;
+            foreach (UserInfoDto info in usersInfo)
+            {
+                if (info.Id == adminToRemoveId)
+                {
+                    containsTheAdmin = true;
+                }
+            }
+
+            if (!containsTheAdmin)
+            {
+                throw new Exception("Error: Admin was removed from room.");
+            }
+        }
+
+        private async Task TestRegularUserRemovingAdminAsync(int roomId, TokenDto regularUserToken, int adminId)
+        {
+            RemoveUserFromRoomDto removeUserFromRoomDto = new()
+            {
+                RoomId = roomId,
+                UserId = adminId,
+            };
+            // We need finer control, so use the RequestWithJsonAsync method
+            HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
+                regularUserToken,
+                HttpMethod.Delete,
+                Service.REST,
+                Controller.Rooms,
+                RoomsAction.RemoveUserFromRoom.ToString(),
+                removeUserFromRoomDto);
+            if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
+            {
+                throw new Exception("Error: When trying to remove an admin, a Forbidden response should be received.");
+            }
+
+            // Check if the admin is still in the room
+            bool containsTheAdmin = false;
+            // Get the users info again to verify that the admin wasn't removed
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            {
+                RoomId = removeUserFromRoomDto.RoomId
+            };
+            IEnumerable <UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(
+                                                    regularUserToken,
+                                                    getUsersInfoFromRoomDto);
+            foreach (UserInfoDto info in usersInfo)
+            {
+                if (info.Id == adminId)
+                {
+                    containsTheAdmin = true;
+                }
+            }
+
+            if (!containsTheAdmin)
+            {
+                throw new Exception("Error: Admin was removed from room.");
+            }
+        }
+
+        private async Task<MessageRealTimeClient[]> ConstructMessageRealTimeClients(TokenDto[] tokensOfUsersInRoom)
+        {
+            MessageRealTimeClient[] mrtClients = new MessageRealTimeClient[tokensOfUsersInRoom.Length];
+            int numberOfUsersInRoom = mrtClients.Length;
+            // Connect each user to SignalR, so they can chat
+            Task[] tasks = new Task[numberOfUsersInRoom];
+            for (int i = 0; i < numberOfUsersInRoom; i++)
+            {
+                mrtClients[i] = new MessageRealTimeClient(url, tokensOfUsersInRoom[i]);
+                tasks[i] = mrtClients[i].TryToConnectToChatHubAsync();
+            }
+            Task.WaitAll(tasks);
+            return mrtClients;
+        }
+
+        private async Task ChatAsync(int roomId, MessageRealTimeClient[] mrtClients)
+        {
+            int numberOfUsersInRoom = mrtClients.Length;
 
             Console.WriteLine("Chatting...");
             // Generate messages randomly
@@ -407,14 +484,18 @@ namespace ConsoleClient
                 string randomContent = random.GetString(ALPHNUM, 100);
                 await mrtClients[randomIndex].SendMessageAsync(roomId, randomContent);
             }
+        }
 
+        private async Task StopConnectionsToSignalRAsync(MessageRealTimeClient[] mrtClients)
+        {
+            int numberOfUsersInRoom = mrtClients.Length;
             // Close the SignalR connections
+            Task[] tasks = new Task[numberOfUsersInRoom];
             for (int i = 0; i < numberOfUsersInRoom; i++)
             {
-                signalrTasks[i] = mrtClients[i].StopAsync();
+                tasks[i] = mrtClients[i].StopAsync();
             }
-            Task.WaitAll(signalrTasks);
-            Console.WriteLine("Finished chatting.");
+            Task.WaitAll(tasks);
         }
 
         private async Task CleanupAsync(int roomId)
