@@ -402,6 +402,13 @@ namespace ConsoleClient
                 string randomContent = random.GetString(ALPHNUM, 100);
                 await mrtClients[randomIndex].SendMessageAsync(roomId, randomContent);
             }
+
+            // Close the SignalR connections
+            for (int i = 0; i < numberOfUsersInRoom; i++)
+            {
+                signalrTasks[i] = mrtClients[i].StopAsync();
+            }
+            Task.WaitAll(signalrTasks);
             Console.WriteLine("Finished chatting.");
         }
 
