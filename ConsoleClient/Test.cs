@@ -68,23 +68,7 @@ namespace ConsoleClient
             };
             int roomId = await restClient.CreateRoomAndAddUserToItAsync(tokens[0], createRoomDto);
 
-            // Get a room invitation
-            GenerateInvitationTokenDto generateInvitationTokenDto = new()
-            {
-                RoomId = roomId
-            };
-            string invitationToken = await restClient.GenerateInvitationTokenAsync(tokens[0], generateInvitationTokenDto);
-            Console.WriteLine($"Invitation token = {invitationToken}");
-
-            // Make other users join the room
-            for (int i = 1; i < _usersQuantity; i++)
-            {
-                JoinRoomDto joinRoomDto = new()
-                {
-                    InvitationToken = invitationToken,
-                };
-                await restClient.JoinRoomAsync(tokens[i], joinRoomDto);
-            }
+            await AddUsersToRoomAsync(roomId);
 
             // Get users info from room, to verify their roles
             // Use the user 1, because it should not need to be an admin
@@ -379,6 +363,27 @@ namespace ConsoleClient
                 }
             }
             Console.WriteLine("Finished deleting users.");
+        }
+
+        public async Task AddUsersToRoomAsync(int roomId)
+        {
+            // Get a room invitation
+            GenerateInvitationTokenDto generateInvitationTokenDto = new()
+            {
+                RoomId = roomId
+            };
+            string invitationToken = await restClient.GenerateInvitationTokenAsync(tokens[0], generateInvitationTokenDto);
+            Console.WriteLine($"Invitation token = {invitationToken}");
+
+            // Make other users join the room
+            for (int i = 1; i < _usersQuantity; i++)
+            {
+                JoinRoomDto joinRoomDto = new()
+                {
+                    InvitationToken = invitationToken,
+                };
+                await restClient.JoinRoomAsync(tokens[i], joinRoomDto);
+            }
         }
 
         private async Task ChatAsync(int roomId, int numberOfUsersInRoom)
