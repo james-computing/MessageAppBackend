@@ -89,7 +89,7 @@ namespace ConsoleClient
             await TestRegularUserRemovingAdminAsync(roomId, tokens[_usersQuantity-2], usersIds[1]);
 
             // Do some chatting
-            int numberOfUsersInRoom = _usersQuantity-1;
+            int numberOfUsersInRoom = _usersQuantity-1; // last user was removed from the room
             TokenDto[] tokensOfUsersInRoom = new TokenDto[numberOfUsersInRoom];
             for (int i = 0; i < numberOfUsersInRoom; i++)
             {
