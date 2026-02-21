@@ -12,14 +12,19 @@ namespace ConsoleClient
 {
     internal class Test
     {
+        private Random random = new Random();
+
         private readonly int _usersQuantity;
         private readonly Url url;
+
+        // Auth
         private UserRegisterDto[] userRegisterDtos;
         private TokenDto[] tokens;
         private int[] usersIds;
-        private Random random = new Random();
         private const string ALPHNUM = "ABCEDFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         private const string SYMB = @"&%-/\*#$";
+
+        // Rooms
         private const string originalRoomName = "original name";
         private const string newRoomName = "new name";
 
