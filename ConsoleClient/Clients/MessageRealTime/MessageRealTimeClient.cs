@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace ConsoleClient.Clients.MessageRealTime
 {
-    internal class MessageRealTimeClient : IAsyncDisposable
+    internal class MessageRealTimeClient
     {
         // SignalR
         private readonly HubConnectionBuilder hubConnectionBuilder;
@@ -118,7 +118,7 @@ namespace ConsoleClient.Clients.MessageRealTime
             }
         }
 
-        public async ValueTask DisposeAsync()
+        public async Task StopAsync()
         {
             Console.WriteLine("Stopping SignalR client.");
             await connection.StopAsync();
