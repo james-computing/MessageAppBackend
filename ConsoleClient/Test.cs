@@ -61,11 +61,11 @@ namespace ConsoleClient
         public async Task ExecuteAsync()
         {
             // Try to register new users until we have the amount of users we need
-            await RegisterRandomUsersAsync(authClient);
+            await RegisterRandomUsersAsync();
             PrintRegisteredUsers();
 
             // Login each user
-            await LoginUsersAsync(authClient);
+            await LoginUsersAsync();
             GetUsersIdsFromTokens();
 
             // Create a room for the first user
@@ -285,7 +285,7 @@ namespace ConsoleClient
             return succeded;
         }
 
-        private async Task RegisterRandomUsersAsync(AuthClient authClient)
+        private async Task RegisterRandomUsersAsync()
         {
             // Keep trying to register new users
             Console.WriteLine("\nTrying to register new users...");
@@ -318,7 +318,7 @@ namespace ConsoleClient
             }
         }
 
-        private async Task LoginUsersAsync(AuthClient authClient)
+        private async Task LoginUsersAsync()
         {
             Console.WriteLine("\nLogin users...");
             for (int i = 0; i < _usersQuantity; i++)
@@ -368,7 +368,7 @@ namespace ConsoleClient
             }
         }
 
-        private async Task DeleteUsersAsync(AuthClient authClient)
+        private async Task DeleteUsersAsync()
         {
             Console.WriteLine("\nDeleting users...");
             for (int i = 0; i < _usersQuantity; i++)
@@ -699,7 +699,7 @@ namespace ConsoleClient
             await restClient.DeleteRoomAsync(adminToken, deleteRoomDto);
 
             // Delete users
-            await DeleteUsersAsync(authClient);
+            await DeleteUsersAsync();
         }
     }
 }
