@@ -193,6 +193,7 @@ namespace REST.Data
         //private const string USERID_VARIABLE = "userid";
         private const string ROLEINROOM_VARIABLE = "roleinroom";
 
+        private const string GET_USER_ROOMS_IDS_PROCEDURE = "dbo.getUserRoomsIds";
         private const string ADD_USER_TO_ROOM_PROCEDURE = "dbo.addUserToRoom";
         private const string COUNT_USERS_IN_ROOM_PROCEDURE = "dbo.countUsersInRoom";
         private const string REMOVE_USER_FROM_ROOM = "dbo.removeUserFromRoom";
@@ -265,6 +266,19 @@ namespace REST.Data
 
         //********************************************** usersrooms table *****************************************
 
+        public async Task<IEnumerable<int>> GetUserRoomsIdsAsync(int userId)
+        {
+            DynamicParameters parameters = new();
+            parameters.Add(USERID_VARIABLE, userId);
+
+            IEnumerable<int> roomsIds =  await connection.QueryAsync<int>
+                (
+                    GET_USER_ROOMS_IDS_PROCEDURE,
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            return roomsIds;
+        }
         public async Task AddUserToRoomAsync(int roomId, int userId, RoleInRoom roleInRoom)
         {
             DynamicParameters parameters = new DynamicParameters();

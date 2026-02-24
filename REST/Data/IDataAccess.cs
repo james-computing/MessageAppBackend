@@ -21,6 +21,7 @@ namespace REST.Data
         public Task<RoomInfoDto> GetRoomInfoAsync(int roomId);
 
         //*********************** usersrooms table *****************************
+        public Task<IEnumerable<int>> GetUserRoomsIdsAsync(int userId);
         public Task AddUserToRoomAsync(int roomId, int userId, RoleInRoom roleInRoom);
         public Task<int> CountUsersInRoomAsync(int roomId);
         public Task RemoveUserFromRoomAsync(int roomId, int userId);
