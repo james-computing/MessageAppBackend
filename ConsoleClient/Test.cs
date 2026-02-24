@@ -225,6 +225,19 @@ namespace ConsoleClient
                 throw new Exception($"Error: loadedMessages with wrong number of messages. Got {loadedMessagesCount}, should be {latestMessagesCount}.");
             }
 
+            // Check that we got the same messages again
+            IEnumerator<REST.Models.Message> latestMessagesEnumerator = latestMessagesOrdered.GetEnumerator();
+            latestMessagesEnumerator.MoveNext();
+            foreach (REST.Models.Message message in loadedMessages.OrderBy(msg => msg.Time))
+            {
+                var current = latestMessagesEnumerator.Current;
+                if (message.Id != current.Id)
+                {
+                    throw new Exception("Error: loaded messages differ from latest messages.");
+                }
+                latestMessagesEnumerator.MoveNext();
+            }
+
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
             IEnumerable<TokenDto> tokensOfAdmins = [tokens[0], tokens[1]];
