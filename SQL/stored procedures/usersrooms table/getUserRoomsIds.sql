@@ -4,10 +4,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
 -- Author:		James
--- Create date: 12/02/2026
+-- Create date: 24/02/2026
 -- Description:	get the ids of the rooms the user is in
 -- =============================================
-CREATE PROCEDURE dbo.getUserRooms
+CREATE PROCEDURE dbo.getUserRoomsIds
 	-- Add the parameters for the stored procedure here
 	@userid INT = NULL
 AS
