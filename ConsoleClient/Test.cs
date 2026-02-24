@@ -66,6 +66,7 @@ namespace ConsoleClient
 
             // Login each user
             await LoginUsersAsync();
+            await TestRefreshingTokensAsync();
             GetUsersIdsFromTokens();
 
             // Create a room for the first user
