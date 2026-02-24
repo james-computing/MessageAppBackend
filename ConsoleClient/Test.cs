@@ -503,6 +503,17 @@ namespace ConsoleClient
         }
 
         private async Task CleanupAsync(int roomId)
+        private async Task LeaveRoomAsync(int roomId, TokenDto token)
+        {
+            
+            RemoveUserFromRoomDto removeUserFromRoomDto = new()
+            {
+                RoomId = roomId,
+                UserId = GetIdFromJWT(token.AccessToken),
+            };
+            await restClient.RemoveUserFromRoomAsync(token, removeUserFromRoomDto);
+        }
+
         {
             // Delete the room
             DeleteRoomDto deleteRoomDto = new()
