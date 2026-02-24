@@ -147,7 +147,8 @@ namespace ConsoleClient
                     firstMessageSenderIndex = i;
                     indicesObtained++;
                 }
-                else if (usersIds[i] == secondMessageSenderId)
+
+                if (usersIds[i] == secondMessageSenderId)
                 {
                     secondMessageSenderIndex = i;
                     indicesObtained++;
