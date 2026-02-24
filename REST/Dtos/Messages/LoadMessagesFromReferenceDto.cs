@@ -1,6 +1,6 @@
 ﻿namespace REST.Dtos.Messages
 {
-    public class LoadMessagesPrecedingReferenceDto
+    public class LoadMessagesFromReferenceDto
     {
         public required int RoomId { get; set; }
         public required int MessageIdReference { get; set; }
