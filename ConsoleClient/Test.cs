@@ -105,9 +105,11 @@ namespace ConsoleClient
             await StopConnectionsToSignalRAsync(mrtClients);
 
             Console.WriteLine("Finished chatting.");
+            Console.WriteLine("Messages of user 0:");
+            mrtClients[0].PrintMessages();
 
             // Test editing, deleting and loading messages
-
+            
 
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
