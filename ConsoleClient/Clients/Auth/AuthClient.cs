@@ -106,6 +106,37 @@ namespace ConsoleClient.Clients.Auth
             return null;
         }
 
+        public async Task<TokenDto?> RefreshAccessTokenAsync(string refreshToken)
+        {
+            Console.WriteLine("Trying to refresh access token...");
+
+            HttpClient httpClient = new HttpClient();
+
+            using StringContent jsonContent = new(refreshToken, Encoding.UTF8, "application/json");
+
+            string url = _url.FromControllerAction(
+                MessageAppService.Auth,
+                MessageAppController.Auth,
+                AuthAction.RefreshAccessToken.ToString());
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                Console.WriteLine(content);
+                TokenDto? refreshedToken = JsonSerializer.Deserialize<TokenDto?>(content, jsonSerializerOptions);
+                if( refreshedToken == null)
+                {
+                    Console.WriteLine("Token not refreshed.");
+                    return null;
+                }
+                Console.WriteLine("Refreshed access token.");
+                return refreshedToken;
+            }
+
+            Console.WriteLine($"Error: Failed to refresh token. Status code: {responseMessage.StatusCode}");
+            return null;
+        }
+
         public async Task<bool> DeleteAsync(TokenDto token)
         {
             Console.WriteLine("Trying to delete user...");
