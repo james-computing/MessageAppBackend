@@ -9,6 +9,7 @@
         JoinRoom,
         RemoveUserFromRoom,
         UpdateUserRoleInRoom,
+        GetUserRoomsIds,
         GetRoomInfo,
         GetUsersInfoFromRoom,
     }
