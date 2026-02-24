@@ -54,6 +54,7 @@ namespace ConsoleClient.Clients.MessageRealTime
             connection.On<ReceiveMessageDto>("ReceiveMessageAsync", async (ReceiveMessageDto receiveMessageDto) =>
             {
                 Console.WriteLine(JsonSerializer.Serialize(receiveMessageDto));
+                AddMessage(receiveMessageDto);
             });
 
             connection.On<ErrorMessageDto>("ReceiveErrorMessageAsync", async (ErrorMessageDto errorMessageDto) =>
