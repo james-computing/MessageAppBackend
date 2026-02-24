@@ -294,7 +294,7 @@ namespace ConsoleClient.Clients.REST
         }
 
         public async Task<IEnumerable<Message>> LoadMessagesFromReferenceAsync(
-            LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto,
+            LoadMessagesFromReferenceDto loadMessagesPrecedingRefDto,
             TokenDto token)
         {
             Console.WriteLine("Trying to load messages from room...");

@@ -47,7 +47,7 @@ namespace MessageREST.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> LoadMessagesPrecedingReferenceAsync(
-            LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto)
+            LoadMessagesFromReferenceDto loadMessagesPrecedingRefDto)
         {
             // Check if user is in the room
             int? userId = Identification.GetUserId(User);
