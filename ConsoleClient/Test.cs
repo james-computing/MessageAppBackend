@@ -193,7 +193,18 @@ namespace ConsoleClient
                 throw new Exception($"Error: wrong number of latest messages. Got {latestMessagesCount}, should be {numberOfMessagesToGenerate-1}.");
             }
 
-
+            // Check that the edited message have the correct content
+            // Since the first message was deleted and the edited message was the second,
+            // now the edited message is the first from the loaded lastest messages.
+            REST.Models.Message editedMessage = latestMessages.OrderBy(message => message.Time).First();
+            if(editedMessage.Id != secondMessage.Id)
+            {
+                throw new Exception("Error: didn't find the edited message in the expected position in the loaded latest messages.");
+            }
+            if(editedMessage.Content != editedMessageContent)
+            {
+                throw new Exception($"Error: edited message has wrong content. Got {editedMessage.Content}, should be {editedMessageContent}.");
+            }
 
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
