@@ -207,6 +207,17 @@ namespace ConsoleClient
                 throw new Exception($"Error: edited message has wrong content. Got {editedMessage.Content}, should be {editedMessageContent}.");
             }
 
+            // Load the messages again, using a message as reference.
+            LoadMessagesFromReferenceDto loadMessagesPrecedingReferenceDto = new()
+            {
+                RoomId = roomId,
+                MessageIdReference = latestMessagesOrdered.Last().Id,
+                Quantity = (uint)latestMessagesCount,
+            };
+            IEnumerable<REST.Models.Message> loadedMessages = await restClient.LoadMessagesFromReferenceAsync(
+                                                                loadMessagesPrecedingReferenceDto,
+                                                                tokens[0]);
+
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
             IEnumerable<TokenDto> tokensOfAdmins = [tokens[0], tokens[1]];
