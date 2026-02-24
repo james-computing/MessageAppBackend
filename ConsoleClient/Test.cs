@@ -75,6 +75,17 @@ namespace ConsoleClient
             };
             int roomId = await restClient.CreateRoomAndAddUserToItAsync(tokens[0], createRoomDto);
 
+            // Check that the user 0 only has a room, and that the id is correct
+            IEnumerable<int> roomsIds = await restClient.GetUserRoomsIdsAsync(tokens[0]);
+            if(roomsIds.Count() != 1)
+            {
+                throw new Exception("Error: user has incorrect number of rooms.");
+            }
+            if (roomsIds.First() != roomId)
+            {
+                throw new Exception("Error: got room with wrong id.");
+            }
+
             for (int i = 1; i < _usersQuantity; i++)
             {
                 await AddUserToRoomAsync(roomId, tokens[0], tokens[i]);
