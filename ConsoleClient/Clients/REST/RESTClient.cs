@@ -214,6 +214,31 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
+        public async Task<IEnumerable<int>> GetUserRoomsIdsAsync(TokenDto token)
+        {
+            Console.WriteLine("Trying to get rooms ids for user...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Get,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
+                RoomsAction.GetUserRoomsIds.ToString(),
+                new { });
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                IEnumerable<int> roomsIds = JsonSerializer.Deserialize<IEnumerable<int>>(content, jsonSerializerOptions)
+                                        ?? throw new Exception("Error: Failed to deserialize content to IEnumerable<int>.");
+                return roomsIds;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to rooms ids for user. Status code: {responseMessage.StatusCode}.");
+            }
+        }
+
         public async Task<RoomInfoDto> GetRoomInfoAsync(TokenDto token, GetRoomInfoDto getRoomInfoDto)
         {
             Console.WriteLine("Trying to get room info...");
