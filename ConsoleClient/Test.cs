@@ -162,6 +162,13 @@ namespace ConsoleClient
                 throw new Exception($"Error: couldn't get the indices of the senders. Got indices:\nfirstMessageSenderIndex = {firstMessageSenderIndex},\n secondMessageSenderIndex = {secondMessageSenderIndex}.");
             }
 
+            // Delete the first message
+            DeleteMessageDto deleteMessageDto = new()
+            {
+                MessageId = firstMessage.Id,
+            };
+            await restClient.DeleteMessageAsync(deleteMessageDto, tokens[firstMessageSenderIndex]);
+
 
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
