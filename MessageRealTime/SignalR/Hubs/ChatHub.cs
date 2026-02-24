@@ -115,6 +115,7 @@ namespace MessageRealTime.SignalR.Hubs
 
             // Send message to all users in room except itself
             await Clients.Users(usersIdsToSend).ReceiveMessageAsync(receiveMessageDto);
+            await Clients.Caller.ReceiveMessageSentConfirmationAsync(receiveMessageDto);
         }
     }
 }
