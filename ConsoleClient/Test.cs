@@ -178,6 +178,21 @@ namespace ConsoleClient
             };
             await restClient.EditMessageAsync(editMessageDto, tokens[secondMessageSenderIndex]);
 
+            // Load last messages
+            LoadLatestMessagesDto loadLatestMessagesDto = new()
+            {
+                RoomId = roomId,
+                Quantity = numberOfMessagesToGenerate,
+            };
+            IEnumerable<REST.Models.Message> latestMessages =  await restClient.LoadLatestMessagesAsync(loadLatestMessagesDto, tokens[0]);
+
+            int latestMessagesCount = latestMessages.Count();
+            if (latestMessagesCount != numberOfMessagesToGenerate - 1)
+            {
+                throw new Exception($"Error: wrong number of latest messages. Got {latestMessagesCount}, should be {numberOfMessagesToGenerate-1}.");
+            }
+
+
 
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
