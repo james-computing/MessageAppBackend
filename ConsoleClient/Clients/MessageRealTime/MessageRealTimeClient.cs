@@ -127,5 +127,19 @@ namespace ConsoleClient.Clients.MessageRealTime
             Console.WriteLine("Stopping SignalR client.");
             await connection.StopAsync();
         }
+
+        private void AddMessage(ReceiveMessageDto receiveMessageDto)
+        {
+            messages.Add(receiveMessageDto);
+        }
+
+        public void PrintMessages()
+        {
+            IOrderedEnumerable<ReceiveMessageDto> orderedMessages = messages.OrderBy(message => message.Time);
+            foreach (ReceiveMessageDto message in orderedMessages)
+            {
+                Console.WriteLine($"Id: {message.Id}, SenderId:, {message.SenderId}, Time: {message.Time}");
+            }
+        }
     }
 }
