@@ -388,7 +388,7 @@ namespace ConsoleClient
         {
             for (int i=0; i < _usersQuantity; i++)
             {
-                TokenDto? refreshedToken = await authClient.RefreshAccessTokenAsync(tokens[i].RefreshToken);
+                TokenDto? refreshedToken = await authClient.RefreshAccessTokenAsync(tokens[i]);
                 if(refreshedToken == null)
                 {
                     throw new Exception("Error: failed to refresh token.");

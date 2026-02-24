@@ -106,13 +106,19 @@ namespace ConsoleClient.Clients.Auth
             return null;
         }
 
-        public async Task<TokenDto?> RefreshAccessTokenAsync(string refreshToken)
+        public async Task<TokenDto?> RefreshAccessTokenAsync(TokenDto token)
         {
             Console.WriteLine("Trying to refresh access token...");
 
             HttpClient httpClient = new HttpClient();
 
-            using StringContent jsonContent = new(refreshToken, Encoding.UTF8, "application/json");
+            RefreshAccessTokenDto refreshAccessTokenDto = new()
+            {
+                RefreshToken = token.RefreshToken,
+            };
+            string serializedString = JsonSerializer.Serialize(refreshAccessTokenDto);
+            Console.WriteLine($"json to post:\n{serializedString}\n");
+            using StringContent jsonContent = new(serializedString, Encoding.UTF8, "application/json");
 
             string url = _url.FromControllerAction(
                 MessageAppService.Auth,
