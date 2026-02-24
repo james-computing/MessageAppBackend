@@ -169,6 +169,15 @@ namespace ConsoleClient
             };
             await restClient.DeleteMessageAsync(deleteMessageDto, tokens[firstMessageSenderIndex]);
 
+            // Edit the second message
+            const string editedMessageContent = "edited message content";
+            EditMessageDto editMessageDto = new()
+            {
+                MessageId = secondMessage.Id,
+                NewContent = editedMessageContent,
+            };
+            await restClient.EditMessageAsync(editMessageDto, tokens[secondMessageSenderIndex]);
+
 
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
