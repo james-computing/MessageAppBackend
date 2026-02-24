@@ -16,7 +16,7 @@ namespace REST.Data
         private const string USERID_VARIABLE = "userid";
 
         private const string LOAD_LATEST_MESSAGES_PROCEDURE = "dbo.loadLatestMessages";
-        private const string LOAD_MESSAGES_PROCEDURE = "dbo.loadMessagesPrecedingReference";
+        private const string LOAD_MESSAGES_FROM_REFERENCE_PROCEDURE = "dbo.loadMessagesFromReference";
         private const string EDIT_MESSAGE_PROCEDURE = "dbo.editMessage";
         private const string DELETE_MESSAGE_PROCEDURE = "dbo.deleteMessage";
         private const string DELETE_USER_MESSAGES_FROM_ROOM_PROCEDURE = "dbo.deleteUserMessagesFromRoom";
@@ -48,7 +48,7 @@ namespace REST.Data
             return messages;
         }
 
-        public async Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(int roomId, int messageIdReference, uint quantity)
+        public async Task<IEnumerable<Message>> LoadMessagesFromReferenceAsync(int roomId, int messageIdReference, uint quantity)
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
@@ -57,7 +57,7 @@ namespace REST.Data
 
             IEnumerable<Message> messages = await connection.QueryAsync<Message>
             (
-                LOAD_MESSAGES_PROCEDURE,
+                LOAD_MESSAGES_FROM_REFERENCE_PROCEDURE,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );

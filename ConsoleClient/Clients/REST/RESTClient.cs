@@ -293,7 +293,7 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
-        public async Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(
+        public async Task<IEnumerable<Message>> LoadMessagesFromReferenceAsync(
             LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto,
             TokenDto token)
         {

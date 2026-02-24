@@ -4,10 +4,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
 -- Author:		James
--- Create date: 17/02/2026
--- Description:	load messages that comes before a message reference
+-- Create date: 24/02/2026
+-- Description:	load messages with id less or equal than a reference
 -- =============================================
-CREATE PROCEDURE dbo.loadMessagesPrecedingReference
+CREATE PROCEDURE dbo.loadMessagesFromReference
 	-- Add the parameters for the stored procedure here
 	@roomid INT = NULL,
 	@messageidreference INT = NULL,
@@ -21,7 +21,7 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT TOP(@quantity) id, senderid, content, time
 	FROM dbo.messages
-	WHERE roomid = @roomid AND id < @messageidreference
+	WHERE roomid = @roomid AND id <= @messageidreference
 	ORDER BY id DESC;
 END
 GO

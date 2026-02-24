@@ -67,7 +67,7 @@ namespace MessageREST.Controllers
                 return BadRequest($"Can't request for more than {maxMessagesQuantity} messages.");
             }
 
-            IEnumerable<Message> messages = await dataAccess.LoadMessagesPrecedingReferenceAsync
+            IEnumerable<Message> messages = await dataAccess.LoadMessagesFromReferenceAsync
                                             (
                                                 loadMessagesPrecedingRefDto.RoomId,
                                                 loadMessagesPrecedingRefDto.MessageIdReference,
