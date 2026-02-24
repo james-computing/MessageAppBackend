@@ -235,7 +235,7 @@ namespace ConsoleClient.Clients.REST
             }
             else
             {
-                throw new Exception($"Error: Failed to rooms ids for user. Status code: {responseMessage.StatusCode}.");
+                throw new Exception($"Error: Failed to get rooms ids for user. Status code: {responseMessage.StatusCode}.");
             }
         }
 
