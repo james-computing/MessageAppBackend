@@ -342,5 +342,26 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
+        public async Task DeleteMessageAsync(DeleteMessageDto deleteMessageDto, TokenDto token)
+        {
+            Console.WriteLine("Trying to delete message...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Delete,
+                MessageAppService.REST,
+                MessageAppController.Message,
+                MessageAction.DeleteMessage.ToString(),
+                deleteMessageDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to delete message. Status code: {responseMessage.StatusCode}.");
+            }
+        }
     }
 }
