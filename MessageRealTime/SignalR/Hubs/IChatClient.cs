@@ -9,6 +9,7 @@ namespace MessageRealTime.SignalR.Hubs
     public interface IChatClient
     {
         public Task ReceiveMessageAsync(ReceiveMessageDto receiveMessageDto);
+        public Task ReceiveMessageSentConfirmationAsync(ReceiveMessageDto receiveMessageDto);
         public Task ReceiveErrorMessageAsync(ErrorMessageDto errorMessage);
         public Task ReceiveNotificationAsync(NotificationDto notificationDto);
     }
