@@ -111,6 +111,10 @@ namespace ConsoleClient.Clients.Auth
             Console.WriteLine("Trying to refresh access token...");
 
             HttpClient httpClient = new HttpClient();
+            // The access token is needed, because the Auth service needs to authenticate the user.
+            // But the Auth service won't bother if the access token expired, since the purpose of the refresh
+            // token is to ask for a new access token.
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
             RefreshAccessTokenDto refreshAccessTokenDto = new()
             {
