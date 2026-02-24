@@ -155,7 +155,7 @@ namespace REST.Data
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
-            parameters.Add(ROLEINROOM_VARIABLE, roleInRoom);
+            parameters.Add(ROLEINROOM_VARIABLE, roleInRoom.ToString());
 
             bool hasAdmin = await connection.QuerySingleAsync<bool>
                             (
