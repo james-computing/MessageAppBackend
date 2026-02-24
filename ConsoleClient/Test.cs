@@ -4,7 +4,7 @@ using ConsoleClient.Clients.MessageRealTime;
 using ConsoleClient.Clients.REST;
 using ConsoleClient.Clients.Urls;
 using ConsoleClient.Enums;
-using JWTAuth.Dtos;
+using Auth.Dtos;
 using REST.Dtos.Messages;
 using REST.Dtos.Rooms;
 using REST.Roles;

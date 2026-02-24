@@ -1,6 +1,6 @@
-﻿using JWTAuth.Roles;
+﻿using Auth.Roles;
 
-namespace JWTAuth.Dtos
+namespace Auth.Dtos
 {
     public class UserRegisterDto
     {

@@ -1,7 +1,7 @@
-﻿using JWTAuth.Dtos;
-using JWTAuth.Models;
+﻿using Auth.Dtos;
+using Auth.Models;
 
-namespace JWTAuth.Data
+namespace Auth.Data
 {
     public interface IDataAccess
     {

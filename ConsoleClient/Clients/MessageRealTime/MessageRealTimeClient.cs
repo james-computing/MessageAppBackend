@@ -1,6 +1,6 @@
 ﻿using Client.Dtos;
 using ConsoleClient.Clients.Urls;
-using JWTAuth.Dtos;
+using Auth.Dtos;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;

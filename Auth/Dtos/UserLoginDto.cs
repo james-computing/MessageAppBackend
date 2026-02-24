@@ -1,4 +1,4 @@
-﻿namespace JWTAuth.Dtos
+﻿namespace Auth.Dtos
 {
     public class UserLoginDto
     {

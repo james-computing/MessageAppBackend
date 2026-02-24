@@ -1,4 +1,4 @@
-﻿namespace JWTAuth.Models
+﻿namespace Auth.Models
 {
     public class RefreshTokenData
     {

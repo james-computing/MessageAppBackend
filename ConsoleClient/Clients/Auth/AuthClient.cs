@@ -1,6 +1,6 @@
 ﻿using ConsoleClient.Clients.Urls;
 using ConsoleClient.Enums;
-using JWTAuth.Dtos;
+using Auth.Dtos;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;

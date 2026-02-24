@@ -1,11 +1,11 @@
-﻿using JWTAuth.Dtos;
-using JWTAuth.Models;
-using JWTAuth.Services;
+﻿using Auth.Dtos;
+using Auth.Models;
+using Auth.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace JWTAuth.Controllers
+namespace Auth.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]

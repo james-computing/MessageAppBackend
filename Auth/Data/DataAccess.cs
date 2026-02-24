@@ -1,9 +1,9 @@
 ﻿using Dapper;
-using JWTAuth.Dtos;
-using JWTAuth.Models;
+using Auth.Dtos;
+using Auth.Models;
 using System.Data;
 
-namespace JWTAuth.Data
+namespace Auth.Data
 {
     public class DataAccess(IDbConnection dbConnection) : IDataAccess
     {

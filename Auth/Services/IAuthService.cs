@@ -1,8 +1,8 @@
-﻿using JWTAuth.Dtos;
-using JWTAuth.Models;
+﻿using Auth.Dtos;
+using Auth.Models;
 using System.Globalization;
 
-namespace JWTAuth.Services
+namespace Auth.Services
 {
     public interface IAuthService
     {

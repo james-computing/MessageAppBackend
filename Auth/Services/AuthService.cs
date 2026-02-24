@@ -1,6 +1,6 @@
-﻿using JWTAuth.Data;
-using JWTAuth.Dtos;
-using JWTAuth.Models;
+﻿using Auth.Data;
+using Auth.Dtos;
+using Auth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens; // for SymmetricSecurityKey
@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text; // for PasswordHasher
 
-namespace JWTAuth.Services
+namespace Auth.Services
 {
     public class AuthService : IAuthService
     {

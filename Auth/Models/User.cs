@@ -1,7 +1,7 @@
-﻿using JWTAuth.Roles;
+﻿using Auth.Roles;
 using System.ComponentModel.DataAnnotations;
 
-namespace JWTAuth.Models
+namespace Auth.Models
 {
     public class User
     {

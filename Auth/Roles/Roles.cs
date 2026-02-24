@@ -1,4 +1,4 @@
-﻿namespace JWTAuth.Roles
+﻿namespace Auth.Roles
 {
     public enum UserRoles
     {

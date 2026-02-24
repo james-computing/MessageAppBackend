@@ -1,5 +1,5 @@
-using JWTAuth.Data;
-using JWTAuth.Services;
+using Auth.Data;
+using Auth.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
