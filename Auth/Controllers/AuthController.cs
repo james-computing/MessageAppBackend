@@ -73,6 +73,7 @@ namespace Auth.Controllers
 
             if (userIdString == null)
             {
+                Console.WriteLine("Error: Failed to get the user id from its claims.");
                 return Unauthorized();
             }
 
@@ -80,6 +81,7 @@ namespace Auth.Controllers
             bool parsed = int.TryParse(userIdString, out userId);
             if(parsed == false)
             {
+                Console.WriteLine("Error: Failed parsing userId to int.");
                 return Unauthorized();
             }
 
@@ -96,6 +98,7 @@ namespace Auth.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync()
         {
+            Console.WriteLine("action DeleteAsync");
             string? userIdString = null;
             foreach (ClaimsIdentity identity in HttpContext.User.Identities)
             {
