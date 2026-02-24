@@ -170,6 +170,7 @@ namespace REST.Data
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
+            parameters.Add(ROLEINROOM_VARIABLE, roleInRoom);
 
             await connection.ExecuteAsync
             (
