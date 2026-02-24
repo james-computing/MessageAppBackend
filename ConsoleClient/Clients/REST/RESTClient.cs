@@ -1,7 +1,9 @@
 ﻿using ConsoleClient.Clients.Urls;
 using ConsoleClient.Enums;
 using JWTAuth.Dtos;
+using REST.Dtos.Messages;
 using REST.Dtos.Rooms;
+using REST.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -264,5 +266,32 @@ namespace ConsoleClient.Clients.REST
                 throw new Exception($"Error: Failed to get users info from room. Status code: {responseMessage.StatusCode}.");
             }
         }
+
+        //************************************* message service ******************************************
+        public async Task<IEnumerable<Message>> LoadLatestMessagesAsync(LoadLatestMessagesDto loadLatestMessagesDto, TokenDto token)
+        {
+            Console.WriteLine("Trying to load last messages from room...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Get,
+                MessageAppService.REST,
+                MessageAppController.Message,
+                MessageAction.LoadLatestMessages.ToString(),
+                loadLatestMessagesDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                IEnumerable<Message> messages = JsonSerializer.Deserialize<IEnumerable<Message>>(content, jsonSerializerOptions)
+                    ?? throw new Exception("Error: Failed to deserialize content to IEnumerable<Message>.");
+                return messages;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to load last messages from room. Status code: {responseMessage.StatusCode}.");
+            }
+        }
+
     }
 }
