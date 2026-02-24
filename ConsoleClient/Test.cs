@@ -105,11 +105,20 @@ namespace ConsoleClient
             await StopConnectionsToSignalRAsync(mrtClients);
 
             Console.WriteLine("Finished chatting.");
+
+            // Count the messages for user 0
+            // Every user should have numberOfMessagesToGenerate messages
+            int messageCount = mrtClients[0].CountMessages();
+            if (mrtClients[0].CountMessages() != numberOfMessagesToGenerate)
+            {
+                throw new Exception($"Error: incorrect number of messages stored locally. Should be {numberOfMessagesToGenerate}, but have {messageCount}.");
+            }
+
             Console.WriteLine("Messages of user 0:");
             mrtClients[0].PrintMessages();
 
             // Test editing, deleting and loading messages
-            
+
 
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
