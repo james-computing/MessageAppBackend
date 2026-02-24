@@ -514,6 +514,36 @@ namespace ConsoleClient
             await restClient.RemoveUserFromRoomAsync(token, removeUserFromRoomDto);
         }
 
+        private async Task TestThatAllUsersBecomeAdminWhenAdminsLeaveAsync(
+            int roomId,
+            IEnumerable<TokenDto> adminsTokens,
+            TokenDto nonAdmintoken)
+        {
+            // Remove all admins
+            int numberOfAdmins = adminsTokens.Count();
+            List<Task> tasks = new(numberOfAdmins);
+            foreach (TokenDto token in adminsTokens)
+            {
+                tasks.Add(LeaveRoomAsync(roomId, token));
+            }
+            Task.WaitAll(tasks);
+
+            // Test that all remaining users became admins
+            GetUsersInfoFromRoomDto getUsersInfoFromRoomDto = new()
+            {
+                RoomId = roomId,
+            };
+            IEnumerable<UserInfoDto> usersInfo = await restClient.GetUsersInfoFromRoomAsync(nonAdmintoken, getUsersInfoFromRoomDto);
+            foreach (UserInfoDto userInfo in usersInfo)
+            {
+                if(userInfo.RoleInRoom != RoleInRoom.Admin.ToString())
+                {
+                    throw new Exception("Error: All users should be admins after all admins left the room.");
+                }
+            }
+        }
+
+        private async Task CleanupAsync(int roomId, TokenDto adminToken)
         {
             // Delete the room
             DeleteRoomDto deleteRoomDto = new()
