@@ -50,13 +50,13 @@ spec:
         type: PathPrefix
         value: /Message
     backendRefs:
-    - name: message-rest-clusterip
+    - name: rest-clusterip
       port: 80
   - matches:
     - path:
         type: PathPrefix
         value: /Rooms
     backendRefs:
-    - name: message-rest-clusterip
+    - name: rest-clusterip
       port: 80
 ---
