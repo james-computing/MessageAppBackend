@@ -230,6 +230,19 @@ namespace REST.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<int>>> GetUserRoomsIdsAsync()
+        {
+            int? userId = Identification.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            IEnumerable<int> roomsIds = await dataAccess.GetUserRoomsIdsAsync(userId.Value);
+            return Ok(roomsIds);
+        }
+
+        [HttpGet]
         public async Task<ActionResult<RoomInfoDto>> GetRoomInfoAsync(GetRoomInfoDto getRoomInfoDto)
         {
             int? userId = Identification.GetUserId(User);
