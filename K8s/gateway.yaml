@@ -48,7 +48,7 @@ spec:
   - matches:
     - path:
         type: PathPrefix
-        value: /MessageREST
+        value: /Message
     backendRefs:
     - name: message-rest-clusterip
       port: 80
