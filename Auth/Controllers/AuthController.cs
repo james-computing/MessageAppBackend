@@ -52,7 +52,7 @@ namespace Auth.Controllers
         // of the endpoint is to get a new access token.
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<TokenDto?>> RefreshAccessTokenAsync(string refreshToken)
+        public async Task<ActionResult<TokenDto?>> RefreshAccessTokenAsync(RefreshAccessTokenDto refreshAccessTokenDto)
         {
             // The refresh token should only be passed to this endpoint,
             // to avoid interception, so it is a parameter of the request.
@@ -84,7 +84,7 @@ namespace Auth.Controllers
             }
 
             // Request for a new token, with a new access token (but same refresh token)
-            TokenDto? token = await authService.RefreshAccessTokenAsync(userId, refreshToken);
+            TokenDto? token = await authService.RefreshAccessTokenAsync(userId, refreshAccessTokenDto.RefreshToken);
             if(token == null)
             {
                 return Forbid();
