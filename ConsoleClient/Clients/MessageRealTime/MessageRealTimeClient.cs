@@ -155,5 +155,10 @@ namespace ConsoleClient.Clients.MessageRealTime
                 Console.WriteLine($"Id: {message.Id}, SenderId:, {message.SenderId}, Time: {message.Time}");
             }
         }
+
+        public int CountMessages()
+        {
+            return messages.Count();
+        }
     }
 }
