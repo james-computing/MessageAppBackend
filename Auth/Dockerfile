@@ -12,19 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["JWTAuth/JWTAuth.csproj", "JWTAuth/"]
-RUN dotnet restore "./JWTAuth/JWTAuth.csproj"
+COPY ["Auth/Auth.csproj", "Auth/"]
+RUN dotnet restore "./Auth/Auth.csproj"
 COPY . .
-WORKDIR "/src/JWTAuth"
-RUN dotnet build "./JWTAuth.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Auth"
+RUN dotnet build "./Auth.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./JWTAuth.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Auth.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "JWTAuth.dll"]
+ENTRYPOINT ["dotnet", "Auth.dll"]
