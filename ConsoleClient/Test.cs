@@ -37,6 +37,8 @@ namespace ConsoleClient
         // MessageRealTime
         private const uint numberOfMessagesToGenerate = 50;
 
+        const string editedMessageContent = "edited message content";
+
         private const int DELAY_MILLISECS = 500;
 
         public Test(bool productionUrls, int usersQuantity)
@@ -170,7 +172,6 @@ namespace ConsoleClient
             await restClient.DeleteMessageAsync(deleteMessageDto, tokens[firstMessageSenderIndex]);
 
             // Edit the second message
-            const string editedMessageContent = "edited message content";
             EditMessageDto editMessageDto = new()
             {
                 MessageId = secondMessage.Id,
