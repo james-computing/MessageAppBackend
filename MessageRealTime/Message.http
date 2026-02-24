@@ -1,6 +1,0 @@
-@Message_HostAddress = http://localhost:5084
-
-GET {{Message_HostAddress}}/
-Accept: application/json
-
-###
