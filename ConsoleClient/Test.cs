@@ -303,8 +303,8 @@ namespace ConsoleClient
             HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
                 regularUserToken,
                 HttpMethod.Put,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.UpdateRoomName.ToString(),
                 updateRoomNameDto);
             if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
@@ -400,8 +400,8 @@ namespace ConsoleClient
             HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
                 adminToken,
                 HttpMethod.Delete,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.RemoveUserFromRoom.ToString(),
                 removeUserFromRoomDto);
             if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)
@@ -444,8 +444,8 @@ namespace ConsoleClient
             HttpResponseMessage responseMessage = await restClient.RequestWithJsonAsync(
                 regularUserToken,
                 HttpMethod.Delete,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.RemoveUserFromRoom.ToString(),
                 removeUserFromRoomDto);
             if (responseMessage.StatusCode != System.Net.HttpStatusCode.Forbidden)

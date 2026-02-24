@@ -34,8 +34,8 @@ namespace ConsoleClient.Clients.Auth
 
             // Test connection first
             string url = _url.FromControllerAction(
-                Service.Auth,
-                Controller.Auth,
+                MessageAppService.Auth,
+                MessageAppController.Auth,
                 AuthAction.TestConnection.ToString());
             HttpResponseMessage responseMessageConnectionTest = await httpClient.GetAsync(url);
             if (!responseMessageConnectionTest.IsSuccessStatusCode)
@@ -63,8 +63,8 @@ namespace ConsoleClient.Clients.Auth
             using StringContent jsonContent = new StringContent(serializedJson, Encoding.UTF8, "application/json");
 
             string url = _url.FromControllerAction(
-                Service.Auth,
-                Controller.Auth,
+                MessageAppService.Auth,
+                MessageAppController.Auth,
                 AuthAction.Register.ToString());
             HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
@@ -90,8 +90,8 @@ namespace ConsoleClient.Clients.Auth
             using StringContent jsonContent = new(serializedString, Encoding.UTF8, "application/json");
 
             string url = _url.FromControllerAction(
-                Service.Auth,
-                Controller.Auth,
+                MessageAppService.Auth,
+                MessageAppController.Auth,
                 AuthAction.Login.ToString());
             HttpResponseMessage responseMessage = await httpClient.PostAsync(url, jsonContent);
             if (responseMessage.IsSuccessStatusCode)
@@ -113,8 +113,8 @@ namespace ConsoleClient.Clients.Auth
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
             string url = _url.FromControllerAction(
-                Service.Auth,
-                Controller.Auth,
+                MessageAppService.Auth,
+                MessageAppController.Auth,
                 AuthAction.Delete.ToString());
             HttpResponseMessage response = await httpClient.DeleteAsync(url);
             if (response.IsSuccessStatusCode)

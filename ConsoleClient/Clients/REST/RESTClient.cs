@@ -28,8 +28,8 @@ namespace ConsoleClient.Clients.REST
         public async Task<HttpResponseMessage> RequestWithJsonAsync(
             TokenDto token,
             HttpMethod method,
-            Service service,
-            Controller controller,
+            MessageAppService service,
+            MessageAppController controller,
             string action,
             object dto)
         {
@@ -62,8 +62,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Post,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.CreateRoomAndAddUserToIt.ToString(),
                 createRoomDto);
 
@@ -84,8 +84,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Delete,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.DeleteRoom.ToString(),
                 deleteRoomDto);
 
@@ -107,8 +107,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Put,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.UpdateRoomName.ToString(),
                 updateRoomNameDto);
 
@@ -130,8 +130,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Post,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.GenerateInvitationToken.ToString(),
                 generateInvitationTokenDto);
 
@@ -153,8 +153,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Post,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.JoinRoom.ToString(),
                 joinRoomDto);
 
@@ -175,8 +175,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Delete,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.RemoveUserFromRoom.ToString(),
                 removeUserFromRoomDto);
 
@@ -197,8 +197,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Put,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.UpdateUserRoleInRoom.ToString(),
                 updateUserRoleInRoomDto);
 
@@ -219,8 +219,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Get,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.GetRoomInfo.ToString(),
                 getRoomInfoDto);
 
@@ -246,8 +246,8 @@ namespace ConsoleClient.Clients.REST
             HttpResponseMessage responseMessage = await RequestWithJsonAsync(
                 token,
                 HttpMethod.Get,
-                Service.REST,
-                Controller.Rooms,
+                MessageAppService.REST,
+                MessageAppController.Rooms,
                 RoomsAction.GetUsersInfoFromRoom.ToString(),
                 getUsersInfoFromRoomDto);
 

@@ -1,10 +1,9 @@
 ﻿namespace ConsoleClient.Enums
 {
-    internal enum Controller
+    internal enum MessageAppService
     {
         Auth,
         MessageRealTime,
-        Rooms,
-        Message,
+        REST,
     }
 }

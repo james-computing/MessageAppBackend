@@ -48,29 +48,29 @@ namespace ConsoleClient.Clients.Urls
             }
         }
 
-        private uint Port(Service service)
+        private uint Port(MessageAppService service)
         {
             switch (service)
             {
-                case Service.Auth:
+                case MessageAppService.Auth:
                     return ports.authPort;
-                case Service.MessageRealTime:
+                case MessageAppService.MessageRealTime:
                     return ports.messageRealTimePort;
-                case Service.REST:
+                case MessageAppService.REST:
                     return ports.restPort;
                 default:
                     throw new Exception($"Port method don't have a case for {service.ToString()}.");
             }
         }
 
-        public string FromControllerAction(Service service, Controller controller, string action)
+        public string FromControllerAction(MessageAppService service, MessageAppController controller, string action)
         {
             return $"{baseUrl}:{Port(service)}/{controller.ToString()}/{action}";
         }
 
         public string ChatHub()
         {
-            return $"{baseUrl}:{Port(Service.MessageRealTime)}/{Service.MessageRealTime.ToString()}";
+            return $"{baseUrl}:{Port(MessageAppService.MessageRealTime)}/{MessageAppService.MessageRealTime.ToString()}";
         }
     }
 }
