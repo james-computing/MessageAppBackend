@@ -13,8 +13,7 @@ kubectl apply -f kafka/kafka-single-node.yaml -n kafka # I'll use a single node,
 kubectl apply -f kafka/kafka-topic.yaml -n kafka
 
 kubectl apply -f kafka-consumer.yaml -n messageapp
-
 kubectl apply -f rest.yaml -n messageapp # requires auth and kafka
-
 kubectl apply -f message-real-time.yaml -n messageapp # requires auth (only authorized users can access) and kafka
+
 kubectl apply -f gateway.yaml -n messageapp # gateway for client to access auth and message services
