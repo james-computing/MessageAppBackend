@@ -130,7 +130,7 @@ namespace ConsoleClient
             enumerator.MoveNext();
             ReceiveMessageDto secondMessage = enumerator.Current;
             enumerator.Dispose();
-            
+
             int firstMessageSenderId = firstMessage.SenderId;
             int secondMessageSenderId = secondMessage.SenderId;
 
