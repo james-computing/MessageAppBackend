@@ -16,6 +16,8 @@ namespace ConsoleClient.Clients.MessageRealTime
         // Urls to communicate with server
         private readonly Url _url;
 
+        private List<ReceiveMessageDto> messages;
+
         public MessageRealTimeClient(Url url, TokenDto token)
         {
             Console.WriteLine("Constructing MessageRealTime client...");
@@ -37,6 +39,8 @@ namespace ConsoleClient.Clients.MessageRealTime
                 .Build();
 
             ConfigureConnectionActions();
+
+            messages = new List<ReceiveMessageDto>();
 
             Console.WriteLine("Finished constructing MessageRealTime client.");
         }
