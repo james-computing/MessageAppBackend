@@ -36,7 +36,7 @@ namespace REST.Data
         {
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
-            parameters.Add(QUANTITY_VARIABLE, quantity);
+            parameters.Add(QUANTITY_VARIABLE, quantity.ToString());
 
             IEnumerable<Message> messages = await connection.QueryAsync<Message>
             (
@@ -53,7 +53,7 @@ namespace REST.Data
             DynamicParameters parameters = new();
             parameters.Add(ROOMID_VARIABLE, roomId);
             parameters.Add(MESSAGEIDREFERENCE_VARIABLE, messageIdReference);
-            parameters.Add(QUANTITY_VARIABLE, quantity);
+            parameters.Add(QUANTITY_VARIABLE, quantity.ToString());
 
             IEnumerable<Message> messages = await connection.QueryAsync<Message>
             (
