@@ -293,5 +293,32 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
+        public async Task<IEnumerable<Message>> LoadMessagesPrecedingReferenceAsync(
+            LoadMessagesPrecedingReferenceDto loadMessagesPrecedingRefDto,
+            TokenDto token)
+        {
+            Console.WriteLine("Trying to load messages from room...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Get,
+                MessageAppService.REST,
+                MessageAppController.Message,
+                MessageAction.LoadMessagesPrecedingReference.ToString(),
+                loadMessagesPrecedingRefDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                IEnumerable<Message> messages = JsonSerializer.Deserialize<IEnumerable<Message>>(content, jsonSerializerOptions)
+                    ?? throw new Exception("Error: Failed to deserialize content to IEnumerable<Message>.");
+                return messages;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to load messages from room. Status code: {responseMessage.StatusCode}.");
+            }
+        }
+
     }
 }
