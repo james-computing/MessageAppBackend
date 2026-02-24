@@ -109,6 +109,10 @@ namespace ConsoleClient
             // Test editing, deleting and loading messages
 
 
+            // Remove admins and check that the remaining users became admins
+            // Remove the admins 0 and 1
+            IEnumerable<TokenDto> tokensOfAdmins = [tokens[0], tokens[1]];
+            await TestThatAllUsersBecomeAdminWhenAdminsLeaveAsync(roomId, tokensOfAdmins, tokens[2]);
             
             await CleanupAsync(roomId, tokens[2]);
 
