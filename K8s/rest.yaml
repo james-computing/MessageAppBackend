@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: rest
-        image: jmstoledo/rest:v1
+        image: jmstoledo/rest:v2
         ports:
         - containerPort: 8080
         volumeMounts:

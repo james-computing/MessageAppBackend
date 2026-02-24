@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - name: kafka-consumer
-        image: jmstoledo/kafka-consumer:v1
+        image: jmstoledo/kafka-consumer:v2

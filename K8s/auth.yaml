@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: jmstoledo/auth:v1
+        image: jmstoledo/auth:v2
         ports:
         - containerPort: 8080
         volumeMounts:

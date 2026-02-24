@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: message-real-time
-        image: jmstoledo/message-real-time:v1
+        image: jmstoledo/message-real-time:v2
         ports:
         - containerPort: 8080
         volumeMounts:
