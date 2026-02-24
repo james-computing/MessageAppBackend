@@ -110,6 +110,8 @@ namespace ConsoleClient
 
 
             await CleanupAsync(roomId);
+            
+            await CleanupAsync(roomId, tokens[2]);
 
             Console.WriteLine("Test succeeded.");
         }
@@ -502,7 +504,6 @@ namespace ConsoleClient
             Task.WaitAll(tasks);
         }
 
-        private async Task CleanupAsync(int roomId)
         private async Task LeaveRoomAsync(int roomId, TokenDto token)
         {
             
@@ -550,7 +551,7 @@ namespace ConsoleClient
             {
                 RoomId = roomId
             };
-            await restClient.DeleteRoomAsync(tokens[0], deleteRoomDto);
+            await restClient.DeleteRoomAsync(adminToken, deleteRoomDto);
 
             // Delete users
             await DeleteUsersAsync(authClient);
