@@ -1,9 +1,11 @@
-﻿using ConsoleClient.Clients.Auth;
+﻿using Client.Dtos;
+using ConsoleClient.Clients.Auth;
 using ConsoleClient.Clients.MessageRealTime;
 using ConsoleClient.Clients.REST;
 using ConsoleClient.Clients.Urls;
 using ConsoleClient.Enums;
 using JWTAuth.Dtos;
+using REST.Dtos.Messages;
 using REST.Dtos.Rooms;
 using REST.Roles;
 using System.IdentityModel.Tokens.Jwt;
@@ -118,6 +120,47 @@ namespace ConsoleClient
             mrtClients[0].PrintMessages();
 
             // Test editing, deleting and loading messages
+
+            // Get all messages
+            IOrderedEnumerable<ReceiveMessageDto> messages = mrtClients[0].GetAllMessagesInOrder();
+            // Get two messages, one to delete, another to edit.
+            IEnumerator<ReceiveMessageDto> enumerator = messages.GetEnumerator();
+            enumerator.MoveNext();// To get the first, have to move next
+            ReceiveMessageDto firstMessage = enumerator.Current;
+            enumerator.MoveNext();
+            ReceiveMessageDto secondMessage = enumerator.Current;
+            enumerator.Dispose();
+            
+            int firstMessageSenderId = firstMessage.SenderId;
+            int secondMessageSenderId = secondMessage.SenderId;
+
+            // With the id, identify the index of the corresponding user
+            int firstMessageSenderIndex = -1; // Initialize with an invalid index
+            int secondMessageSenderIndex = -1; // Initialize with an invalid index
+            int indicesObtained = 0;
+            for (int i=0; i < numberOfUsersInRoom; i++)
+            {
+                if (usersIds[i] == firstMessageSenderId)
+                {
+                    firstMessageSenderIndex = i;
+                    indicesObtained++;
+                }
+                else if (usersIds[i] == secondMessageSenderId)
+                {
+                    secondMessageSenderIndex = i;
+                    indicesObtained++;
+                }
+
+                if(indicesObtained == 2)
+                {
+                    break;
+                }
+            }
+
+            if(indicesObtained != 2)
+            {
+                throw new Exception($"Error: couldn't get the indices of the senders. Got indices:\nfirstMessageSenderIndex = {firstMessageSenderIndex},\n secondMessageSenderIndex = {secondMessageSenderIndex}.");
+            }
 
 
             // Remove admins and check that the remaining users became admins
