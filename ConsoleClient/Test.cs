@@ -218,6 +218,13 @@ namespace ConsoleClient
                                                                 loadMessagesPrecedingReferenceDto,
                                                                 tokens[0]);
 
+            // Check that we got the same number of messages
+            int loadedMessagesCount = loadedMessages.Count();
+            if(loadedMessagesCount !=  latestMessagesCount)
+            {
+                throw new Exception($"Error: loadedMessages with wrong number of messages. Got {loadedMessagesCount}, should be {latestMessagesCount}.");
+            }
+
             // Remove admins and check that the remaining users became admins
             // Remove the admins 0 and 1
             IEnumerable<TokenDto> tokensOfAdmins = [tokens[0], tokens[1]];
