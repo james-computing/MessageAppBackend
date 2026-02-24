@@ -109,7 +109,6 @@ namespace ConsoleClient
             // Test editing, deleting and loading messages
 
 
-            await CleanupAsync(roomId);
             
             await CleanupAsync(roomId, tokens[2]);
 
