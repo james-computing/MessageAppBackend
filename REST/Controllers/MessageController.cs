@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using REST.Dtos.Messages;
 using REST.Utils;
 
-namespace MessageREST.Controllers
+namespace REST.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
