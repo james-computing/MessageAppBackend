@@ -320,5 +320,27 @@ namespace ConsoleClient.Clients.REST
             }
         }
 
+        public async Task EditMessageAsync(EditMessageDto editMessageDto, TokenDto token)
+        {
+            Console.WriteLine("Trying to edit message...");
+
+            HttpResponseMessage responseMessage = await RequestWithJsonAsync(
+                token,
+                HttpMethod.Put,
+                MessageAppService.REST,
+                MessageAppController.Message,
+                MessageAction.EditMessage.ToString(),
+                editMessageDto);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception($"Error: Failed to edit message. Status code: {responseMessage.StatusCode}.");
+            }
+        }
+
     }
 }
