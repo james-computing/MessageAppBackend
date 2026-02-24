@@ -196,7 +196,8 @@ namespace ConsoleClient
             // Check that the edited message have the correct content
             // Since the first message was deleted and the edited message was the second,
             // now the edited message is the first from the loaded lastest messages.
-            REST.Models.Message editedMessage = latestMessages.OrderBy(message => message.Time).First();
+            IOrderedEnumerable<REST.Models.Message> latestMessagesOrdered = latestMessages.OrderBy(message => message.Time);
+            REST.Models.Message editedMessage = latestMessagesOrdered.First();
             if(editedMessage.Id != secondMessage.Id)
             {
                 throw new Exception("Error: didn't find the edited message in the expected position in the loaded latest messages.");
