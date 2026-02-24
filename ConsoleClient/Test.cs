@@ -383,6 +383,20 @@ namespace ConsoleClient
             Console.WriteLine("Finished deleting users.");
         }
 
+        private async Task TestRefreshingTokensAsync()
+        {
+            for (int i=0; i < _usersQuantity; i++)
+            {
+                TokenDto? refreshedToken = await authClient.RefreshAccessTokenAsync(tokens[i].RefreshToken);
+                if(refreshedToken == null)
+                {
+                    throw new Exception("Error: failed to refresh token.");
+                }
+                tokens[i] = refreshedToken;
+                await Task.Delay(DELAY_MILLISECS);
+            }
+        }
+
         public async Task AddUserToRoomAsync(int roomId, TokenDto roomCreatorToken, TokenDto userToJoinToken)
         {
             // Get a room invitation
