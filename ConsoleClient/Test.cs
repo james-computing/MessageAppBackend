@@ -186,6 +186,7 @@ namespace ConsoleClient
             };
             IEnumerable<REST.Models.Message> latestMessages =  await restClient.LoadLatestMessagesAsync(loadLatestMessagesDto, tokens[0]);
 
+            // Check that the number of messages is correct
             int latestMessagesCount = latestMessages.Count();
             if (latestMessagesCount != numberOfMessagesToGenerate - 1)
             {
