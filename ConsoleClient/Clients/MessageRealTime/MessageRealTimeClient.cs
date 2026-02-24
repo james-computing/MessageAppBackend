@@ -160,5 +160,10 @@ namespace ConsoleClient.Clients.MessageRealTime
         {
             return messages.Count();
         }
+
+        public IOrderedEnumerable<ReceiveMessageDto> GetAllMessagesInOrder()
+        {
+            return messages.OrderBy(message => message.Time);
+        }
     }
 }
