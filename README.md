@@ -17,5 +17,17 @@ This is a project of the backend for a real-time messaging app, to put in practi
   <li> xUnit for testing the application. </li>
 </ul>
 
+# Basic idea
+
+The app is made for different clients to communicate with each other in real-time. The communication is done inside rooms that the users must create and join. Any user can create a room and is automatically added to its own room, but other users must first receive an invitation to join the room. Managing users and their rooms doesn't require real-time communication, so this is done by REST APIs. Once the users are inside the same room, they can communicate with each other in real-time. In the web, real-time communication is done with WebSockets. Specifically for ASP.NET Core, SignalR can be used instead, which has WebSockets underneath it. Real-time communication is important mainly for a client to receive messages. I expect that the client will be connected to the server through SignalR while a frontend app is being used. Therefore, I would expect the client to already have a SignalR connection when the client is writing a message to send to a room. For this reason, I've chosen that messages would also be sent with SignalR in real-time.
+
 # Architecture
 
+Communication between users happens inside rooms that they must create and join.
+
+The app has multiple services:
+
+<ul>
+  <li> Auth: the authentication service; </li>
+  <li> REST: a REST API to manage room
+</ul>
