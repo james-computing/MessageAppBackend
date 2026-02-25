@@ -47,5 +47,12 @@ The app is structured in multiple services that implement different functionalit
 
 The entry point of the app is the Auth service. A user must first register using the Auth service, then it must login to get a JWT. It receives an access token for authentication and a refresh token. The access token expires faster than the refresh token. The refresh token has the only purpose of letting the user request a new access token without having to login again. After the refresh token expires, the user must login another time. The Auth service is responsible for managing the users, so it is used both to register a new user and deleting it.
 
+All other services that a user can access require authentication, so the user must have a valid JWT to access them.
+
 # REST service
 
+The REST service have all the REST APIs that are outside the Auth service. It is responsible for interactions between client and server that doesn't require real-time communication. The service has two controllers, Message and Rooms. The Message controller is responsible for managing users massages. Loading messages, editing or deleting them can be done with the Message controller. The Rooms controller is responsible for managing the rooms. This includes creating and deleting rooms, inviting users to rooms, joining rooms and removing users from rooms.
+
+# MessageRealTime
+
+The MessageRealTime service is responsible for stablishing real-time communication between client and server. 
