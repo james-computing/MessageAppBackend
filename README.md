@@ -69,3 +69,6 @@ This service consumes all messages that are produced to Kafka.
 # Tests
 
 The folder AuthTests has unit tests for the Auth service, using xUnit. Also, the folder ConsoleClient has clients for the Auth, REST and MessageRealTime services. The functionality of these services were tested with these clients.
+
+# Kubernetes cluster
+
