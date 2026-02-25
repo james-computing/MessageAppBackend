@@ -31,7 +31,7 @@ The app is made for different clients to communicate with each other in real-tim
   <li> Messages from a room can be received by a client in real-time if it is connected via SignalR. Otherwise, the messages can be loaded by a REST API.</li>
 </ul>
 
-For web apps, real-time communication is done with WebSockets. Specifically for ASP.NET Core, SignalR can be used instead, which has WebSockets underneath it. Real-time communication is important mainly for a client to receive messages. I expect that the client will be connected to the server through SignalR while a frontend app is being used (a frontend isn't implemented in this project). Therefore, I would expect the client to already have a SignalR connection when it is sending a message to a room. For this reason, I've chosen that **SignalR will be used both to send and receive messages in real-time**. Other functionality of the app doesn't require real-time communication and is done by REST APIs.
+For web apps, real-time communication is done with WebSockets. Specifically for ASP.NET Core, SignalR can be used instead, which has WebSockets underneath it. Real-time communication is important mainly for a client to receive messages. I expect that the client will be connected to the server through SignalR while using the app. For this reason, I've chosen that **SignalR will be used both to send and receive messages in real-time**, not only to receive messages. Other functionality of the app doesn't require real-time communication and is done by REST APIs.
 
 # Architecture
 
