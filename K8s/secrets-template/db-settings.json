@@ -1,0 +1,5 @@
+{
+    "ConnectionStrings": {
+        "Default": "Data Source=mssql-clusterip,1433;Initial Catalog=databaseName;Persist Security Info=True;User ID=sa;Password=yourPassword;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Command Timeout=0"
+    }
+}
