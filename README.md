@@ -52,7 +52,7 @@ All other services that a user can access require authentication, so the user mu
 
 # REST service
 
-The REST service have all the REST APIs that are outside the Auth service. It is responsible for interactions between client and server that doesn't require real-time communication. The service has two controllers, Message and Rooms. The Message controller is responsible for managing users massages. Loading messages, editing or deleting them can be done with the Message controller. The Rooms controller is responsible for managing the rooms. This includes creating and deleting rooms, inviting users to rooms, joining rooms and removing users from rooms.
+The REST service have all the REST APIs that are outside the Auth service. It is responsible for interactions between client and server that doesn't require real-time communication. The service has two controllers, Message and Rooms. The Message controller is responsible for managing users' massages. Loading messages, editing or deleting them can be done with the Message controller. The Rooms controller is responsible for managing the rooms. This includes creating and deleting rooms, inviting users to rooms, joining rooms and removing users from rooms.
 
 # MessageRealTime service
 
