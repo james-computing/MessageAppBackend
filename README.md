@@ -7,7 +7,7 @@ This is a project of the backend for a real-time messaging app, to put in practi
   <li> ASP.NET Core SignalR for real-time communication; </li>
   <li> Json Web Tokens (JWT) for authentication and authorization; </li>
   <li> Microsoft SQL Server for a relational database; </li>
-  <li> Dapper to access the database and have finer control; </li>
+  <li> Dapper to access the database with finer control; </li>
   <li> Stored procedures, to make database execution faster; </li>
   <li> Docker for containerization; </li>
   <li> Kubernetes for deploying the application containers in a cluster; </li>
