@@ -1,6 +1,6 @@
 # MessageAppBackend
 
-This is a project of the backend for a real-time messaging app to put in practice multiple technologies used for backend development. The following technologies were used in this project:
+This is a project of the backend for a real-time messaging app, to put in practice multiple technologies used for backend development. The following technologies were used in this project:
 
 <ul>
   <li> REST APIs with ASP.NET Core; </li>
