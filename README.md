@@ -14,5 +14,8 @@ This is a project of the backend for a real-time messaging app, to put in practi
   <li> Apache Kafka as messaging queue; </li>
   <li> Strimzi operator to run a Kafka cluster in Kubernetes; </li>
   <li> NGINX Gateway Fabric to make a gateway for the application in Kubernetes; </li>
-  <li> xUnit for testing the application </li>
+  <li> xUnit for testing the application. </li>
 <ul>
+
+# Architecture
+
