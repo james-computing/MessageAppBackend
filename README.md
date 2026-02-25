@@ -26,7 +26,7 @@ The app is made for different clients to communicate with each other in real-tim
   <li> The user login to get a JWT for authentication, which is required to use the app; </li>
   <li> The user can create new rooms, to which it joins automatically; </li>
   <li> Other users can be invited to join a room; </li>
-  <li> Messages can be sent to a room in real-time with a SignalR connection; </li>
+  <li> Messages can be sent to a room in real-time through a SignalR connection; </li>
   <li> Messages from a room can be received by a client in real-time if it is connected via SignalR; </li>
 </ul>
 
