@@ -39,7 +39,7 @@ The app is structured in multiple services that implement different functionalit
 <ul>
   <li> Auth: the authentication service; </li>
   <li> REST: a REST API to manage rooms and its messages; </li>
-  <li> MessageRealTime: a web app that uses ASP.NET Core SignalR for real-time communication. </li>
+  <li> MessageRealTime: a web app that uses ASP.NET Core SignalR for real-time communication; </li>
   <li> KafkaConsumer: a web app with a Kafka consumer, to consume messages produced by other services. </li>
 </ul>
 
