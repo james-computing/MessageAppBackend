@@ -1,12 +1,11 @@
-kubectl delete -f kafka-consumer.yaml -n messageapp
-
-kubectl delete -f mssql.yaml -n messageapp
-
 kubectl delete -f auth.yaml -n messageapp
 kubectl delete -f rest.yaml -n messageapp
 kubectl delete -f message-real-time.yaml -n messageapp
+kubectl delete -f kafka-consumer.yaml -n messageapp
 
 kubectl delete -f gateway.yaml -n messageapp
+
+kubectl delete -f mssql.yaml -n messageapp
 
 kubectl delete secret mssql -n messageapp
 kubectl delete secret jwt-settings -n messageapp
