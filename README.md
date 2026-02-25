@@ -3,6 +3,7 @@
 This is a project for the backend for a real-time messaging app, to put in practice multiple technologies used for backend development. The following technologies were used in this project:
 
 <ul>
+  <li> C#, .NET; </li>
   <li> REST APIs with ASP.NET Core; </li>
   <li> ASP.NET Core SignalR for real-time communication; </li>
   <li> Json Web Tokens (JWT) for authentication and authorization; </li>
