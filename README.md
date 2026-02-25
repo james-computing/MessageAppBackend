@@ -54,8 +54,18 @@ All other services that a user can access require authentication, so the user mu
 
 The REST service have all the REST APIs that are outside the Auth service. It is responsible for interactions between client and server that doesn't require real-time communication. The service has two controllers, Message and Rooms. The Message controller is responsible for managing users' massages. Loading messages, editing or deleting them can be done with the Message controller. The Rooms controller is responsible for managing the rooms. This includes creating and deleting rooms, inviting users to rooms, joining rooms and removing users from rooms.
 
+The REST service also has a Kafka producer, which produces messages for Kafka.
+
 # MessageRealTime service
 
 The MessageRealTime service is responsible for stablishing real-time communication between client and server. Since most functionality of the app doesn't require real-time communication, this service is only responsible for letting a client send messages to a room and receive messages from rooms in real-time. The message sent by a client is first saved in a relational database, which automatically generates an id for the message. This id let users identify the message and ask for editing of deleting a message. The user who sent the message also receives a confirmation that the message was sent together with the id generated for the message.
 
 The client can only use this service to send messages in real-time. The client doesn't request messages from this service, rather they are pushed automatically to the clients in real-time. If a client isn't connected, it won't receive messages by this service, but the messages are stored in a database. To get these messages, the REST service must be used.
+
+# KafkaConsumer service
+
+This service consumes all messages that are produced to Kafka.
+
+# Tests
+
+The folder AuthTests has unit tests for the Auth service, using xUnit. Also, the folder ConsoleClient has clients for the Auth, REST and MessageRealTime services. The functionality of these services were tested with these clients.
