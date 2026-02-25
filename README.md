@@ -43,3 +43,9 @@ The app is structured in multiple services that implement different functionalit
   <li> KafkaConsumer: a web app with a Kafka consumer, to consume messages produced by other services. </li>
 </ul>
 
+# Auth service
+
+The entry point of the app is the Auth service. A user must first register using the Auth service, then it must login to get a JWT. It receives an access token for authentication and a refresh token. The access token expires faster than the refresh token. The refresh token has the only purpose of letting the user request a new access token without having to login again. After the refresh token expires, the user must login another time. The Auth service is responsible for managing the users, so it is used both to register a new user and deleting it.
+
+# REST service
+
