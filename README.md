@@ -18,7 +18,7 @@ This is a project for the backend for a real-time messaging app, to put in pract
   <li> xUnit for testing the application. </li>
 </ul>
 
-# Basic idea
+# Overview
 
 The app is made for different clients to communicate with each other in real-time. The communication is done inside rooms that the users must create and join. The basic flow of the app is as follows:
 
