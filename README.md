@@ -33,7 +33,7 @@ The app is made for different clients to communicate with each other in real-tim
 
 For web apps, real-time communication is done with WebSockets. Specifically for ASP.NET Core, SignalR can be used instead, which has WebSockets underneath it. Real-time communication is important mainly for a client to receive messages. I expect that the client will be connected to the server through SignalR while using the app. Being already connected, it makes sense to use such connection to send messages. For this reason, I've chosen that **SignalR will be used both to send and receive messages in real-time**, not only to receive messages. Other functionality of the app doesn't require real-time communication and is done by REST APIs.
 
-# Architecture
+# Services
 
 The app is structured in multiple services that implement different functionality. The services are the following:
 
